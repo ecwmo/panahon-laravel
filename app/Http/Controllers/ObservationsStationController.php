@@ -112,6 +112,6 @@ class ObservationsStationController extends Controller
         $station = ObservationsStation::find($id);
         $station->delete();
 
-        return redirect('/admin/stations')->with('success', 'Station deleted!');
+        return redirect('admin/stations')->with('success', 'Station deleted!');
     }
 }

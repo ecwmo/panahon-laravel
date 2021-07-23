@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-sm-8"><h2>Station <b>Details</b></h2></div>
             <div class="col-sm-4">
-                <a class="btn btn-info add-new" href="/admin/stations/create" role="button"><i class="fa fa-plus"></i> Add New</a>
+                <a class="btn btn-info add-new" href="{{ url('admin/stations/create') }}" role="button"><i class="fa fa-plus"></i> Add New</a>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
             <td>{{ date('Y-m-d', strtotime($st->date_installed)) }}</td>
             <td>
                 {{-- <a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square">&#xE03B;</i></a> --}}
-                <a class="edit" title="Edit" data-bs-toggle="tooltip" href="/admin/stations/{{ $st->id }}/edit"><i class="fas fa-edit">&#xE254;</i></a>
+                <a class="edit" title="Edit" data-bs-toggle="tooltip" href="{{ url('admin/stations/'.$st->id.'/edit') }}"><i class="fas fa-edit">&#xE254;</i></a>
                 <a class="delete" title="Delete" data-bs-toggle="tooltip" @click="deleteStation({{ $st->id }})"><i class="fas fa-trash">&#xE872;</i></a>
             </td>
             </tr>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal()">Close</button>
-                    <form x-bind:action="`/admin/stations/${station.id}`" method="post">
+                    <form x-bind:action="`{{ url('admin/stations') }}/${station.id}`" method="post">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger" type="submit">Delete</button>

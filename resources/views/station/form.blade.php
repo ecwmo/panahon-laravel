@@ -14,7 +14,7 @@
                     @endif
 
                     <form method="post"
-                        action="{{ $station->id == null ? '/admin/stations' :  '/admin/stations/' . $station->id }}"
+                        action="{{ $station->id == null ? url('admin/stations') :  url('admin/stations/'.$station->id)}}"
                         >
                         @isset($station->id)
                         {{ method_field('PATCH')}}
