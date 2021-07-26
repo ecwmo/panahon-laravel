@@ -11,9 +11,13 @@
     <div class="table-title">
         <div class="row">
             <div class="col-sm-8"><h2>Station <b>Details</b></h2></div>
+            @auth
+            @if (Auth::user()->hasRole('ADMIN'))
             <div class="col-sm-4">
-                <a class="btn btn-info add-new" href="{{ url('admin/stations/create') }}" role="button"><i class="fa fa-plus"></i> Add New</a>
+                <a class="btn btn-info add-new" href="{{ url('stations/create') }}" role="button"><i class="fa fa-plus"></i> Add New</a>
             </div>
+            @endif
+            @endauth
         </div>
     </div>
     <table class="table table-bordered table-hover">
@@ -24,7 +28,11 @@
             <th scope="col">Address</th>
             <th scope="col">Status</th>
             <th scope="col">Install Date</th>
+            @auth
+            @if (Auth::user()->hasRole('ADMIN'))
             <th scope="col">Action</th>
+            @endif
+            @endauth
             </tr>
         </thead>
         <tbody>
@@ -35,11 +43,15 @@
             <td>{{ $st->address }}</td>
             <td>{{ $st->status }}</td>
             <td>{{ date('Y-m-d', strtotime($st->date_installed)) }}</td>
+            @auth
+            @if (Auth::user()->hasRole('ADMIN'))
             <td>
                 {{-- <a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square">&#xE03B;</i></a> --}}
-                <a class="edit" title="Edit" data-bs-toggle="tooltip" href="{{ url('admin/stations/'.$st->id.'/edit') }}"><i class="fas fa-edit">&#xE254;</i></a>
+                <a class="edit" title="Edit" data-bs-toggle="tooltip" href="{{ url('stations/'.$st->id.'/edit') }}"><i class="fas fa-edit">&#xE254;</i></a>
                 <a class="delete" title="Delete" data-bs-toggle="tooltip" @click="deleteStation({{ $st->id }})"><i class="fas fa-trash">&#xE872;</i></a>
             </td>
+            @endif
+            @endauth
             </tr>
         @endforeach
         </tbody>
@@ -54,6 +66,8 @@
     </div>
 
     <!-- Modal -->
+    @auth
+    @if (Auth::user()->hasRole('ADMIN'))
     <div class="x-modal" x-cloak x-show="modalIsVisible" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -66,7 +80,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="closeModal()">Close</button>
-                    <form x-bind:action="`{{ url('admin/stations') }}/${station.id}`" method="post">
+                    <form x-bind:action="`{{ url('stations') }}/${station.id}`" method="post">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger" type="submit">Delete</button>
@@ -75,5 +89,7 @@
             </div>
         </div>
     </div>
+    @endif
+    @endauth
 </div>
 @endsection

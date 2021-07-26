@@ -15,26 +15,15 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Auth::routes();
+
+
 Route::get('/', function () {
-    // return view('home');
-    return redirect('/admin');
+    return view('home');
 });
 
-Auth::routes();
-
-
-
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [App\Http\Controllers\AdminController::class, 'index']);
-    Route::resource('/stations', ObservationsStationController::class);
-});
-
-
-
-// Route::get('/superadmin', [App\Http\Controllers\SuperAdminController::class, 'index']);
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('/stations', ObservationsStationController::class)->except(['index', 'show'])->middleware(['auth','role:ADMIN']);
+Route::resource('/stations', ObservationsStationController::class)->only(['index', 'show']);
+
