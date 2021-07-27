@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\ObservationsStationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ObservationsStationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,15 +17,13 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::get('/', [HomeController::class, 'index'])->name('home');
+if (config('app.suburl') != '') {
+    Route::get('/'.config('app.suburl'), [HomeController::class, 'index']); # workaround for subdirectory
+}
+
 Auth::routes();
 
-
-Route::get('/', function () {
-    return view('home');
-});
-
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('/stations', ObservationsStationController::class)->except(['index', 'show'])->middleware(['auth','role:ADMIN']);
 Route::resource('/stations', ObservationsStationController::class)->only(['index', 'show']);
 
