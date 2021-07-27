@@ -8,11 +8,14 @@
           >
             <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main dashboard</span>
           </a>
+          <a href="{{ url('stations') }}" class="list-group-item list-group-item-action py-2 ripple {{ request()->routeIs('stations.*') ? 'active' : '' }}"
+            ><i class="fas fa-umbrella fa-fw me-3"></i><span>Weather Stations</span></a
+          >
           <a href="#" class="list-group-item list-group-item-action py-2 ripple">
             <i class="fas fa-user fa-fw me-3"></i><span>User</span>
           </a>
-          <a href="{{ url('stations') }}" class="list-group-item list-group-item-action py-2 ripple {{ request()->routeIs('stations.index') ? 'active' : '' }}"
-            ><i class="fas fa-umbrella fa-fw me-3"></i><span>Weather Stations</span></a
+          <a href="{{ url('roles') }}" class="list-group-item list-group-item-action py-2 ripple {{ request()->routeIs('roles.*') ? 'active' : '' }}"
+            ><i class="fas fa-user-tag fa-fw me-3"></i><span>Roles</span></a
           >
         </div>
     </div>
