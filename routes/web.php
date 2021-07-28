@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ObservationsStationController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,6 @@ Auth::routes();
 Route::resource('/stations', ObservationsStationController::class)->except(['index', 'show'])->middleware(['auth','role:ADMIN']);
 Route::resource('/stations', ObservationsStationController::class)->only(['index', 'show']);
 
-Route::resource('/roles', RoleController::class)->except(['index', 'show'])->middleware(['auth','role:SUPERADMIN']);
-Route::resource('/roles', RoleController::class)->only(['index']);
+Route::resource('/roles', RoleController::class)->except(['show'])->middleware(['auth','role:SUPERADMIN']);
 
+Route::resource('/users', UserController::class)->except(['show'])->middleware(['auth','role:SUPERADMIN']);
