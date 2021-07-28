@@ -56,7 +56,12 @@ class GLabsController extends Controller
                 $station = ObservationsStation::create([
                     'name'=>'63'.$subNum,
                     'mobile_number'=>'63'.$subNum,
+                    'station_type'=>'SMS',
+                    'status'=>'ACTIVE',
                 ]);
+            } else {
+                $station->status = 'ACTIVE';
+                $station->save();
             }
             $stGLabsSubs = $station->glabs_subscription;
             if (!$stGLabsSubs) { # Create new subscription
@@ -105,7 +110,7 @@ class GLabsController extends Controller
                     $curMon, $gsmSignalStrength, $arqTemp, $arqRH, $flashPg,
                     $dateTimeStr] = $varArray;
             } else {
-                Log::debug('[GlobeLabs] sender:'.$subNum.' message:'.$smsMsg);
+                Log::debug('[GlobeLabs] Invalid data. sender:'.$subNum.' message:'.$smsMsg);
                 if ($station) {
                     $station->health()->create([
                         'message' => $smsMsg,
@@ -156,9 +161,10 @@ class GLabsController extends Controller
                 }
                 $station->health()->create($stnHealth);
 
+                Log::debug('[GlobeLabs] Data saved. sender:'.$subNum.' message:'.$smsMsg);
                 return response()->json(['message'=>"Data saved"]);
             } else {
-                Log::debug('[GlobeLabs] sender:'.$subNum.' message:'.$smsMsg);
+                Log::debug('[GlobeLabs] unknown sender:'.$subNum.' message:'.$smsMsg);
                 return response()->json(['message'=>"Error: No associated weather station for ".$subNum]);
             }
         }
