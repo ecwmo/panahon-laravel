@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ObservationsStation;
 use Illuminate\Http\Request;
+
+use App\Models\ObservationsStation;
 
 class ObservationsStationController extends Controller
 {
@@ -53,7 +54,7 @@ class ObservationsStationController extends Controller
             'lon' => 'numeric|nullable',
             'lat' => 'numeric|nullable',
             'elevation' => 'numeric|nullable',
-            'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable|unique:App\Models\ObservationsStation,mobile_number',
+            'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number',
             'date_installed' => 'nullable|date_format:Y-m-d',
             'address' => 'max:255|nullable',
             'province' => 'max:255|nullable',
@@ -67,10 +68,10 @@ class ObservationsStationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\ObservationsStation  $station
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ObservationsStation $station)
     {
         //
     }
@@ -78,11 +79,10 @@ class ObservationsStationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\ObservationsStation  $station
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
-        $station = ObservationsStation::find($id);
+    public function edit(ObservationsStation $station) {
         return view('station.form', compact('station'));
     }
 
@@ -90,38 +90,34 @@ class ObservationsStationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\ObservationsStation  $station
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-
-        // return view('station.edit', compact('station'));
+    public function update(Request $request, ObservationsStation $station) {
         $request->validate([
             'name' => 'required|max:200',
             'lon' => 'numeric|nullable',
             'lat' => 'numeric|nullable',
             'elevation' => 'numeric|nullable',
-            'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable',
+            'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number,'. $station->id,
             'address' => 'max:255|nullable',
             'province' => 'max:255|nullable',
             'region' => 'max:255|nullable',
         ]);
 
-        $station = ObservationsStation::findOrFail($id);
         $station->update($request->all());
-        // $station->save();
+
         return back()->with('success', 'Station updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\ObservationsStation  $station
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ObservationsStation $station)
     {
-        $station = ObservationsStation::find($id);
         $station->delete();
 
         return redirect('stations')->with('success', 'Station deleted!');
