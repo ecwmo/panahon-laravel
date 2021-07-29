@@ -47,45 +47,45 @@
                 </div>
             </div>
         </div>
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Install Date</th>
-                    @auth
-                        @if (Auth::user()->hasRole('ADMIN'))
-                            <th scope="col">Action</th>
-                        @endif
-                    @endauth
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($stations as $st)
-                    <tr>
-                        <th scope="row">{{ $st->id }}</th>
-                        <td>{{ $st->name }}</td>
-                        <td>{{ $st->address }}</td>
-                        <td>{{ $st->status }}</td>
-                        <td>{{ date('Y-m-d', strtotime($st->date_installed)) }}</td>
+        <div class="d-flex justify-content-center">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Install Date</th>
                         @auth
                             @if (Auth::user()->hasRole('ADMIN'))
-                                <td>
-                                    {{-- <a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square">&#xE03B;</i></a> --}}
-                                    <a class="edit" title="Edit" data-bs-toggle="tooltip"
-                                        href="{{ url('stations/' . $st->id . '/edit') }}"><i
-                                            class="fas fa-edit">&#xE254;</i></a>
-                                    <a class="delete" title="Delete" data-bs-toggle="tooltip"
-                                        @click="deleteStation({{ $st->id }})"><i class="fas fa-trash">&#xE872;</i></a>
-                                </td>
+                                <th scope="col">Action</th>
                             @endif
                         @endauth
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($stations as $st)
+                        <tr>
+                            <th scope="row">{{ $st->name }}</th>
+                            <td>{{ $st->address }}</td>
+                            <td class="text-center">{{ $st->station_type }}</td>
+                            <td class="text-center">{{ $st->status }}</td>
+                            <td class="text-center">{{ date('Y-m-d', strtotime($st->date_installed)) }}</td>
+                            @auth
+                                @if (Auth::user()->hasRole('ADMIN'))
+                                    <td class="d-flex justify-content-evenly">
+                                        <a class="edit" title="Edit" data-bs-toggle="tooltip"
+                                            href="{{ url('stations/' . $st->id . '/edit') }}"><i class="fas fa-edit"></i></a>
+                                        <a class="ms-2 delete" title="Delete" data-bs-toggle="tooltip"
+                                            @click="deleteStation({{ $st->id }})"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                @endif
+                            @endauth
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         <div>
             <!-- For Default pagination user -->

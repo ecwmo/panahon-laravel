@@ -23,41 +23,39 @@
                 @endauth
             </div>
         </div>
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    @auth
-                        @if (Auth::user()->hasRole('SUPERADMIN'))
-                            <th scope="col">Action</th>
-                        @endif
-                    @endauth
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($roles as $role)
+        <div class="d-flex justify-content-center">
+            <table class="table table-bordered table-hover w-auto">
+                <thead>
                     <tr>
-                        <th scope="row">{{ $role->id }}</th>
-                        <td>{{ $role->name }}</td>
-                        <td>{{ $role->description }}</td>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
                         @auth
                             @if (Auth::user()->hasRole('SUPERADMIN'))
-                                <td>
-                                    {{-- <a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square">&#xE03B;</i></a> --}}
-                                    <a class="edit" title="Edit" data-bs-toggle="tooltip"
-                                        href="{{ url('roles/' . $role->id . '/edit') }}"><i
-                                            class="fas fa-edit">&#xE254;</i></a>
-                                    <a class="delete" title="Delete" data-bs-toggle="tooltip"
-                                        @click="deleteRole({{ $role->id }})"><i class="fas fa-trash">&#xE872;</i></a>
-                                </td>
+                                <th scope="col">Action</th>
                             @endif
                         @endauth
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($roles as $role)
+                        <tr>
+                            <th scope="row">{{ $role->name }}</th>
+                            <td>{{ $role->description }}</td>
+                            @auth
+                                @if (Auth::user()->hasRole('SUPERADMIN'))
+                                    <td class="d-flex justify-content-evenly">
+                                        <a class="edit" title="Edit" data-bs-toggle="tooltip"
+                                            href="{{ url('roles/' . $role->id . '/edit') }}"><i class="fas fa-edit"></i></a>
+                                        <a class="ms-2 delete" title="Delete" data-bs-toggle="tooltip"
+                                            @click="deleteRole({{ $role->id }})"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                @endif
+                            @endauth
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         <div>
             <!-- For Default pagination user -->
