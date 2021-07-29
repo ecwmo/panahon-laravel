@@ -17057,19 +17057,6 @@ readers do not read off random characters that represent icons */
   margin: 6px 0 0;
   font-size: 22px;
 }
-.table-title .add-new {
-  float: right;
-  height: 30px;
-  font-weight: bold;
-  font-size: 12px;
-  text-shadow: none;
-  min-width: 100px;
-  border-radius: 50px;
-  line-height: 13px;
-}
-.table-title .add-new i {
-  margin-right: 4px;
-}
 
 table.table td a {
   cursor: pointer;
