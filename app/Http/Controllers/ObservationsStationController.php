@@ -13,8 +13,20 @@ class ObservationsStationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        $stations = ObservationsStation::paginate(10);
+    public function index(Request $request) {
+        $stations = ObservationsStation::where([
+            ['name', '!=', Null],
+            [function ($query) use ($request) {
+                if ($q = $request->q) {
+                    $query->orWhere('name', 'LIKE', '%' . $q . '%')
+                        ->orWhere('address', 'LIKE', '%' . $q . '%')
+                        ->get();
+                }
+            }]
+        ])
+            ->orderBy('id', 'desc')
+            ->paginate(15);
+        // $stations = ObservationsStation::paginate(10);
         return view('station.index', compact('stations'));
     }
 
