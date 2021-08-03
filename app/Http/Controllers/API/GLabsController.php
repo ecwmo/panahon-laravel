@@ -109,6 +109,14 @@ class GLabsController extends Controller
                     $voltPB1, $curr, $boostPB1,
                     $curMon, $gsmSignalStrength, $arqTemp, $arqRH, $flashPg,
                     $dateTimeStr] = $varArray;
+
+            } elseif ($varCount == 24) {
+                [$_,
+                    $tempC, $relHum, $airPresHPA, $windSpeedKPH, $windGustKPH, $_, $windDirDeg,
+                    $solRadWPM2, $dewPtC, $windChillC, $rainTip, $rainCumTip,
+                    $voltPB1, $curr, $boostPB1,
+                    $curMon, $gsmSignalStrength, $arqTemp, $arqRH, $flashPg,
+                    $dateTimeStr] = $varArray;
             } else {
                 Log::debug('[GlobeLabs] Invalid data. sender:'.$subNum.' message:'.$smsMsg);
                 if ($station) {
