@@ -114,7 +114,7 @@ class GLabsController extends Controller
                 [$_,
                     $tempC, $relHum, $airPresHPA, $windSpeedKPH, $windGustKPH, $_, $windDirDeg,
                     $solRadWPM2, $dewPtC, $windChillC, $rainTip, $rainCumTip,
-                    $voltPB1, $curr, $boostPB1,
+                    $voltPB1, $voltPB2, $curr, $boostPB1, $boostPB2,
                     $curMon, $gsmSignalStrength, $arqTemp, $arqRH, $flashPg,
                     $dateTimeStr] = $varArray;
             } else {
