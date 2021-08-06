@@ -26,9 +26,9 @@ class ObservationsStationController extends Controller
                 }
             }]
         ])
-            ->orderBy('date_installed', 'desc')
-            ->orderBy('status', 'asc')
+            ->orderByRaw('date_installed DESC NULLS LAST')
             ->orderBy('id', 'asc')
+            ->orderBy('status', 'asc')
             ->paginate(15);
         return view('station.index', compact('stations'));
     }
