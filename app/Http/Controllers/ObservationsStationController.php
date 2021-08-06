@@ -21,13 +21,15 @@ class ObservationsStationController extends Controller
                 if ($q = $request->q) {
                     $query->orWhere('name', 'LIKE', '%' . $q . '%')
                         ->orWhere('address', 'LIKE', '%' . $q . '%')
+                        ->orWhere('mobile_number', 'LIKE', '%' . $q . '%')
                         ->get();
                 }
             }]
         ])
-            ->orderBy('id', 'desc')
+            ->orderBy('date_installed', 'desc')
+            ->orderBy('status', 'asc')
+            ->orderBy('id', 'asc')
             ->paginate(15);
-        // $stations = ObservationsStation::paginate(10);
         return view('station.index', compact('stations'));
     }
 
