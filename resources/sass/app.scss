@@ -1,18 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Nunito");
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
-@import "variables";
+@import 'variables';
 
-// Bootstrap
-@import "~bootstrap/scss/bootstrap";
+$fa-font-path: '../webfonts';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
 
-$fa-font-path: "../webfonts";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free/scss/solid";
-@import "~@fortawesome/fontawesome-free/scss/brands";
-@import "~@fortawesome/fontawesome-free/scss/regular";
-
-@import "components/navbar.scss";
-@import "components/table.scss";
-@import "components/form.scss";
+// @import 'components/table.scss';
+@import 'components/form.scss';

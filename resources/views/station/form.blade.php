@@ -1,33 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" x-data="stationForm({{ $station }})">
-    <div class="row justify-content-center">
-        <div class="col-sm-8">
-            <div class="card">
-                <div class="card-header fs-2">{{ $station->id ? "Update ".$station->name : "Add new station" }}</div>
-                <div class="card-body">
-                    @if(Session::has('success'))
+    <div class="flex items-center min-h-screen bg-white dark:bg-gray-900" x-data="stationForm({{ $station }})">
+        <div class=" container mx-auto">
+            <div class="max-w-md mx-auto">
+                <div class="text-center">
+                    <h1 class="my-3 text-3xl font-semibold text-gray-700 dark:text-gray-200">
+                        {{ $station->id ? 'Update ' . $station->name : 'Add new station' }}</h1>
+                </div>
+                <div class="m-7">
+                    @if (Session::has('success'))
                         <div class="alert alert-success text-center">
-                            {{Session::get('success')}}
+                            {{ Session::get('success') }}
                         </div>
                     @endif
 
                     <form method="post"
-                        action="{{ $station->id == null ? url('stations') :  url('stations/'.$station->id)}}"
-                        >
+                        action="{{ $station->id == null ? url('stations') : url('stations/' . $station->id) }}">
                         @isset($station->id)
-                        {{ method_field('PATCH')}}
+                            {{ method_field('PATCH') }}
                         @endisset
                         @csrf
 
-                        <div class="form-floating mb-3">
+                        <div class="mb-3">
+                            <label for="name" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Station
+                                Name</label>
                             <input type="text"
-                                class="form-control @error('name') is-invalid @enderror"
-                                placeholder="Station Name" name="name"
-                                value="{{ old('name', $station->name) }}"
-                                required/>
-                            <label for="name">Station Name</label>
+                                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('name') is-invalid @enderror"
+                                placeholder="Station Name" name="name" value="{{ old('name', $station->name) }}"
+                                required />
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -35,118 +36,111 @@
                             @enderror
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text"
-                                        class="form-control @error('lat') is-invalid @enderror"
-                                        id="lat" placeholder="Lat" name="lat"
-                                        value="{{ old('lat', $station->lat) }}" />
-                                    <label for="lat">Latitude</label>
-                                    @error('lat')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                        <div class="flex mb-3 space-x-2">
+                            <div class="w-1/3">
+                                <label for="lat"
+                                    class="block mb-1 text-sm text-gray-600 dark:text-gray-400">Latitude</label>
+                                <input type="text"
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('lat') is-invalid @enderror"
+                                    id="lat" placeholder="Lat" name="lat" value="{{ old('lat', $station->lat) }}" />
+                                @error('lat')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text"
-                                        class="form-control @error('lon') is-invalid @enderror"
-                                        id="lon" placeholder="Lon" name="lon"
-                                        value="{{ old('lon', $station->lon) }}" />
-                                    <label for="lon">Longitude</label>
-                                    @error('lon')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                            <div class="w-1/3">
+                                <label for="lon"
+                                    class="block mb-1 text-sm text-gray-600 dark:text-gray-400">Longitude</label>
+                                <input type="text"
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('lon') is-invalid @enderror"
+                                    id="lon" placeholder="Lon" name="lon" value="{{ old('lon', $station->lon) }}" />
+                                @error('lon')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text"
-                                        class="form-control @error('elevation') is-invalid @enderror"
-                                        id="elevation" placeholder="Elevation" name="elevation"
-                                        value="{{ old('elevation', $station->elevation)  }}" />
-                                    <label for="elevation">Elevation</label>
-                                    @error('elevation')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                            <div class="w-1/3">
+                                <label for="elevation"
+                                    class="block mb-1 text-sm text-gray-600 dark:text-gray-400">Elevation</label>
+                                <input type="text"
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('elevation') is-invalid @enderror"
+                                    id="elevation" placeholder="Elevation" name="elevation"
+                                    value="{{ old('elevation', $station->elevation) }}" />
+                                @error('elevation')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md">
-                                <div class="form-floating">
-                                    <select class="form-select" id="station_type"
-                                        @change="toggleMobileNumber()"
-                                        x-model="station['station_type']"
-                                        name="station_type"
-                                        aria-label="Station Type">
-                                        <option>SMS</option>
-                                        <option>MO</option>
-                                    </select>
-                                    <label for="station_type">Station Type</label>
-                                </div>
+                        <div class="flex mb-3 space-x-2">
+                            <div class="w-2/5">
+                                <label for="station_type"
+                                    class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Station
+                                    Type</label>
+                                <select
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                                    id="station_type" @change="toggleMobileNumber()" x-model="station['station_type']"
+                                    name="station_type" aria-label="Station Type">
+                                    <option>SMS</option>
+                                    <option>MO</option>
+                                </select>
                             </div>
-                            <div class="col-md">
-                                <div class="form-floating">
-                                    <input type="text"
-                                        class="form-control @error('mobile_number') is-invalid @enderror"
-                                        :disabled="!mobileNumberInputEnabled"
-                                        id="mobile_number" placeholder="63XXXXXXXXXX" name="mobile_number"
-                                        pattern="63[0-9]{10}"
-                                        value="{{ old('mobile_number', $station->mobile_number) }}" />
-                                    <label for="mobile_number">Mobile Number</label>
-                                    @error('mobile_number')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                            <div class="w-3/5">
+                                <label for="mobile_number"
+                                    class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Mobile
+                                    Number</label>
+                                <input type="text"
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('mobile_number') is-invalid @enderror"
+                                    :disabled="!mobileNumberInputEnabled" id="mobile_number" placeholder="63XXXXXXXXXX"
+                                    name="mobile_number" pattern="63[0-9]{10}"
+                                    value="{{ old('mobile_number', $station->mobile_number) }}" />
+
+                                @error('mobile_number')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md">
-                                <div class="form-floating">
-                                    <select class="form-select" id="status"
-                                        x-model="station['status']"
-                                        name="status"
-                                        aria-label="Station Status">
-                                        <option>ACTIVE</option>
-                                        <option>INACTIVE</option>
-                                    </select>
-                                    <label for="status">Status</label>
-                                </div>
+                        <div class="flex mb-3 space-x-2">
+                            <div class="w-2/5">
+                                <label for="status"
+                                    class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Status</label>
+                                <select
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                                    id="status" x-model="station['status']" name="status" aria-label="Station Status">
+                                    <option>ACTIVE</option>
+                                    <option>INACTIVE</option>
+                                </select>
+
                             </div>
-                            <div class="col-md">
-                                <div class="form-floating">
-                                    <input type="date"
-                                        class="form-control @error('date_installed') is-invalid @enderror"
-                                        id="date_installed" placeholder="YYYY-MM-dd" name="date_installed"
-                                        value="{{ old('date_installed', $station->date_installed) }}" />
-                                    <label for="date_installed">Date Installed</label>
-                                    @error('date_installed')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                            <div class="w-3/5">
+                                <label for="date_installed" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Date
+                                    Installed</label>
+                                <input type="date"
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('date_installed') is-invalid @enderror"
+                                    id="date_installed" placeholder="YYYY-MM-dd" name="date_installed"
+                                    value="{{ old('date_installed', $station->date_installed) }}" />
+
+                                @error('date_installed')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="form-floating mb-3">
+                        <div class="mb-3">
+                            <label for="address" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Address</label>
                             <input type="text"
-                                class="form-control @error('address') is-invalid @enderror"
+                                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('address') is-invalid @enderror"
                                 id="address" name="address" placeholder="Address"
                                 value="{{ old('address', $station->address) }}" />
-                            <label for="address">Address</label>
                             @error('address')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -154,42 +148,42 @@
                             @enderror
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text"
-                                        class="form-control @error('province') is-invalid @enderror"
-                                        id="province" placeholder="Province" name="province"
-                                        value="{{ old('province', $station->province) }}" />
-                                    <label for="province">Province</label>
-                                    @error('province')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                        <div class="flex mb-4 space-x-2">
+                            <div class="w-1/2">
+                                <label for="province"
+                                    class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Province</label>
+                                <input type="text"
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('province') is-invalid @enderror"
+                                    id="province" placeholder="Province" name="province"
+                                    value="{{ old('province', $station->province) }}" />
+                                @error('province')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text"
-                                        class="form-control @error('region') is-invalid @enderror"
-                                        id="region" placeholder="Region" name="region"
-                                        value="{{ old('region', $station->region) }}" />
-                                    <label for="region">Region</label>
-                                    @error('region')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                            <div class="w-1/2">
+                                <label for="region"
+                                    class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Region</label>
+                                <input type="text"
+                                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('region') is-invalid @enderror"
+                                    id="region" placeholder="Region" name="region"
+                                    value="{{ old('region', $station->region) }}" />
+                                @error('region')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">{{ $station->id ? "Update" : "Add" }}</button>
+                        <div class="mb-3">
+                            <button type="submit"
+                                class="w-full px-3 py-4 text-white bg-blue-500 rounded-md focus:bg-blue-600 focus:outline-none">{{ $station->id ? 'Update' : 'Add' }}</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

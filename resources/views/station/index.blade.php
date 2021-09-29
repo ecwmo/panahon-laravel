@@ -1,64 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container" x-data="stationForm()">
+    <div class="flex flex-col space-y-2" x-data="stationForm()">
         @if (Session::has('success'))
             <div class="alert alert-success text-center">
                 {{ Session::get('success') }}
             </div>
         @endif
 
-        <div class="table-title">
-            <div class="row">
-                <div class="col">
-                    <h2>Station <b>Details</b></h2>
-                </div>
-                <div class="col-auto">
-                    <div class="row">
-                        <div class="col">
-                            <div class="row g-1">
-                                <div class="col">
-                                    <form action="{{ route('stations.index') }}" method="GET" role="search">
-                                        <div class="input-group">
-                                            <button class="btn btn-info" type="submit" title="Search stations">
-                                                <span class="fas fa-search"></span>
-                                            </button>
-                                            <input type="text" class="form-control mr-2" name="q"
-                                                placeholder="Search stations" id="q">
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-auto">
-                                    <a href="{{ route('stations.index') }}" class="btn btn-danger">
-                                        <span class="fas fa-sync-alt"></span>
-                                    </a>
-                                </div>
-                            </div>
+        <div class="flex justify-between items-end p-2">
+            <h2 class="text-2xl">Station <span class="font-bold">Details</span></h2>
+            <div class="flex">
+                <div class="flex">
+                    <form action="{{ route('stations.index') }}" method="GET" role="search">
+                        <div class="input-group">
+                            <button class="rounded px-3 py-2 m-1 shadow-lg bg-blue-500 border-blue-600" type="submit"
+                                title="Search stations">
+                                <span class="fas fa-search"></span>
+                            </button>
+                            <input type="text" class="rounded px-3 py-2 shadow-lg mr-2" name="q"
+                                placeholder="Search stations" id="q">
                         </div>
-                        @auth
-                            @if (Auth::user()->hasRole('ADMIN'))
-                                <div class="col-auto">
-                                    <a class="btn btn-info" href="{{ route('stations.create') }}" role="button"><i
-                                            class="fa fa-plus"></i></a>
-                                </div>
-                            @endif
-                        @endauth
-                    </div>
+                    </form>
                 </div>
+                <a href="{{ route('stations.index') }}" class="rounded px-3 py-2 m-1 shadow-lg bg-red-500 border-red-600">
+                    <span class="fas fa-sync-alt"></span>
+                </a>
+                @auth
+                    @if (Auth::user()->hasRole('ADMIN'))
+                        <a class="rounded px-3 py-2 m-1 shadow-lg bg-blue-600 border-blue-700"
+                            href="{{ route('stations.create') }}" role="button">
+                            <i class="fa fa-plus"></i></a>
+                    @endif
+                @endauth
             </div>
         </div>
-        <div class="d-flex justify-content-center">
-            <table class="table table-bordered table-hover">
+        <div class="flex justify-center">
+            <table class="space-y-6 text-sm">
                 <thead>
                     <tr class="text-center">
-                        <th scope="col">Name</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Install Date</th>
+                        <th class="p-2 border border-gray-300" scope="col">Name</th>
+                        <th class="p-2 border border-gray-300" scope="col">Address</th>
+                        <th class="p-2 border border-gray-300" scope="col">Type</th>
+                        <th class="p-2 border border-gray-300" scope="col">Status</th>
+                        <th class="p-2 border border-gray-300" scope="col">Install Date</th>
                         @auth
                             @if (Auth::user()->hasRole('ADMIN'))
-                                <th scope="col">Action</th>
+                                <th class="p-2 border border-gray-300" scope="col">Action</th>
                             @endif
                         @endauth
                     </tr>
@@ -66,18 +54,19 @@
                 <tbody>
                     @foreach ($stations as $st)
                         <tr>
-                            <th scope="row">{{ $st->name }}</th>
-                            <td>{{ $st->address }}</td>
-                            <td class="text-center">{{ $st->station_type }}</td>
-                            <td class="text-center">{{ $st->status }}</td>
-                            <td class="text-center">{{ date('Y-m-d', strtotime($st->date_installed)) }}</td>
+                            <th class="p-2 text-justify border border-gray-300" scope="row">{{ $st->name }}</th>
+                            <td class="p-2 text-justify border border-gray-300">{{ $st->address }}</td>
+                            <td class="p-2 text-center border border-gray-300">{{ $st->station_type }}</td>
+                            <td class="p-2 text-center border border-gray-300">{{ $st->status }}</td>
+                            <td class="p-2 text-center border border-gray-300">
+                                {{ date('Y-m-d', strtotime($st->date_installed)) }}</td>
                             @auth
                                 @if (Auth::user()->hasRole('ADMIN'))
-                                    <td class="d-flex justify-content-evenly">
-                                        <a class="edit" title="Edit" data-bs-toggle="tooltip"
-                                            href="{{ url('stations/' . $st->id . '/edit') }}"><i class="fas fa-edit"></i></a>
-                                        <a class="ms-2 delete" title="Delete" data-bs-toggle="tooltip"
-                                            @click="deleteStation({{ $st->id }})"><i class="fas fa-trash"></i></a>
+                                    <td class="p-2 text-center border border-gray-300 space-x-2">
+                                        <a title="Edit" href="{{ url('stations/' . $st->id . '/edit') }}"><i
+                                                class="fas fa-edit"></i></a>
+                                        <a title="Delete" @click="deleteStation({{ $st->id }})"><i
+                                                class="fas fa-trash"></i></a>
                                     </td>
                                 @endif
                             @endauth

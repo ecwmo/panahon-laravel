@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,13 +17,12 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
-    <head>
-        <x-sidebar />
-        <x-header />
-    </head>
 
-    <main style="margin-top: 58px; padding-left: 240px;">
+<body class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
+    <x-sidebar />
+
+    <main id="app" class="main flex flex-col flex-grow -ml-64 md:ml-0">
+        <x-header />
         <div class="container pt-4">@yield('content')</div>
     </main>
 
@@ -32,4 +32,5 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     @stack('scripts')
 </body>
+
 </html>

@@ -1,37 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container" x-data="userForm()">
+    <div class="flex flex-col space-y-2" x-data="userForm()">
         @if (Session::has('success'))
             <div class="alert alert-success text-center">
                 {{ Session::get('success') }}
             </div>
         @endif
 
-        <div class="table-title">
-            <div class="row">
-                <div class="col">
-                    <h2>User <b>Details</b></h2>
-                </div>
+        <div class="flex justify-between items-end p-2">
+            <h2 class="text-2xl">User <span class="font-bold">Details</span></h2>
+            <div class="flex">
                 @auth
                     @if (Auth::user()->hasRole('SUPERADMIN'))
-                        <div class="col-auto">
-                            <a class="btn btn-info" href="{{ route('users.create') }}" user="button"><i
-                                    class="fa fa-plus"></i></a>
-                        </div>
+                        <a class="rounded px-3 py-2 m-1 shadow-lg bg-blue-600 border-blue-700"
+                            href="{{ route('users.create') }}" role="button">
+                            <i class="fa fa-plus"></i></a>
                     @endif
                 @endauth
             </div>
         </div>
-        <div class="d-flex justify-content-center">
-            <table class="table table-bordered table-hover w-auto">
+
+        <div class="flex justify-center">
+            <table class="space-y-6 text-sm">
                 <thead>
                     <tr class="text-center">
-                        <th scope="col">Name</th>
-                        <th scope="col">Roles</th>
+                        <th class="p-2 border border-gray-300" scope="col">Name</th>
+                        <th class="p-2 border border-gray-300" scope="col">Roles</th>
                         @auth
                             @if (Auth::user()->hasRole('SUPERADMIN'))
-                                <th scope="col">Action</th>
+                                <th class="p-2 border border-gray-300" scope="col">Action</th>
                             @endif
                         @endauth
                     </tr>
@@ -39,15 +37,15 @@
                 <tbody>
                     @foreach ($users as $user)
                         <tr>
-                            <th scope="row">{{ $user->name }}</th>
-                            <td>{{ $user->roleList }}</td>
+                            <th class="p-2 text-justify border border-gray-300" scope="row">{{ $user->name }}</th>
+                            <td class="p-2 text-justify border border-gray-300">{{ $user->roleList }}</td>
                             @auth
                                 @if (Auth::user()->hasRole('SUPERADMIN'))
-                                    <td class="d-flex justify-content-evenly">
-                                        <a class="edit" title="Edit" data-bs-toggle="tooltip"
-                                            href="{{ url('users/' . $user->id . '/edit') }}"><i class="fas fa-edit"></i></a>
-                                        <a class="ms-2 delete" title="Delete" data-bs-toggle="tooltip"
-                                            @click="deleteUser({{ $user->id }})"><i class="fas fa-trash"></i></a>
+                                    <td class="p-2 text-center border border-gray-300 space-x-2">
+                                        <a title="Edit" href="{{ url('users/' . $user->id . '/edit') }}"><i
+                                                class="fas fa-edit"></i></a>
+                                        <a title="Delete" @click="deleteUser({{ $user->id }})"><i
+                                                class="fas fa-trash"></i></a>
                                     </td>
                                 @endif
                             @endauth
