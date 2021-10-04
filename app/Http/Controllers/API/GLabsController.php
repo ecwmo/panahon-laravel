@@ -95,6 +95,8 @@ class GLabsController extends Controller
                 return response()->json(['message'=>'Number not found']);
             }
 
+            $logType = 2;
+
             if ($varCount == 23) {
                 [$_,
                     $tempC, $relHum, $airPresHPA, $windSpeedKPH, $windGustKPH, $windDirDeg,
@@ -102,14 +104,16 @@ class GLabsController extends Controller
                     $voltPB1, $voltPB2, $curr, $boostPB1, $boostPB2,
                     $curMon, $gsmSignalStrength, $arqTemp, $arqRH, $flashPg,
                     $dateTimeStr] = $varArray;
-            } elseif ($varCount == 21) {
+            } elseif ($varCount == 19) {
+                $logType = 1;
                 [$_,
                     $tempC, $relHum, $airPresHPA, $windSpeedKPH, $windGustKPH, $windDirDeg,
                     $solRadWPM2, $dewPtC, $windChillC, $rainTip, $rainCumTip,
-                    $voltPB1, $curr, $boostPB1,
-                    $curMon, $gsmSignalStrength, $arqTemp, $arqRH, $flashPg,
+                    $arqTemp, $arqRH, $gsmSignalStrength,
+                    $voltPB1, $boostPB1, $flashPg,
                     $dateTimeStr] = $varArray;
 
+                $voltPB1 = explode("#", $voltPB1)[0];
             } elseif ($varCount == 24) {
                 [$_,
                     $tempC, $relHum, $airPresHPA, $windSpeedKPH, $windGustKPH, $_, $windDirDeg,
@@ -128,10 +132,14 @@ class GLabsController extends Controller
                 return response()->json(['message'=>"Error: Message not understood", 'data'=>$smsMsg]);
             }
 
-            if (strlen($dateTimeStr)==13) {
-                $dateTime = Carbon::createFromFormat("ymd/His" ,$dateTimeStr, 'Asia/Manila');
+            if ($logType==1) {
+                $dateTime = Carbon::createFromFormat("y:m:d:H:i:s" ,$dateTimeStr, 'Asia/Manila');
             } else {
-                $dateTime = Carbon::createFromFormat("Ymd/His" ,$dateTimeStr, 'Asia/Manila');
+                if (strlen($dateTimeStr)==13) {
+                    $dateTime = Carbon::createFromFormat("ymd/His" ,$dateTimeStr, 'Asia/Manila');
+                } else {
+                    $dateTime = Carbon::createFromFormat("Ymd/His" ,$dateTimeStr, 'Asia/Manila');
+                }
             }
 
             if ($station) {
@@ -153,19 +161,19 @@ class GLabsController extends Controller
 
                 $stnHealth = [
                     'vb1'=>(float)$voltPB1,
-                    'curr'=>(float)$curr,
                     'bp1'=>(float)$boostPB1,
-                    'cm'=>$curMon,
-                    'ss'=>(int)$gsmSignalStrength,
                     'temp_arq'=>(float)$arqTemp,
                     'rh_arq'=>(float)$arqRH,
+                    'ss'=>(int)$gsmSignalStrength,
                     'fpm'=>(int)$flashPg,
                     'message'=>$smsMsg,
                     'timestamp'=>$dateTime
                 ];
-                if ($varCount == 23) {
+                if ($logType==2) {
                     $stnHealth = Arr::add($stnHealth, 'vb2', (float)$voltPB2);
                     $stnHealth = Arr::add($stnHealth, 'bp2', (float)$boostPB2);
+                    $stnHealth = Arr::add($stnHealth, 'curr', (float)$curr);
+                    $stnHealth = Arr::add($stnHealth, 'cm', $curMon);
                 }
                 $station->health()->create($stnHealth);
 
