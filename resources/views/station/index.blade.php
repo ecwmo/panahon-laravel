@@ -33,6 +33,7 @@
             <table class="space-y-6 text-sm">
                 <thead>
                     <tr class="text-center">
+                        <th class="p-2 border border-gray-300" scope="col"> </th>
                         <th class="p-2 border border-gray-300" scope="col">Name</th>
                         <th class="p-2 border border-gray-300" scope="col">Address</th>
                         <th class="p-2 border border-gray-300" scope="col">Type</th>
@@ -48,7 +49,8 @@
                 <tbody>
                     @foreach ($stations as $st)
                         <tr>
-                            <th class="p-2 text-justify border border-gray-300" scope="row">{{ $st->name }}</th>
+                            <th class="p-2 text-justify border border-gray-300" scope="row">{{ $st->id }}</th>
+                            <td class="p-2 text-justify border border-gray-300">{{ $st->name }}</td>
                             <td class="p-2 text-justify border border-gray-300">{{ $st->address }}</td>
                             <td class="p-2 text-center border border-gray-300">{{ $st->station_type }}</td>
                             <td class="p-2 text-center border border-gray-300">{{ $st->status }}</td>
