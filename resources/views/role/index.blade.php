@@ -38,7 +38,7 @@
                                     <td class="p-2 text-center border border-gray-300 space-x-2">
                                         <a title="Edit" href="{{ url('roles/' . $role->id . '/edit') }}"><i
                                                 class="fas fa-edit"></i></a>
-                                        <a title="Delete" @click="deleteRole({{ $role->id }})"><i
+                                        <a title="Delete" href="#" @click.prevent="deleteRole({{ $role->id }})"><i
                                                 class="fas fa-trash"></i></a>
                                     </td>
                                 @endif

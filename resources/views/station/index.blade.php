@@ -61,7 +61,7 @@
                                     <td class="p-2 text-center border border-gray-300 space-x-2">
                                         <a title="Edit" href="{{ url('stations/' . $st->id . '/edit') }}"><i
                                                 class="fas fa-edit"></i></a>
-                                        <a title="Delete" @click="deleteStation({{ $st->id }})"><i
+                                        <a title="Delete" href="#" @click.prevent="deleteStation({{ $st->id }})"><i
                                                 class="fas fa-trash"></i></a>
                                     </td>
                                 @endif
