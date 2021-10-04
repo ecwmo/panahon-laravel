@@ -59,9 +59,11 @@
                             @auth
                                 @if (Auth::user()->hasRole('ADMIN'))
                                     <td class="p-2 text-center border border-gray-300 space-x-2">
-                                        <a title="Edit" href="{{ url('stations/' . $st->id . '/edit') }}"><i
+                                        <a class="stroke-current hover:text-blue-600" title="Edit"
+                                            href="{{ url('stations/' . $st->id . '/edit') }}"><i
                                                 class="fas fa-edit"></i></a>
-                                        <a title="Delete" href="#" @click.prevent="deleteStation({{ $st->id }})"><i
+                                        <a class="stroke-current hover:text-red-600" title="Delete" href="#"
+                                            @click.prevent="deleteStation({{ $st->id }})"><i
                                                 class="fas fa-trash"></i></a>
                                     </td>
                                 @endif
