@@ -143,42 +143,48 @@ class GLabsController extends Controller
             }
 
             if ($station) {
-                $obsRaw = [
-                    'temp'=>(float)$tempC,
-                    'rh'=>(float)$relHum,
-                    'pres'=>(float)$airPresHPA,
-                    'wspd'=>(float)$windSpeedKPH/3.6,
-                    'wspdx'=>(float)$windGustKPH/3.6,
-                    'wdir'=>(float)$windDirDeg,
-                    'srad'=>(float)$solRadWPM2,
-                    'td'=>(float)$dewPtC,
-                    'wchill'=>(float)$windChillC,
-                    'rr'=>(float)$rainTip*0.2*6.0,
-                    'timestamp'=>$dateTime
-                ];
-                $station->observationRaw()->create($obsRaw);
-                $station->observation()->create($obsRaw);
+                $record = $station->observationRaw()->firstWhere('timestamp', $dateTime);
+                if (is_null($record)) {
+                    $obsRaw = [
+                        'temp'=>(float)$tempC,
+                        'rh'=>(float)$relHum,
+                        'pres'=>(float)$airPresHPA,
+                        'wspd'=>(float)$windSpeedKPH/3.6,
+                        'wspdx'=>(float)$windGustKPH/3.6,
+                        'wdir'=>(float)$windDirDeg,
+                        'srad'=>(float)$solRadWPM2,
+                        'td'=>(float)$dewPtC,
+                        'wchill'=>(float)$windChillC,
+                        'rr'=>(float)$rainTip*0.2*6.0,
+                        'timestamp'=>$dateTime
+                    ];
+                    $station->observationRaw()->create($obsRaw);
+                    $station->observation()->create($obsRaw);
 
-                $stnHealth = [
-                    'vb1'=>(float)$voltPB1,
-                    'bp1'=>(float)$boostPB1,
-                    'temp_arq'=>(float)$arqTemp,
-                    'rh_arq'=>(float)$arqRH,
-                    'ss'=>(int)$gsmSignalStrength,
-                    'fpm'=>(int)$flashPg,
-                    'message'=>$smsMsg,
-                    'timestamp'=>$dateTime
-                ];
-                if ($logType==2) {
-                    $stnHealth = Arr::add($stnHealth, 'vb2', (float)$voltPB2);
-                    $stnHealth = Arr::add($stnHealth, 'bp2', (float)$boostPB2);
-                    $stnHealth = Arr::add($stnHealth, 'curr', (float)$curr);
-                    $stnHealth = Arr::add($stnHealth, 'cm', $curMon);
+                    $stnHealth = [
+                        'vb1'=>(float)$voltPB1,
+                        'bp1'=>(float)$boostPB1,
+                        'temp_arq'=>(float)$arqTemp,
+                        'rh_arq'=>(float)$arqRH,
+                        'ss'=>(int)$gsmSignalStrength,
+                        'fpm'=>(int)$flashPg,
+                        'message'=>$smsMsg,
+                        'timestamp'=>$dateTime
+                    ];
+                    if ($logType==2) {
+                        $stnHealth = Arr::add($stnHealth, 'vb2', (float)$voltPB2);
+                        $stnHealth = Arr::add($stnHealth, 'bp2', (float)$boostPB2);
+                        $stnHealth = Arr::add($stnHealth, 'curr', (float)$curr);
+                        $stnHealth = Arr::add($stnHealth, 'cm', $curMon);
+                    }
+                    $station->health()->create($stnHealth);
+
+                    Log::debug('[GlobeLabs] Data saved. sender:'.$subNum.' message:'.$smsMsg);
+                    return response()->json(['message'=>"Data saved"]);
+                } else {
+                    Log::debug('[GlobeLabs] Data not saved, record already exists. sender:'.$subNum.' message:'.$smsMsg);
+                    return response()->json(['message'=>"Data not saved, record already exists"]);
                 }
-                $station->health()->create($stnHealth);
-
-                Log::debug('[GlobeLabs] Data saved. sender:'.$subNum.' message:'.$smsMsg);
-                return response()->json(['message'=>"Data saved"]);
             } else {
                 Log::debug('[GlobeLabs] unknown sender:'.$subNum.' message:'.$smsMsg);
                 return response()->json(['message'=>"Error: No associated weather station for ".$subNum]);
