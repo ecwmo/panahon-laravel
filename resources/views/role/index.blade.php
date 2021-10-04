@@ -2,12 +2,6 @@
 
 @section('content')
     <div class="flex flex-col space-y-2" x-data="roleForm()">
-        @if (Session::has('success'))
-            <div class="alert alert-success text-center">
-                {{ Session::get('success') }}
-            </div>
-        @endif
-
         <div class="flex justify-between items-end p-2">
             <h2 class="text-2xl">Role <span class="font-bold">Details</span></h2>
             <div class="flex">
@@ -66,25 +60,35 @@
         <!-- Modal -->
         @auth
             @if (Auth::user()->hasRole('SUPERADMIN'))
-                <div class="x-modal" x-cloak x-show="modalIsVisible" tabindex="-1" aria-labelledby="deleteModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Confirm delete</h5>
-                                <button type="button" class="btn-close" @click="closeModal()" aria-label="Close"></button>
+                <div class="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-50"
+                    aria-labelledby="deleteModalLabel" x-show="modalIsVisible" x-cloak>
+                    <div class="relative flex flex-col p-8 bg-white shadow-md hover:shodow-lg rounded-2xl">
+                        <div class="absolute top-1 right-1 p-2 cursor-pointer" @click="closeModal()">
+                            <svg class=" w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-16 h-16 rounded-2xl p-3 border border-blue-100 text-blue-400 bg-blue-50"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div class="flex flex-col ml-3">
+                                    <div class="font-medium leading-none">Delete this role?</div>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete this role?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" @click="closeModal()">Close</button>
-                                <form x-bind:action="`{{ url('roles') }}/${role.id}`" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger" type="submit">Delete</button>
-                                </form>
-                            </div>
+                            <form x-bind:action="`{{ url('roles') }}/${role.id}`" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    class="flex-no-shrink bg-red-500 px-5 ml-4 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 text-white rounded-full"
+                                    type="submit">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>
