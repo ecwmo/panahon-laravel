@@ -20,8 +20,8 @@
                                 placeholder="John Doe" name="name" value="{{ old('name') }}" required autocomplete="name"
                                 autofocus>
                             @error('name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                <span class="mb-3 text-xs text-red-500" role="alert">
+                                    {{ $message }}
                                 </span>
                             @enderror
                         </div>
@@ -34,8 +34,8 @@
                                 placeholder="username@domain.com" name="email" value="{{ old('email') }}" required
                                 autocomplete="email">
                             @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                <span class="mb-3 text-xs text-red-500" role="alert">
+                                    {{ $message }}
                                 </span>
                             @enderror
                         </div>
@@ -47,8 +47,8 @@
                                 class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('password') is-invalid @enderror"
                                 placeholder="************" name="password" required autocomplete="new-password">
                             @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                <span class="mb-3 text-xs text-red-500" role="alert">
+                                    {{ $message }}
                                 </span>
                             @enderror
                         </div>
