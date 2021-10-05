@@ -16,9 +16,11 @@
         </div>
 
         <div class="flex flex-col items-center">
-            <user-table :data='@json($users)' :base-url="'{{ url('users') }}'"
-                :show-action="{{ Auth::user()->hasRole('SUPERADMIN') }}">
-            </user-table>
+            <data-table :fetch-url="'{{ route('users.table') }}'"
+                :columns="[{'name': 'name', 'title': 'Name'}, {'name': 'roleList', 'title': 'Roles'}]"
+                :base-url="'{{ url('users') }}'" :show-action="@json(Auth::user()->hasRole('SUPERADMIN'))"
+                :delete-modal-message="'Delete this user?'">
+            </data-table>
 
             <!-- For Default pagination user -->
             {{-- <div>{{ $users->links() }}</div> --}}

@@ -100,4 +100,15 @@ class RoleController extends Controller
 
         return $role;
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function table()
+    {
+        $roles = Role::paginate(10);
+        return $roles;
+    }
 }

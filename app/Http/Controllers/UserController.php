@@ -136,4 +136,20 @@ class UserController extends Controller
 
         return $user;
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function table()
+    {
+        $users = User::paginate(10);
+
+        foreach($users as $user) {
+            $user->roleList = $user->roles->pluck('name')->implode(', ');
+        }
+
+        return $users;
+    }
 }

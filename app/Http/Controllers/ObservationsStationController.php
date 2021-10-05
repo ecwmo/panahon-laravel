@@ -26,9 +26,7 @@ class ObservationsStationController extends Controller
                 }
             }]
         ])
-            ->orderByRaw('date_installed DESC NULLS LAST')
             ->orderBy('id', 'asc')
-            ->orderBy('status', 'asc')
             ->paginate(15);
         return view('station.index', compact('stations'));
     }
@@ -123,5 +121,27 @@ class ObservationsStationController extends Controller
         $station->delete();
 
         return $station;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function table(Request $request) {
+        $stations = ObservationsStation::where([
+            ['name', '!=', Null],
+            [function ($query) use ($request) {
+                if ($q = $request->q) {
+                    $query->orWhere('name', 'LIKE', '%' . $q . '%')
+                        ->orWhere('address', 'LIKE', '%' . $q . '%')
+                        ->orWhere('mobile_number', 'LIKE', '%' . $q . '%')
+                        ->get();
+                }
+            }]
+        ])
+            ->orderBy('id', 'asc')
+            ->paginate(15);
+        return $stations;
     }
 }

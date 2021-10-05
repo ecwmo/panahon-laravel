@@ -26,9 +26,14 @@ if (config('app.suburl') != '') {
 
 Auth::routes();
 
+Route::get('stations/data-table', [ObservationsStationController::class, 'table'])->name('stations.table');
 Route::resource('/stations', ObservationsStationController::class)->except(['index', 'show'])->middleware(['auth','role:ADMIN']);
 Route::resource('/stations', ObservationsStationController::class)->only(['index', 'show']);
 
+Route::get('roles/data-table', [RoleController::class, 'table'])->name('roles.table');
 Route::resource('/roles', RoleController::class)->except(['show'])->middleware(['auth','role:SUPERADMIN']);
 
+Route::get('users/data-table', [UserController::class, 'table'])->name('users.table');
 Route::resource('/users', UserController::class)->except(['show'])->middleware(['auth','role:SUPERADMIN']);
+// Route('/users/data-table', 'UsersController@getUsersForDataTable')->name('users.table');
+

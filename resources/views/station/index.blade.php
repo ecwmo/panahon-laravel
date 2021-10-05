@@ -30,9 +30,11 @@
             </div>
         </div>
         <div class="flex flex-col items-center">
-            <station-table :data='@json($stations)' :base-url="'{{ url('stations') }}'"
-                :show-action="{{ Auth::user()->hasRole('ADMIN') }}">
-            </station-table>
+            <data-table :fetch-url="'{{ route('stations.table') }}'"
+                :columns="[{'name': 'name', 'title': 'Name'}, {'name': 'address', 'title': 'Address'}, {'name': 'station_type', 'title': 'Type'}, {'name': 'status', 'title': 'Status'}, {'name': 'date_installed', 'title': 'Install Date'}]"
+                :base-url="'{{ url('stations') }}'" :show-action="@json(Auth::user()->hasRole('ADMIN'))"
+                :delete-modal-message="'Delete this station?'">
+            </data-table>
             <!-- For Default pagination user -->
             {{-- <div>{{ $stations->links() }}</div> --}}
 
