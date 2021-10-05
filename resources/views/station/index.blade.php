@@ -32,7 +32,7 @@
 
         <data-table class="w-full" :fetch-url="'{{ route('stations.table') }}'"
             :columns="[{'name': 'name', 'title': 'Name'}, {'name': 'address', 'title': 'Address'}, {'name': 'station_type', 'title': 'Type'}, {'name': 'status', 'title': 'Status'}, {'name': 'date_installed', 'title': 'Install Date'}]"
-            :base-url="'{{ url('stations') }}'" :show-action="@json(Auth::user()->hasRole('ADMIN'))"
+            :base-url="'{{ url('stations') }}'" :show-action="@json(Auth::check() && Auth::user()->hasRole('ADMIN'))"
             :delete-modal-message="'Delete this station?'">
         </data-table>
     </div>
