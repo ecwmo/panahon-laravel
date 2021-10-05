@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex flex-col space-y-2">
-        <div class="flex justify-between items-end p-2">
+    <div class="w-max flex flex-col space-y-2 items-center mx-auto">
+        <div class="w-full flex justify-between items-end p-2">
             <h2 class="text-2xl">Station <span class="font-bold">Details</span></h2>
             <div class="flex">
                 <div class="flex">
@@ -29,17 +29,11 @@
                 @endauth
             </div>
         </div>
-        <div class="flex flex-col items-center">
-            <data-table :fetch-url="'{{ route('stations.table') }}'"
-                :columns="[{'name': 'name', 'title': 'Name'}, {'name': 'address', 'title': 'Address'}, {'name': 'station_type', 'title': 'Type'}, {'name': 'status', 'title': 'Status'}, {'name': 'date_installed', 'title': 'Install Date'}]"
-                :base-url="'{{ url('stations') }}'" :show-action="@json(Auth::user()->hasRole('ADMIN'))"
-                :delete-modal-message="'Delete this station?'">
-            </data-table>
-            <!-- For Default pagination user -->
-            {{-- <div>{{ $stations->links() }}</div> --}}
 
-            <!-- For Custom pagination User -->
-            <div>{{ $stations->links('components.pagination') }}</div>
-        </div>
+        <data-table class="w-full" :fetch-url="'{{ route('stations.table') }}'"
+            :columns="[{'name': 'name', 'title': 'Name'}, {'name': 'address', 'title': 'Address'}, {'name': 'station_type', 'title': 'Type'}, {'name': 'status', 'title': 'Status'}, {'name': 'date_installed', 'title': 'Install Date'}]"
+            :base-url="'{{ url('stations') }}'" :show-action="@json(Auth::user()->hasRole('ADMIN'))"
+            :delete-modal-message="'Delete this station?'">
+        </data-table>
     </div>
 @endsection

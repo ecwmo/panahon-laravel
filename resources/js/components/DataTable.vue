@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="space-y-6 text-sm">
+        <table class="table-auto space-y-6 text-sm mb-2">
             <thead>
                 <tr class="text-center">
                     <th v-if="showIdColumn" class="p-2 border border-gray-300" scope="col">#</th>
@@ -46,21 +46,23 @@
                 </tr>
             </tbody>
         </table>
+        <Pagination v-if="showPagination" :data="data" @fetch-data="fetchData" />
         <Modal
             v-if="showModal"
             @close="showModal = false"
             :message="deleteModalMessage"
             @btn-click="handleButtonClick"
-        >
-        </Modal>
+        />
     </div>
 </template>
 
 <script>
-import { ref, toRefs, onMounted } from 'vue';
+import { ref, toRefs, computed, onMounted } from 'vue';
 import axios from 'axios';
 
+import Pagination from './Pagination.vue';
 import Modal from './Modal.vue';
+
 export default {
     props: {
         fetchUrl: { type: String, required: true },
@@ -71,6 +73,7 @@ export default {
         deleteModalMessage: { type: String, required: true },
     },
     components: {
+        Pagination,
         Modal,
     },
     setup(props) {
@@ -90,16 +93,33 @@ export default {
             });
         };
 
-        const fetchData = async () => {
-            data.value = await axios.get(fetchUrl.value).then(({ data: d }) => d);
-            tabledata.value = data.value.data;
+        const fetchData = async (url) => {
+            if (url) {
+                data.value = await axios.get(url).then(({ data: d }) => d);
+                tabledata.value = data.value.data;
+            }
         };
 
+        const showPagination = computed(
+            () =>
+                Object.prototype.hasOwnProperty.call(data.value, 'links') &&
+                data.value.links.length > 3
+        );
+
         onMounted(() => {
-            fetchData();
+            fetchData(fetchUrl.value);
         });
 
-        return { tabledata, activeId, showModal, closeModal, handleButtonClick };
+        return {
+            fetchData,
+            data,
+            tabledata,
+            activeId,
+            showModal,
+            showPagination,
+            closeModal,
+            handleButtonClick,
+        };
     },
 };
 </script>
