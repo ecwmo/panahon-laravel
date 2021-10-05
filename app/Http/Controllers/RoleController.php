@@ -42,8 +42,9 @@ class RoleController extends Controller
             'description' => 'max:255|nullable',
         ]);
 
-        Role::create($request->all());
-        return back()->with('success', 'New role added.');
+        $role = Role::create($request->all());
+
+        return $role;
     }
 
     /**
@@ -83,7 +84,8 @@ class RoleController extends Controller
         ]);
 
         $role->update($request->all());
-        return back()->with('success', 'Role updated!');
+
+        return $role;
     }
 
     /**
@@ -96,6 +98,6 @@ class RoleController extends Controller
     {
         $role->delete();
 
-        return redirect('roles')->with('success', 'Role deleted!');
+        return $role;
     }
 }

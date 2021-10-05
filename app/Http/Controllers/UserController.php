@@ -64,7 +64,7 @@ class UserController extends Controller
 
         $user->roles()->attach($request->roles);
 
-        return back()->with('success', 'New user added.');
+        return $user;
     }
 
     /**
@@ -121,7 +121,7 @@ class UserController extends Controller
 
         $user->roles()->sync($request->roles);
 
-        return back()->with('success', 'User updated!');
+        return $user;
     }
 
     /**
@@ -134,6 +134,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect('users')->with('success', 'User deleted!');
+        return $user;
     }
 }

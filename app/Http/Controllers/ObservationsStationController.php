@@ -63,8 +63,8 @@ class ObservationsStationController extends Controller
             'region' => 'max:255|nullable',
         ]);
 
-        ObservationsStation::create($request->all());
-        return back()->with('success', 'New station added.');
+        $station = ObservationsStation::create($request->all());
+        return $station;
     }
 
     /**
@@ -109,7 +109,7 @@ class ObservationsStationController extends Controller
 
         $station->update($request->all());
 
-        return back()->with('success', 'Station updated!');
+        return $station;
     }
 
     /**
@@ -122,6 +122,6 @@ class ObservationsStationController extends Controller
     {
         $station->delete();
 
-        return redirect('stations')->with('success', 'Station deleted!');
+        return $station;
     }
 }
