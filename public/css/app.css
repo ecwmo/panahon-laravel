@@ -714,6 +714,7 @@ video {
 }
 
 .sticky{
+  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -38176,6 +38177,7 @@ readers do not read off random characters that represent icons */
   }
 
   .sm\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -69403,6 +69405,7 @@ readers do not read off random characters that represent icons */
   }
 
   .md\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -100630,6 +100633,7 @@ readers do not read off random characters that represent icons */
   }
 
   .lg\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -131857,6 +131861,7 @@ readers do not read off random characters that represent icons */
   }
 
   .xl\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -163084,6 +163089,7 @@ readers do not read off random characters that represent icons */
   }
 
   .\32xl\:sticky{
+    position: -webkit-sticky;
     position: sticky;
   }
 
