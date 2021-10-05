@@ -284,7 +284,7 @@ export default {
 .form-button
     @apply w-full px-3 py-4 text-white bg-blue-500 rounded-md
     &:focus
-        bg-blue-600 outline-none
+        @apply bg-blue-600 outline-none
 .form-error
     @apply mb-3 text-xs text-red-500
 </style>
