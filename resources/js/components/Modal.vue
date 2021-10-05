@@ -13,47 +13,36 @@
         "
         aria-labelledby="deleteModalLabel"
     >
-        <div class="relative flex flex-col p-8 bg-white shadow-md hover:shodow-lg rounded-2xl">
-            <div class="absolute top-1 right-1 p-2 cursor-pointer" @click.prevent="$emit('close')">
-                <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                </svg>
+        <div class="relative flex flex-col p-8 bg-white shadow-md hover:shadow-lg rounded-2xl">
+            <div class="absolute top-1 right-2.5 cursor-pointer" @click.prevent="$emit('close')">
+                <i class="fas fa-times"></i>
             </div>
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
+                    <div
                         class="
-                            w-16
-                            h-16
+                            border
                             rounded-2xl
                             p-3
                             border border-blue-100
                             text-blue-400
                             bg-blue-50
                         "
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
                     >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                    </svg>
+                        <div
+                            class="
+                                flex
+                                justify-center
+                                items-center
+                                border-4 border-blue-400
+                                rounded-full
+                                w-8
+                                h-8
+                            "
+                        >
+                            <i class="fas fa-info stroke-current"></i>
+                        </div>
+                    </div>
                     <div class="flex flex-col ml-3">
                         <div class="font-medium leading-none">{{ message }}</div>
                     </div>

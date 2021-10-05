@@ -10,7 +10,7 @@
                         <div class="input-group">
                             <button class="rounded px-3 py-2 m-1 shadow-lg bg-blue-500 border-blue-600" type="submit"
                                 title="Search stations">
-                                <span class="fas fa-search"></span>
+                                <i class="fas fa-search"></i>
                             </button>
                             <input type="text" class="rounded px-3 py-2 shadow-lg mr-2" name="q"
                                 placeholder="Search stations" id="q">
@@ -18,7 +18,7 @@
                     </form>
                 </div>
                 <a href="{{ route('stations.index') }}" class="rounded px-3 py-2 m-1 shadow-lg bg-red-500 border-red-600">
-                    <span class="fas fa-sync-alt"></span>
+                    <i class="fas fa-sync-alt"></i>
                 </a>
                 @auth
                     @if (Auth::user()->hasRole('ADMIN'))
