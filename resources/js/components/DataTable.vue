@@ -25,7 +25,18 @@
                         :key="col.name"
                         class="p-2 text-justify border border-gray-300"
                     >
-                        {{ td[col.name] }}
+                        <a
+                            v-if="col.href"
+                            class="
+                                underline
+                                text-blue-600
+                                hover:text-blue-800
+                                visited:text-purple-600
+                            "
+                            :href="replaceParams(col.href, td)"
+                            >{{ td[col.name] }}</a
+                        >
+                        <span v-else>{{ td[col.name] }}</span>
                     </td>
                     <td v-if="showAction" class="p-2 text-center border border-gray-300 space-x-2">
                         <a
@@ -110,6 +121,13 @@ export default {
             fetchData(fetchUrl.value);
         });
 
+        const replaceParams = (s, d) => {
+            s.match(/\{([\s\S]*?)\}/g).forEach(
+                (p) => (s = s.replace(p, d[p.replace(/[{}]/g, '')]))
+            );
+            return s;
+        };
+
         return {
             fetchData,
             data,
@@ -119,6 +137,7 @@ export default {
             showPagination,
             closeModal,
             handleButtonClick,
+            replaceParams,
         };
     },
 };

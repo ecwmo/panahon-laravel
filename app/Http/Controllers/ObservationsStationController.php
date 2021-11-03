@@ -14,7 +14,8 @@ class ObservationsStationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $stations = ObservationsStation::where([
             ['name', '!=', Null],
             [function ($query) use ($request) {
@@ -82,7 +83,8 @@ class ObservationsStationController extends Controller
      * @param  \App\Models\ObservationsStation  $station
      * @return \Illuminate\Http\Response
      */
-    public function edit(ObservationsStation $station) {
+    public function edit(ObservationsStation $station)
+    {
         return view('station.form', compact('station'));
     }
 
@@ -93,13 +95,14 @@ class ObservationsStationController extends Controller
      * @param  \App\Models\ObservationsStation  $station
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ObservationsStation $station) {
+    public function update(Request $request, ObservationsStation $station)
+    {
         $request->validate([
             'name' => 'required|max:200',
             'lon' => 'numeric|nullable',
             'lat' => 'numeric|nullable',
             'elevation' => 'numeric|nullable',
-            'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number,'. $station->id,
+            'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number,' . $station->id,
             'address' => 'max:255|nullable',
             'province' => 'max:255|nullable',
             'region' => 'max:255|nullable',
@@ -128,7 +131,8 @@ class ObservationsStationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function table(Request $request) {
+    public function table(Request $request)
+    {
         $stations = ObservationsStation::where([
             ['name', '!=', Null],
             [function ($query) use ($request) {
@@ -143,5 +147,17 @@ class ObservationsStationController extends Controller
             ->orderBy('id', 'asc')
             ->paginate(15);
         return $stations;
+    }
+
+    public function showLogs(Request $request, $id)
+    {
+        return view('station.logs', ["id" => $id]);
+    }
+
+    public function fetchLogs(Request $request, $id)
+    {
+        $station = ObservationsStation::find($id);
+        $logs = $station->health()->orderBy('timestamp', 'DESC')->paginate(20, array('timestamp', 'message'));
+        return $logs;
     }
 }
