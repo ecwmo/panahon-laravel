@@ -70,7 +70,7 @@ export default {
         columns: { required: true },
         showIdColumn: { type: Boolean, default: true },
         showAction: { type: Boolean, default: false },
-        deleteModalMessage: { type: String, required: true },
+        deleteModalMessage: { type: String, default: 'Delete?' },
     },
     components: {
         Pagination,
