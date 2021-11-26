@@ -25,7 +25,14 @@ class GLabs extends Model
         'access_token'
     ];
 
-    public function station() {
+    public function station()
+    {
         return $this->belongsTo(ObservationsStation::class);
+    }
+
+    public function topups()
+    {
+        return $this
+            ->hasMany(GLabsLoad::class, 'glabs_id', 'id');
     }
 }

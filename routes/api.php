@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ObservationsStationController;
 use App\Http\Controllers\API\GLabsController;
+use App\Http\Controllers\API\GLabsLoadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,7 @@ use App\Http\Controllers\API\GLabsController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:api')->group( function () {
+Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthController::class, 'userInfo']);
 });
 
@@ -34,3 +35,5 @@ Route::get('station/{id}/observation', [ObservationsStationController::class, 'f
 
 Route::get('globelabs', [GLabsController::class, 'index']);
 Route::post('globelabs', [GLabsController::class, 'post']);
+
+Route::post('globelabs/load', [GLabsLoadController::class, 'post']);
