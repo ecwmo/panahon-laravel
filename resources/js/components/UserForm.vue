@@ -131,7 +131,7 @@
                                 name="password"
                                 :value="user.password"
                                 @input="user.password = $event.target.value"
-                                :required="user.id !== null"
+                                :required="user.id === null"
                             />
                             <template v-if="errors">
                                 <span
