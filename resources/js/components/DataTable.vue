@@ -5,7 +5,7 @@
                 <tr class="text-center">
                     <th v-if="showIdColumn" class="p-2 border border-gray-300" scope="col">#</th>
                     <th
-                        v-for="col in columns"
+                        v-for="col in data.columns"
                         :key="col.name"
                         class="p-2 border border-gray-300"
                         scope="col"
@@ -16,12 +16,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="td in tabledata" :key="td.id">
+                <tr v-for="td in data.data" :key="td.id">
                     <td v-if="showIdColumn" class="p-2 text-justify border border-gray-300">
                         {{ td.id }}
                     </td>
                     <td
-                        v-for="col in columns"
+                        v-for="col in data.columns"
                         :key="col.name"
                         class="p-2 text-justify border border-gray-300"
                     >
@@ -33,83 +33,71 @@
                                 hover:text-blue-800
                                 visited:text-purple-600
                             "
-                            :href="replaceParams(col.href, td)"
+                            :href="td[col.href]"
                             >{{ td[col.name] }}</a
                         >
                         <span v-else>{{ td[col.name] }}</span>
                     </td>
                     <td v-if="showAction" class="p-2 text-center border border-gray-300 space-x-2">
-                        <a
-                            class="stroke-current hover:text-blue-600"
-                            title="Edit"
-                            :href="`${baseUrl}/${td.id}/edit`"
-                        >
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a
-                            class="stroke-current hover:text-red-600"
-                            title="Delete"
-                            href="#"
-                            @click.prevent="(showModal = true), (activeId = td.id)"
-                            ><i class="fas fa-trash"></i
-                        ></a>
+                        <template v-for="act in td.action" :key="act.title">
+                            <a
+                                v-if="act.emit === undefined"
+                                :class="act.className"
+                                :title="act.title"
+                                :href="act.href"
+                                ><i :class="act.btnClassName"></i
+                            ></a>
+                            <a
+                                v-else
+                                :class="act.className"
+                                :title="act.title"
+                                href="#"
+                                @click.prevent="
+                                    (activeDelId = td.id),
+                                        (activeDelMessage = act.modalMessage || 'Delete?'),
+                                        (showDeleteModal = true)
+                                "
+                                ><i :class="act.btnClassName"></i
+                            ></a>
+                        </template>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <Pagination v-if="showPagination" :data="data" @fetch-data="fetchData" />
+
+        <Pagination v-if="showPagination" :data="data" @fetchData="$emit('fetchData', $event)" />
+
         <Modal
-            v-if="showModal"
-            @close="showModal = false"
-            :message="deleteModalMessage"
-            @btn-click="handleButtonClick"
+            v-if="showDeleteModal"
+            @close="showDeleteModal = false"
+            :message="activeDelMessage"
+            @btn-click="$emit('itemDeleteConfirm', activeDelId), (showDeleteModal = false)"
         />
     </div>
 </template>
 
 <script>
-import { ref, toRefs, computed, onMounted } from 'vue';
-import axios from 'axios';
+import { computed, ref, toRefs } from 'vue';
 
-import Pagination from './Pagination.vue';
 import Modal from './Modal.vue';
+import Pagination from './Pagination.vue';
 
 export default {
     props: {
-        fetchUrl: { type: String, required: true },
-        baseUrl: { type: String, required: true },
-        columns: { required: true },
+        data: { default: {} },
         showIdColumn: { type: Boolean, default: true },
         showAction: { type: Boolean, default: false },
-        deleteModalMessage: { type: String, default: 'Delete?' },
     },
     components: {
-        Pagination,
         Modal,
+        Pagination,
     },
+    emits: ['fetchData', 'itemDeleteConfirm'],
     setup(props) {
-        const data = ref({});
-        const tabledata = ref([]);
-        const showModal = ref(false);
-        const activeId = ref();
-
-        const { fetchUrl, baseUrl } = toRefs(props);
-
-        const closeModal = () => (showModal.value = false);
-
-        const handleButtonClick = () => {
-            axios.delete(`${baseUrl.value}/${activeId.value}`).then(() => {
-                tabledata.value = tabledata.value.filter(({ id }) => id !== activeId.value);
-                closeModal();
-            });
-        };
-
-        const fetchData = async (url) => {
-            if (url) {
-                data.value = await axios.get(url).then(({ data: d }) => d);
-                tabledata.value = data.value.data;
-            }
-        };
+        const { data } = toRefs(props);
+        const showDeleteModal = ref(false);
+        const activeDelId = ref(-1);
+        const activeDelMessage = ref('');
 
         const showPagination = computed(
             () =>
@@ -117,27 +105,11 @@ export default {
                 data.value.links.length > 3
         );
 
-        onMounted(() => {
-            fetchData(fetchUrl.value);
-        });
-
-        const replaceParams = (s, d) => {
-            s.match(/\{([\s\S]*?)\}/g).forEach(
-                (p) => (s = s.replace(p, d[p.replace(/[{}]/g, '')]))
-            );
-            return s;
-        };
-
         return {
-            fetchData,
-            data,
-            tabledata,
-            activeId,
-            showModal,
+            activeDelId,
+            activeDelMessage,
             showPagination,
-            closeModal,
-            handleButtonClick,
-            replaceParams,
+            showDeleteModal,
         };
     },
 };

@@ -76,6 +76,7 @@
 
 <script>
 export default {
+    name: 'Modal',
     props: { message: { default: 'Delete?' }, btnName: { default: 'Delete' } },
 };
 </script>
