@@ -87,7 +87,6 @@ export default {
                         {
                             className: 'stroke-current hover:text-red-600',
                             title: 'Delete',
-                            href: '#',
                             emit: 'itemDeleteConfirm',
                             modalMessage: `delete '${d.name}' station?`,
                             btnClassName: 'fas fa-trash',

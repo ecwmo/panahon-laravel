@@ -40,25 +40,17 @@
                     </td>
                     <td v-if="showAction" class="p-2 text-center border border-gray-300 space-x-2">
                         <template v-for="act in td.action" :key="act.title">
-                            <a
-                                v-if="act.emit === undefined"
-                                :class="act.className"
+                            <ActionBtn
                                 :title="act.title"
+                                :className="act.className"
+                                :btnClassName="act.btnClassName"
                                 :href="act.href"
-                                ><i :class="act.btnClassName"></i
-                            ></a>
-                            <a
-                                v-else
-                                :class="act.className"
-                                :title="act.title"
-                                href="#"
-                                @click.prevent="
+                                @btnClicked="
                                     (activeDelId = td.id),
                                         (activeDelMessage = act.modalMessage || 'Delete?'),
                                         (showDeleteModal = true)
                                 "
-                                ><i :class="act.btnClassName"></i
-                            ></a>
+                            />
                         </template>
                     </td>
                 </tr>
@@ -79,6 +71,7 @@
 <script>
 import { computed, ref, toRefs } from 'vue';
 
+import ActionBtn from './ActionBtn.vue';
 import Modal from './Modal.vue';
 import Pagination from './Pagination.vue';
 
@@ -89,6 +82,7 @@ export default {
         showAction: { type: Boolean, default: false },
     },
     components: {
+        ActionBtn,
         Modal,
         Pagination,
     },
