@@ -63,12 +63,13 @@
         <Modal
             v-if="showModal"
             @close="showModal = false"
-            :message="activeModalMessage"
-            @btn-click="
+            @btnClick="
                 $emit('modalBtnClick', { type: activeModalType, id: activeItemId }),
                     (showModal = false)
             "
-        />
+        >
+            <div class="font-medium leading-none">{{ activeModalMessage }}</div>
+        </Modal>
     </div>
 </template>
 

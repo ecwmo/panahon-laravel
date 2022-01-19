@@ -11,7 +11,6 @@
             items-center
             bg-black bg-opacity-50
         "
-        aria-labelledby="deleteModalLabel"
     >
         <div class="relative flex flex-col p-8 bg-white shadow-md hover:shadow-lg rounded-2xl">
             <div class="absolute top-1 right-2.5 cursor-pointer" @click.prevent="$emit('close')">
@@ -44,31 +43,31 @@
                         </div>
                     </div>
                     <div class="flex flex-col ml-3">
-                        <div class="font-medium leading-none">{{ message }}</div>
+                        <slot></slot>
                     </div>
                 </div>
-                <form @submit.prevent="$emit('btnClick')" method="post">
-                    <button
-                        class="
-                            flex-no-shrink
-                            bg-red-500
-                            px-5
-                            ml-4
-                            py-2
-                            text-sm
-                            shadow-sm
-                            hover:shadow-lg
-                            font-medium
-                            tracking-wider
-                            border-2 border-red-500
-                            text-white
-                            rounded-full
-                        "
-                        type="submit"
-                    >
-                        {{ btnName }}
-                    </button>
-                </form>
+                <a
+                    class="
+                        flex-no-shrink
+                        bg-red-500
+                        px-5
+                        ml-4
+                        py-2
+                        text-sm
+                        shadow-sm
+                        hover:shadow-lg
+                        font-medium
+                        tracking-wider
+                        border-2 border-red-500
+                        text-white
+                        rounded-full
+                    "
+                    role="button"
+                    href="#"
+                    @click.prevent="$emit('btnClick')"
+                >
+                    {{ btnLabel }}
+                </a>
             </div>
         </div>
     </div>
@@ -77,6 +76,7 @@
 <script>
 export default {
     name: 'Modal',
-    props: { message: { default: 'Delete?' }, btnName: { default: 'Delete' } },
+    props: { btnLabel: { default: 'Delete' } },
+    emits: ['btnClick', 'close'],
 };
 </script>
