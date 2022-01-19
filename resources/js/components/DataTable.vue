@@ -46,9 +46,10 @@
                                 :btnClassName="act.btnClassName"
                                 :href="act.href"
                                 @btnClicked="
-                                    (activeDelId = td.id),
-                                        (activeDelMessage = act.modalMessage || 'Delete?'),
-                                        (showDeleteModal = true)
+                                    (activeItemId = td.id),
+                                        (activeModalType = act.type),
+                                        (activeModalMessage = act.modalMessage || 'Delete?'),
+                                        (showModal = true)
                                 "
                             />
                         </template>
@@ -60,10 +61,13 @@
         <Pagination v-if="showPagination" :data="data" @fetchData="$emit('fetchData', $event)" />
 
         <Modal
-            v-if="showDeleteModal"
-            @close="showDeleteModal = false"
-            :message="activeDelMessage"
-            @btn-click="$emit('itemDeleteConfirm', activeDelId), (showDeleteModal = false)"
+            v-if="showModal"
+            @close="showModal = false"
+            :message="activeModalMessage"
+            @btn-click="
+                $emit('modalBtnClick', { type: activeModalType, id: activeItemId }),
+                    (showModal = false)
+            "
         />
     </div>
 </template>
@@ -86,12 +90,13 @@ export default {
         Modal,
         Pagination,
     },
-    emits: ['fetchData', 'itemDeleteConfirm'],
+    emits: ['fetchData', 'modalBtnClick'],
     setup(props) {
         const { data } = toRefs(props);
-        const showDeleteModal = ref(false);
-        const activeDelId = ref(-1);
-        const activeDelMessage = ref('');
+        const showModal = ref(false);
+        const activeItemId = ref(-1);
+        const activeModalType = ref('');
+        const activeModalMessage = ref('');
 
         const showPagination = computed(
             () =>
@@ -100,10 +105,11 @@ export default {
         );
 
         return {
-            activeDelId,
-            activeDelMessage,
+            activeItemId,
+            activeModalType,
+            activeModalMessage,
             showPagination,
-            showDeleteModal,
+            showModal,
         };
     },
 };

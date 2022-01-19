@@ -45,7 +45,7 @@
             :data="tableData"
             :showAction="isAdmin"
             @fetchData="fetchData"
-            @itemDeleteConfirm="handleItemDeleteConfirm"
+            @modalBtnClick="handleModalBtnClick"
         >
         </DataTable>
     </div>
@@ -63,7 +63,6 @@ export default {
         baseUrl: { type: String, required: true },
         isAdmin: { type: Boolean, default: false },
     },
-    emits: ['itemDeleted'],
     components: { DataTable },
     setup(props) {
         const tableData = ref([]);
@@ -87,7 +86,7 @@ export default {
                         {
                             className: 'stroke-current hover:text-red-600',
                             title: 'Delete',
-                            emit: 'itemDeleteConfirm',
+                            type: 'delete',
                             modalMessage: `delete '${d.name}' station?`,
                             btnClassName: 'fas fa-trash',
                         },
@@ -108,18 +107,20 @@ export default {
             }
         };
 
-        const handleItemDeleteConfirm = (delId) =>
-            axios.delete(`${baseUrl.value}/${delId}`).then(() => {
-                const newDat = tableData.value.data.filter(({ id }) => id !== delId);
-                tableData.value = { ...tableData.value, data: newDat };
-            });
+        const handleModalBtnClick = (ev) => {
+            if (ev.type === 'delete')
+                axios.delete(`${baseUrl.value}/${ev.id}`).then(() => {
+                    const newDat = tableData.value.data.filter(({ id }) => id !== ev.id);
+                    tableData.value = { ...tableData.value, data: newDat };
+                });
+        };
 
         onMounted(() => fetchData(fetchUrl.value));
 
         return {
             tableData,
             fetchData,
-            handleItemDeleteConfirm,
+            handleModalBtnClick,
         };
     },
 };
