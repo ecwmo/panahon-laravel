@@ -104,14 +104,18 @@ export default {
                         { name: 'date_installed', title: 'Install Date' },
                     ],
                 };
+
+                console.log(tableData.value);
             }
         };
 
         const handleModalBtnClick = (ev) => {
             if (ev.type === 'delete')
                 axios.delete(`${baseUrl.value}/${ev.id}`).then(() => {
-                    const newDat = tableData.value.data.filter(({ id }) => id !== ev.id);
-                    tableData.value = { ...tableData.value, data: newDat };
+                    const { current_page: curPage, links, data } = tableData.value;
+                    const curLink = links.find(({ label }) => `${curPage}` === label);
+                    const url = data.length === 1 ? fetchUrl.value : curLink.url;
+                    fetchData(url);
                 });
         };
 
