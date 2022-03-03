@@ -13,9 +13,6 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
 <body class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
@@ -26,11 +23,8 @@
         <div class="container pt-4">@yield('content')</div>
     </main>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/manifest.js') }}"></script>
-    <script src="{{ asset('js/vendor.js') }}" defer></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    @stack('scripts')
+    <!-- Vite -->
+    {{ vite_assets() }}
 </body>
 
 </html>
