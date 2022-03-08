@@ -17,7 +17,7 @@ function vite_assets(): HtmlString
     if ($devServerIsRunning) {
         return new HtmlString(<<<HTML
             <script type="module" src="http://{$hostIP}:{$vitePort}/@vite/client"></script>
-            <script type="module" src="http://{$hostIP}:{$vitePort}/resources/js/app.js"></script>
+            <script type="module" src="http://{$hostIP}:{$vitePort}/resources/scripts/app.ts"></script>
         HTML);
     }
 
@@ -26,7 +26,7 @@ function vite_assets(): HtmlString
     ), true);
 
     return new HtmlString(<<<HTML
-        <script type="module" src="/build/{$manifest['resources/js/app.js']['file']}"></script>
-        <link rel="stylesheet" href="/build/{$manifest['resources/js/app.js']['css'][0]}">
+        <script type="module" src="/build/{$manifest['resources/scripts/app.js']['file']}"></script>
+        <link rel="stylesheet" href="/build/{$manifest['resources/scripts/app.ts']['css'][0]}">
     HTML);
 }
