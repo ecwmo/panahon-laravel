@@ -44,6 +44,7 @@
             class="w-full"
             :data="tableData"
             :showAction="isAdmin"
+            :showIdColumn="showIdColumn"
             @fetchData="fetchData"
             @modalBtnClick="handleModalBtnClick"
         >
@@ -62,6 +63,7 @@ export default {
         fetchUrl: { type: String, required: true },
         baseUrl: { type: String, required: true },
         isAdmin: { type: Boolean, default: false },
+        showIdColumn: { type: Boolean, default: true },
         formatData: { type: Function },
     },
     components: { DataTable },
