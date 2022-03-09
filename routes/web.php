@@ -19,10 +19,11 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-if (config('app.suburl') != '') {
-    Route::get('/' . config('app.suburl'), [HomeController::class, 'index']); # workaround for subdirectory
-}
+$subURL = config('misc.suburl');
+if ($subURL != '') $subURL = "/{$subURL}";
+else $subURL = "/";
+
+Route::get($subURL, [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
