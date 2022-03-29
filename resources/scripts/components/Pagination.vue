@@ -1,47 +1,46 @@
 <template>
-  <nav class="flex">
-    <ul class="flex h-8 font-medium rounded-full bg-gray-200">
-      <!-- Previous Page Link -->
-      <li
-        class="h-8 w-8 mr-1 flex justify-center items-center rounded-full bg-gray-200"
-        :class="{ 'cursor-pointer': data.prev_page_url !== null }"
-        :aria-disabled="data.prev_page_url === null"
-        @click="$emit('fetchData', data.prev_page_url)"
-      >
-        &lt;
-      </li>
+  <div class="flex flex-wrap -mb-1">
+    <!-- Previous Page Link -->
+    <div
+      class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
+      :class="
+        data.prev_page_url !== null
+          ? 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'
+          : 'text-gray-400'
+      "
+      @click="$emit('fetchData', data.prev_page_url)"
+    >
+      « Previous
+    </div>
 
-      <!-- Pagination Elements -->
-      <template v-for="link in data.links" :key="link.label">
-        <li
-          v-if="link.label === '...'"
-          class="w-8 md:flex justify-center items-center hidden leading-5 rounded-full"
-          aria-disabled="true"
-        >
-          {{ link.label }}
-        </li>
-        <li
-          v-else-if="!isNaN(+link.label)"
-          class="w-8 md:flex justify-center items-center hidden leading-5 rounded-full"
-          :class="[link.active ? 'bg-blue-600 text-white' : 'cursor-pointer']"
-          :aria-disabled="link.url === null"
-          @click="$emit('fetchData', link.url)"
-        >
-          {{ link.label }}
-        </li>
-      </template>
-
-      <!-- Next Page Link -->
-      <li
-        class="h-8 w-8 ml-1 flex justify-center items-center rounded-full bg-gray-200"
-        :class="{ 'cursor-pointer': data.next_page_url !== null }"
-        :aria-disabled="data.next_page_url === null"
-        @click="$emit('fetchData', data.next_page_url)"
+    <!-- Pagination Elements -->
+    <template v-for="link in data.links" :key="link.label">
+      <div v-if="link.label === '...'" class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded text-gray-400">
+        {{ link.label }}
+      </div>
+      <div
+        v-else-if="!isNaN(+link.label)"
+        class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
+        :class="link.active ? 'bg-white' : 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'"
+        @click="$emit('fetchData', link.url)"
       >
-        &gt;
-      </li>
-    </ul>
-  </nav>
+        {{ link.label }}
+      </div>
+    </template>
+
+    <!-- Next Page Link -->
+    <div
+      class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
+      :class="
+        data.next_page_url !== null
+          ? 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'
+          : 'text-gray-400'
+      "
+      @click="$emit('fetchData', data.next_page_url)"
+    >
+      Next »
+    </div>
+  </div>
 </template>
 
 <script lang="ts">

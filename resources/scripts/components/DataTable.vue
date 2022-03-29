@@ -1,50 +1,44 @@
 <template>
-  <div>
-    <table class="table-auto space-y-6 text-sm mb-2">
-      <thead>
-        <tr class="text-center">
-          <th v-if="showIdColumn" class="p-2 border border-gray-300" scope="col">#</th>
-          <th v-for="col in data.columns" :key="col.name" class="p-2 border border-gray-300" scope="col">
-            {{ col.title }}
-          </th>
-          <th v-if="showAction" class="p-2 border border-gray-300" scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="td in data.data" :key="td.id">
-          <td v-if="showIdColumn" class="p-2 text-justify border border-gray-300">
-            {{ td.id }}
-          </td>
-          <td v-for="col in data.columns" :key="col.name" class="p-2 text-justify border border-gray-300">
-            <a
-              v-if="col.href"
-              class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
-              :href="td[col.href]"
-              >{{ td[col.name] }}</a
-            >
-            <span v-else>{{ td[col.name] }}</span>
-          </td>
-          <td v-if="showAction" class="p-2 text-center border border-gray-300 space-x-2">
-            <template v-for="act in td.action" :key="act.title">
-              <ActionBtn
-                :title="act.title"
-                :class-name="act.className"
-                :btn-class-name="act.btnClassName"
-                :href="act.href"
-                @btnClicked="
-                  ;(activeItemId = td.id),
-                    (activeModalType = act.type),
-                    (activeModalMessage = act.modalMessage || 'Delete?'),
-                    (showModal = true)
-                "
-              />
-            </template>
-          </td>
-        </tr>
-      </tbody>
+  <div class="bg-white rounded-md shadow overflow-x-auto">
+    <table class="w-full whitespace-nowrap">
+      <tr class="text-left font-bold">
+        <th v-if="showIdColumn" class="p-3" scope="col">#</th>
+        <th v-for="col in data.columns" :key="col.name" class="p-2" scope="col">
+          {{ col.title }}
+        </th>
+        <th v-if="showAction" class="p-3" scope="col">Action</th>
+      </tr>
+      <tr v-for="td in data.data" :key="td.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+        <td v-if="showIdColumn" class="p-3 text-justify border-t">
+          {{ td.id }}
+        </td>
+        <td v-for="col in data.columns" :key="col.name" class="p-2 text-justify border-t">
+          <a
+            v-if="col.href"
+            class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+            :href="td[col.href]"
+            >{{ td[col.name] }}</a
+          >
+          <span v-else>{{ td[col.name] }}</span>
+        </td>
+        <td v-if="showAction" class="p-3 text-center border-t space-x-2">
+          <template v-for="act in td.action" :key="act.title">
+            <ActionBtn
+              :title="act.title"
+              :class-name="act.className"
+              :btn-class-name="act.btnClassName"
+              :href="act.href"
+              @btnClicked="
+                ;(activeItemId = td.id),
+                  (activeModalType = act.type),
+                  (activeModalMessage = act.modalMessage || 'Delete?'),
+                  (showModal = true)
+              "
+            />
+          </template>
+        </td>
+      </tr>
     </table>
-
-    <Pagination v-if="showPagination" :data="data" @fetchData="$emit('fetchData', $event)" />
 
     <Modal
       v-if="showModal"
@@ -59,6 +53,9 @@
     >
       <div class="font-medium leading-none">{{ activeModalMessage }}</div>
     </Modal>
+  </div>
+  <div class="mt-6">
+    <Pagination v-if="showPagination" :data="data" @fetchData="$emit('fetchData', $event)" />
   </div>
 </template>
 

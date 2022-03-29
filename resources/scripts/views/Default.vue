@@ -1,5 +1,5 @@
 <template>
-  <div class="w-max flex flex-col space-y-2 items-center mx-auto">
+  <div>
     <div class="w-full flex justify-between items-end p-2">
       <h2 class="text-2xl"><slot name="header"></slot></h2>
       <div class="flex">
@@ -38,7 +38,6 @@
     </div>
 
     <DataTable
-      class="w-full"
       :data="tableData"
       :showAction="isAdmin"
       :showIdColumn="showIdColumn"
