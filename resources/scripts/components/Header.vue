@@ -15,7 +15,7 @@
         </svg>
         <div v-show="showMenu" class="absolute z-50 top-0 right-0 mt-5">
           <div class="mt-2 px-8 py-4 shadow-lg bg-blue-800 rounded">
-            <Sidebar :isPopup="true" :isSuperAdmin="isSuperAdmin" />
+            <Sidebar :isPopup="true" :isSuperAdmin="isSuperAdmin" :subUrl="subUrl" />
           </div>
         </div>
       </button>
@@ -61,7 +61,7 @@
   import Sidebar from '@/components/Sidebar.vue'
 
   export default defineComponent({
-    props: ['title', 'username', 'loginUrl', 'logoutUrl', 'registerUrl', 'isSuperAdmin'],
+    props: ['title', 'username', 'loginUrl', 'logoutUrl', 'registerUrl', 'subUrl', 'isSuperAdmin'],
     components: { Sidebar },
     setup(props) {
       const showMenu = ref(false)

@@ -15,6 +15,15 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 </head>
 
+@php
+$subURL = config('misc.suburl');
+if ($subURL != '') {
+    $subURL = "/{$subURL}/";
+} else {
+    $subURL = '/';
+}
+@endphp
+
 <body class="font-sans leading-none text-gray-700 bg-gray-100 antialiased">
     <div id="app">
         <div class="md:flex md:flex-col">
@@ -24,11 +33,12 @@
                     @if (Route::has('login')) :login-url="'{{ route('login') }}'" @endif
                     :logout-url="'{{ route('logout') }}'"
                     @if (Route::has('register')) :register-url="'{{ route('register') }}'" @endif
-                    :is-super-admin="@json(Auth::check() && Auth::user()->hasRole('SUPERADMIN'))">
+                    :is-super-admin="@json(Auth::check() && Auth::user()->hasRole('SUPERADMIN'))" :sub-url="'{{ $subURL }}'">
                 </v-header>
 
                 <div class="md:flex md:flex-grow md:overflow-hidden">
-                    <v-sidebar :is-super-admin="@json(Auth::check() && Auth::user()->hasRole('SUPERADMIN'))"></v-sidebar>
+                    <v-sidebar :is-super-admin="@json(Auth::check() && Auth::user()->hasRole('SUPERADMIN'))" :sub-url="'{{ $subURL }}'">
+                    </v-sidebar>
                     <div class="md:flex-1 px-4 py-8 md:p-12 md:overflow-y-auto">@yield('content')</div>
                 </div>
             </div>

@@ -26,14 +26,15 @@
     props: {
       isPopup: { type: Boolean, default: false },
       isSuperAdmin: { type: Boolean, default: false },
+      subUrl: { type: String, default: '/' },
     },
     setup(props) {
-      const { isSuperAdmin } = props
+      const { isSuperAdmin, subUrl } = props
       const menu = [
-        { href: '/', label: 'Dashboard', icon: 'tachometer-alt', display: true },
-        { href: '/stations', label: 'Weather Stations', icon: 'umbrella', display: true },
-        { href: '/users', label: 'User', icon: 'user', display: isSuperAdmin },
-        { href: '/roles', label: 'Roles', icon: 'user-tag', display: isSuperAdmin },
+        { href: `${subUrl}`, label: 'Dashboard', icon: 'tachometer-alt', display: true },
+        { href: `${subUrl}stations`, label: 'Weather Stations', icon: 'umbrella', display: true },
+        { href: `${subUrl}users`, label: 'User', icon: 'user', display: isSuperAdmin },
+        { href: `${subUrl}roles`, label: 'Roles', icon: 'user-tag', display: isSuperAdmin },
       ]
 
       const activeUrl = computed(() => '/' + window.location.href.substring(window.location.href.lastIndexOf('/') + 1))
