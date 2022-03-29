@@ -15,13 +15,25 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 </head>
 
-<body class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
-    <x-sidebar />
+<body class="font-sans leading-none text-gray-700 bg-gray-100 antialiased">
+    <div id="app">
+        <div class="md:flex md:flex-col">
+            <div class="md:h-screen md:flex md:flex-col">
+                <v-header :title="'{{ config('app.name', 'Laravel') }}'" @auth
+                    :username="'{{ Auth::user()->name }}'" @endauth
+                    @if (Route::has('login')) :login-url="'{{ route('login') }}'" @endif
+                    :logout-url="'{{ route('logout') }}'"
+                    @if (Route::has('register')) :register-url="'{{ route('register') }}'" @endif
+                    :is-super-admin="@json(Auth::check() && Auth::user()->hasRole('SUPERADMIN'))">
+                </v-header>
 
-    <main id="app" class="main flex flex-col flex-grow -ml-64 md:ml-0">
-        <x-header />
-        <div class="container pt-4">@yield('content')</div>
-    </main>
+                <div class="md:flex md:flex-grow md:overflow-hidden">
+                    <v-sidebar :is-super-admin="@json(Auth::check() && Auth::user()->hasRole('SUPERADMIN'))"></v-sidebar>
+                    <div class="md:flex-1 px-4 py-8 md:p-12 md:overflow-y-auto">@yield('content')</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Vite -->
     {{ vite_assets() }}

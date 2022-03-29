@@ -9,6 +9,7 @@ import { createApp } from 'vue'
 import '../styles/app.scss'
 
 import Header from '@/components/Header.vue'
+import Sidebar from '@/components/Sidebar.vue'
 import StationDefault from '@/views/StationDefault.vue'
 import StationForm from '@/views/StationForm.vue'
 import StationLogs from '@/views/StationLogs.vue'
@@ -24,6 +25,7 @@ dom.watch()
 const app = createApp({})
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.component('v-header', Header)
+app.component('v-sidebar', Sidebar)
 app.component('station-default', StationDefault)
 app.component('station-form', StationForm)
 app.component('station-logs', StationLogs)
