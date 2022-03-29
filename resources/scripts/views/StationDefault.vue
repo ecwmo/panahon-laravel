@@ -23,7 +23,7 @@
 
       const cols = [
         { name: 'name', title: 'Name' },
-        { name: 'address', title: 'Address' },
+        // { name: 'address', title: 'Address' },
         { name: 'station_type', title: 'Type' },
         { name: 'status', title: 'Status', href: 'statusUrl' },
         { name: 'date_installed', title: 'Install Date' },
