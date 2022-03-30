@@ -3,7 +3,7 @@ interface User {
   name: string
   email?: string
   password?: string
-  roles: string[]
+  roles: number[]
 }
 
 interface UserFormError {

@@ -6,7 +6,6 @@
         <th v-for="col in data.columns" :key="col.name" class="p-2" scope="col">
           {{ col.title }}
         </th>
-        <th v-if="showAction" class="p-3" scope="col">Action</th>
       </tr>
       <tr v-for="td in data.data" :key="td.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
         <td v-if="showIdColumn" class="p-3 text-justify border-t">
@@ -15,47 +14,23 @@
         <td v-for="col in data.columns" :key="col.name" class="p-2 text-justify border-t">
           <a
             v-if="col.href"
+            tabindex="-1"
             class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
             :href="td[col.href]"
             >{{ td[col.name] }}</a
           >
-          <span v-else>{{ td[col.name] }}</span>
+          <a v-else tabindex="-1" class="px-4 flex items-center" :href="td.editUrl">{{ td[col.name] }}</a>
         </td>
-        <td v-if="showAction" class="p-3 text-center border-t space-x-2">
-          <template v-for="act in td.action" :key="act.title">
-            <ActionBtn
-              :title="act.title"
-              :class-name="act.className"
-              :btn-class-name="act.btnClassName"
-              :href="act.href"
-              @btnClicked="
-                ;(activeItemId = td.id),
-                  (activeModalType = act.type),
-                  (activeModalMessage = act.modalMessage || 'Delete?'),
-                  (showModal = true)
-              "
-            />
-          </template>
+        <td class="p-3 text-justify border-t w-px">
+          <a :href="td.editUrl" tabindex="-1" class="px-4 flex items-center">
+            <i class="block w-4 h-4 text-gray-400 fas fa-chevron-right"></i>
+          </a>
         </td>
       </tr>
     </table>
-
-    <Modal
-      v-if="showModal"
-      @close="showModal = false"
-      @btnClick="
-        $emit('modalBtnClick', {
-          type: activeModalType,
-          id: activeItemId,
-        }),
-          (showModal = false)
-      "
-    >
-      <div class="font-medium leading-none">{{ activeModalMessage }}</div>
-    </Modal>
   </div>
   <div class="mt-6">
-    <Pagination v-if="showPagination" :data="data" @fetchData="$emit('fetchData', $event)" />
+    <Pagination v-if="showPagination" :data="data" @pageChange="$emit('fetchData', $event)" />
   </div>
 </template>
 
@@ -63,38 +38,27 @@
   import { computed, ref, toRefs, defineComponent } from 'vue'
 
   import ActionBtn from '@/components/ActionBtn.vue'
-  import Modal from '@/components/Modal.vue'
   import Pagination from '@/components/Pagination.vue'
 
   export default defineComponent({
     props: {
       data: { type: Object, required: true },
       showIdColumn: { type: Boolean, default: true },
-      showAction: { type: Boolean, default: false },
     },
     components: {
       ActionBtn,
-      Modal,
       Pagination,
     },
-    emits: ['fetchData', 'modalBtnClick'],
+    emits: ['fetchData'],
     setup(props) {
       const { data } = toRefs(props)
-      const showModal = ref(false)
-      const activeItemId = ref(-1)
-      const activeModalType = ref('')
-      const activeModalMessage = ref('')
 
       const showPagination = computed(
         () => Object.prototype.hasOwnProperty.call(data.value, 'links') && data.value.links.length > 3
       )
 
       return {
-        activeItemId,
-        activeModalType,
-        activeModalMessage,
         showPagination,
-        showModal,
       }
     },
   })

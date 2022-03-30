@@ -37,14 +37,7 @@
       </div>
     </div>
 
-    <DataTable
-      :data="tableData"
-      :showAction="isAdmin"
-      :showIdColumn="showIdColumn"
-      @fetchData="fetchData"
-      @modalBtnClick="handleModalBtnClick"
-    >
-    </DataTable>
+    <DataTable :data="tableData" :showIdColumn="showIdColumn" @fetchData="fetchData"> </DataTable>
   </div>
 </template>
 
@@ -54,48 +47,50 @@
 
   import DataTable from '@/components/DataTable.vue'
 
+  interface PageLink {
+    label: string
+    url: string
+  }
+
+  interface TableDatum {
+    current_page: string
+    links: PageLink[]
+    data: string[]
+  }
+
+  interface Datum {
+    [k: string]: any
+  }
+
   export default defineComponent({
     props: {
       fetchUrl: { type: String, required: true },
+      features: { type: Object, required: true },
       baseUrl: { type: String, required: true },
       isAdmin: { type: Boolean, default: false },
       showIdColumn: { type: Boolean, default: true },
-      formatData: { type: Function },
     },
     components: { DataTable },
     setup(props) {
-      interface PageLink {
-        label: string
-        url: string
-      }
-      interface TableDatum {
-        current_page: string
-        links: PageLink[]
-        data: string[]
-      }
       const tableData = ref({} as TableDatum)
 
-      const { fetchUrl, baseUrl, formatData } = toRefs(props)
+      const { fetchUrl, baseUrl, features } = toRefs(props)
 
       const fetchData = async (url: string) => {
         if (url) {
           const dat = await axios.get(url).then(({ data: d }) => d)
-          tableData.value = formatData.value ? formatData.value(dat) : dat
-        }
-      }
+          const newDat = dat.data.map((d: Datum) => ({
+            ...d,
+            statusUrl: `${baseUrl.value}/${d.id}/logs`,
+            editUrl: `${baseUrl.value}/${d.id}/edit`,
+          }))
 
-      interface Event {
-        id: string
-        type: string
-      }
-      const handleModalBtnClick = (ev: Event) => {
-        if (ev.type === 'delete')
-          axios.delete(`${baseUrl.value}/${ev.id}`).then(() => {
-            const { current_page: curPage, links, data } = tableData.value
-            const curLink = links.find(({ label }) => `${curPage}` === label) || { url: '' }
-            const url = data.length === 1 ? fetchUrl.value : curLink.url
-            fetchData(url)
-          })
+          tableData.value = {
+            ...dat,
+            data: newDat,
+            columns: features.value,
+          }
+        }
       }
 
       onMounted(() => fetchData(fetchUrl.value))
@@ -103,7 +98,6 @@
       return {
         tableData,
         fetchData,
-        handleModalBtnClick,
       }
     },
   })
