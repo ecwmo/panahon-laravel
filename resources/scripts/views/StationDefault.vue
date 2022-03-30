@@ -1,6 +1,5 @@
 <template>
-  <Default :fetchUrl="fetchUrl" :baseUrl="baseUrl" :isAdmin="isAdmin" :features="features">
-    <template v-slot:header>Station <span class="font-bold">Details</span></template>
+  <Default title="Stations" :fetchUrl="fetchUrl" :baseUrl="baseUrl" :showCreateBtn="showCreateBtn" :features="features">
   </Default>
 </template>
 
@@ -13,7 +12,7 @@
     props: {
       fetchUrl: { type: String, required: true },
       baseUrl: { type: String, required: true },
-      isAdmin: { type: Boolean, default: false },
+      showCreateBtn: { type: Boolean, default: false },
     },
     components: { Default },
     setup() {
