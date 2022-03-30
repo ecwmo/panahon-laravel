@@ -1,5 +1,5 @@
 <template>
-  <Default :fetchUrl="fetchUrl" :baseUrl="baseUrl" :isAdmin="false" :showIdColumn="false" :formatData="formatData">
+  <Default :fetchUrl="fetchUrl" :baseUrl="baseUrl" :isAdmin="false" :showIdColumn="false" :features="features">
     <template v-slot:header>Station <span class="font-bold">Logs</span></template>
   </Default>
 </template>
@@ -17,17 +17,12 @@
     },
     components: { Default },
     setup() {
-      const cols = [
+      const features = [
         { name: 'timestamp', title: 'Timestamp' },
         { name: 'message', title: 'Message' },
       ]
 
-      const formatData = (dat: any) => ({
-        ...dat,
-        columns: cols,
-      })
-
-      return { formatData }
+      return { features }
     },
   })
 </script>
