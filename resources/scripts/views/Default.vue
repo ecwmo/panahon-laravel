@@ -16,31 +16,26 @@
 </template>
 
 <script lang="ts">
-  import { ref, toRefs, onMounted, defineComponent } from 'vue'
+  import { ref, toRefs, onMounted, defineComponent, PropType } from 'vue'
   import axios from 'axios'
 
   import DataTable from '@/components/DataTable.vue'
 
-  interface PageLink {
-    label: string
-    url: string
-  }
-
-  interface TableDatum {
-    current_page: string
-    links: PageLink[]
-    data: string[]
-  }
-
   interface Datum {
     [k: string]: any
+  }
+
+  interface Feature {
+    name: string
+    title: string
+    href?: string
   }
 
   export default defineComponent({
     props: {
       title: { type: String, default: '' },
       fetchUrl: { type: String, required: true },
-      features: { type: Object, required: true },
+      features: { type: Object as PropType<Feature[]>, required: true },
       baseUrl: { type: String, required: true },
       showCreateBtn: { type: Boolean, default: false },
       showIdColumn: { type: Boolean, default: true },
@@ -48,23 +43,24 @@
     },
     components: { DataTable },
     setup(props) {
-      const tableData = ref({} as TableDatum)
+      const tableData = ref({})
 
       const { fetchUrl, baseUrl, features, hasEditPage } = toRefs(props)
 
       const fetchData = async (url: string) => {
         if (url) {
+          const featHrefs = features.value.filter(({ href }) => href !== undefined).map(({ href }) => href)
           const dat = await axios.get(url).then(({ data: d }) => d)
           const newDat = dat.data.map((d: Datum) => ({
             ...d,
-            statusUrl: `${baseUrl.value}/${d.id}/logs`,
+            statusUrl: featHrefs.includes('statusUrl') ? `${baseUrl.value}/${d.id}/logs` : undefined,
             editUrl: hasEditPage.value ? `${baseUrl.value}/${d.id}/edit` : undefined,
           }))
 
           tableData.value = {
             ...dat,
             data: newDat,
-            columns: features.value,
+            features: features.value,
           }
         }
       }
