@@ -1,7 +1,19 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import { far } from '@fortawesome/free-regular-svg-icons'
+import {
+  faTachometerAlt,
+  faUmbrella,
+  faUser,
+  faUserTag,
+  faAdd,
+  faEdit,
+  faTrash,
+  faTimes,
+  faInfo,
+  faChevronUp,
+  faChevronDown,
+  faBars,
+} from '@fortawesome/free-solid-svg-icons'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 
 import { createApp } from 'vue'
@@ -18,8 +30,20 @@ import UserForm from '@/views/UserForm.vue'
 import RoleDefault from '@/views/RoleDefault.vue'
 import RoleForm from '@/views/RoleForm.vue'
 
-library.add(fas)
-library.add(far)
+library.add(
+  faTachometerAlt,
+  faUmbrella,
+  faUser,
+  faUserTag,
+  faAdd,
+  faEdit,
+  faTrash,
+  faTimes,
+  faInfo,
+  faChevronUp,
+  faChevronDown,
+  faBars
+)
 dom.watch()
 
 const app = createApp({})
