@@ -1,16 +1,16 @@
 {
   "resources/scripts/app.ts": {
-    "file": "assets/app.f50bfc98.js",
+    "file": "assets/app.321e3e4f.js",
     "src": "resources/scripts/app.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.5d387f7f.js"
+      "_vendor.5f87419a.js"
     ],
     "css": [
-      "assets/app.cd7032b5.css"
+      "assets/app.15e5217e.css"
     ]
   },
-  "_vendor.5d387f7f.js": {
-    "file": "assets/vendor.5d387f7f.js"
+  "_vendor.5f87419a.js": {
+    "file": "assets/vendor.5f87419a.js"
   }
 }
