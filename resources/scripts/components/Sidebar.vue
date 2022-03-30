@@ -11,7 +11,7 @@
         <i
           :class="[
             `w-4 h-4 mr-2 fas fa-${m.icon} fa-fw`,
-            activeUrl === m.href ? 'fill-white' : 'fill-blue-300 group-hover:fill-white',
+            activeUrl === m.href ? 'text-white' : 'text-blue-300 group-hover:text-white',
           ]"
         ></i>
         <span :class="activeUrl === m.href ? 'text-white' : 'text-blue-300 group-hover:text-white'">{{ m.label }}</span>

@@ -32,7 +32,7 @@
           :href="`${baseUrl}/create`"
           role="button"
         >
-          <i class="fa fa-plus"></i
+          <i class="fas fa-plus"></i
         ></a>
       </div>
     </div>

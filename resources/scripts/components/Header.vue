@@ -10,9 +10,7 @@
         <span class="font-semibold text-gray-200 text-lg md:text-2xl">{{ title }}</span>
       </a>
       <button @click.prevent="showMenu = true" class="md:hidden relative">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="fill-white w-6 h-6">
-          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-        </svg>
+        <i class="text-white w-6 h-6 fas fa-bars"></i>
         <div v-show="showMenu" class="absolute z-50 top-0 right-0 mt-5">
           <div class="mt-2 px-8 py-4 shadow-lg bg-blue-800 rounded">
             <Sidebar :isPopup="true" :isSuperAdmin="isSuperAdmin" :subUrl="subUrl" />
@@ -28,13 +26,9 @@
           >
             <span>{{ username }}</span>
           </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            class="w-5 h-5 group-hover:fill-blue-500 fill-gray-700 focus:fill-blue-500"
-          >
-            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
-          </svg>
+          <i
+            class="w-3 h-3 stroke-current group-hover:text-blue-500 text-gray-700 focus:text-blue-500 fas fa-chevron-down"
+          ></i>
         </div>
         <div v-show="showSubmenu" class="absolute z-50 top-0 right-0 mt-5">
           <div class="mt-2 py-2 shadow-xl bg-white rounded text-sm">
