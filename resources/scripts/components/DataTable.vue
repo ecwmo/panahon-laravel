@@ -19,9 +19,12 @@
             :href="td[col.href]"
             >{{ td[col.name] }}</a
           >
-          <a v-else tabindex="-1" class="px-4 flex items-center" :href="td.editUrl">{{ td[col.name] }}</a>
+          <a v-else-if="td.editUrl" tabindex="-1" class="px-4 flex items-center" :href="td.editUrl">{{
+            td[col.name]
+          }}</a>
+          <span v-else>{{ td[col.name] }}</span>
         </td>
-        <td class="p-3 text-justify border-t w-px">
+        <td v-if="td.editUrl" class="p-3 text-justify border-t w-px">
           <a :href="td.editUrl" tabindex="-1" class="px-4 flex items-center">
             <i class="block w-4 h-4 text-gray-400 fas fa-chevron-right"></i>
           </a>

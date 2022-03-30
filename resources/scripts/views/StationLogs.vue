@@ -6,6 +6,7 @@
     :showCreateBtn="false"
     :showIdColumn="false"
     :features="features"
+    :hasEditPage="false"
   >
   </Default>
 </template>

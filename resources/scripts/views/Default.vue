@@ -44,12 +44,13 @@
       baseUrl: { type: String, required: true },
       showCreateBtn: { type: Boolean, default: false },
       showIdColumn: { type: Boolean, default: true },
+      hasEditPage: { type: Boolean, default: true },
     },
     components: { DataTable },
     setup(props) {
       const tableData = ref({} as TableDatum)
 
-      const { fetchUrl, baseUrl, features } = toRefs(props)
+      const { fetchUrl, baseUrl, features, hasEditPage } = toRefs(props)
 
       const fetchData = async (url: string) => {
         if (url) {
@@ -57,7 +58,7 @@
           const newDat = dat.data.map((d: Datum) => ({
             ...d,
             statusUrl: `${baseUrl.value}/${d.id}/logs`,
-            editUrl: `${baseUrl.value}/${d.id}/edit`,
+            editUrl: hasEditPage.value ? `${baseUrl.value}/${d.id}/edit` : undefined,
           }))
 
           tableData.value = {
