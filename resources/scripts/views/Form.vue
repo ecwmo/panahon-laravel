@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-  import { ref, toRefs, computed, onMounted, defineComponent } from 'vue'
+  import { ref, toRefs, onMounted, defineComponent } from 'vue'
   import axios from 'axios'
 
   import StatusMessage from '@/components/StatusMessage.vue'
@@ -42,10 +42,9 @@
 
       const handleDelete = async () => {
         if (confirm('Are you sure you want to delete this station?')) {
-          message.value = { type: 'delete', text: '', show: false }
           const res = await axios.delete(`${baseUrl.value}/${data.value.id}`)
           if (res.status === 200) {
-            message.value = { ...message.value, text: 'Deleted successfully', show: true }
+            localStorage.setItem('redirect', 'delete')
             window.location.assign(baseUrl.value)
           }
         }
@@ -53,26 +52,28 @@
 
       const handleFormSubmit = async () => {
         let res
-        message.value = { type: 'update', text: '', show: false }
         if (data.value.id) {
           res = await axios.patch(`${baseUrl.value}/${data.value.id}`, data.value).catch(({ response }) => response)
-          message.value.text = 'Updated successfully'
         } else {
           res = await axios.post(baseUrl.value, data.value).catch(({ response }) => response)
         }
         if (res.status === 200) {
-          message.value = { ...message.value, show: true }
+          localStorage.setItem('redirect', 'update')
+          window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
         } else if (res.status === 201) {
-          window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit?r=c`)
+          localStorage.setItem('redirect', 'create')
+          window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
         } else emit('formError', res?.data?.errors)
       }
 
       onMounted(() => {
-        const urlParams = new URLSearchParams(window.location.search)
-        if (urlParams.get('r') === 'c') {
+        const redirectType = localStorage.getItem('redirect')
+        if (redirectType === 'create') {
           message.value = { type: 'create', text: 'Added successfully', show: true }
-          window.location.search = ''
+        } else if (redirectType === 'update') {
+          message.value = { type: 'update', text: 'Updated successfully', show: true }
         }
+        localStorage.removeItem('redirect')
       })
 
       return {

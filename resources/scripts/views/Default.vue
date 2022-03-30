@@ -1,5 +1,7 @@
 <template>
   <div>
+    <StatusMessage :message="message"></StatusMessage>
+
     <div class="mb-6 flex justify-between items-center">
       <h1 class="font-bold text-3xl">{{ title }}</h1>
       <a
@@ -19,6 +21,7 @@
   import { ref, toRefs, onMounted, defineComponent, PropType } from 'vue'
   import axios from 'axios'
 
+  import StatusMessage from '@/components/StatusMessage.vue'
   import DataTable from '@/components/DataTable.vue'
 
   interface Datum {
@@ -41,9 +44,10 @@
       showIdColumn: { type: Boolean, default: true },
       hasEditPage: { type: Boolean, default: true },
     },
-    components: { DataTable },
+    components: { StatusMessage, DataTable },
     setup(props) {
       const tableData = ref({})
+      const message = ref({ type: 'delete', text: '', show: false })
 
       const { fetchUrl, baseUrl, features, hasEditPage } = toRefs(props)
 
@@ -65,9 +69,18 @@
         }
       }
 
-      onMounted(() => fetchData(fetchUrl.value))
+      onMounted(async () => {
+        const redirectType = localStorage.getItem('redirect')
+        if (redirectType === 'delete') {
+          message.value = { type: 'delete', text: 'Deleted successfully', show: true }
+        }
+        localStorage.removeItem('redirect')
+
+        await fetchData(fetchUrl.value)
+      })
 
       return {
+        message,
         tableData,
         fetchData,
       }
