@@ -12,7 +12,9 @@ import {
   faInfo,
   faChevronUp,
   faChevronDown,
+  faChevronRight,
   faBars,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 
@@ -42,7 +44,9 @@ library.add(
   faInfo,
   faChevronUp,
   faChevronDown,
-  faBars
+  faChevronRight,
+  faBars,
+  faCheck
 )
 dom.watch()
 
