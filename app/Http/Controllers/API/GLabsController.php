@@ -27,6 +27,12 @@ class GLabsController extends Controller
     return round($val * $cf, 2);
   }
 
+  private function isValid($strVal)
+  {
+    $val = (float)$strVal;
+    return ($val != $this->MISSING_VALUE);
+  }
+
   public function index(Request $request)
   {
     $msg = "Nothing to do";
@@ -192,6 +198,13 @@ class GLabsController extends Controller
           $station->observationRaw()->create($obsRaw);
           $station->observation()->create($obs);
 
+          $metVars = [
+            $tempC, $relHum, $airPresHPA, $windSpeedKPH, $windGustKPH, $windDirDeg,
+            $solRadWPM2, $dewPtC, $windChillC, $rainTip, $rainCumTip
+          ];
+          $metVarStat = array_map(array($this, 'isValid'), $metVars);
+          $metVarStat = array_map('intval', $metVarStat);
+
           $stnHealth = [
             'vb1' => (float)$voltPB1,
             'bp1' => (float)$boostPB1,
@@ -200,8 +213,10 @@ class GLabsController extends Controller
             'ss' => (int)$gsmSignalStrength,
             'fpm' => (int)$flashPg,
             'message' => $smsMsg,
+            'data_status' => implode("", $metVarStat),
             'timestamp' => $dateTime
           ];
+
           if ($logType == 2) {
             $stnHealth = Arr::add($stnHealth, 'vb2', (float)$voltPB2);
             $stnHealth = Arr::add($stnHealth, 'bp2', (float)$boostPB2);
