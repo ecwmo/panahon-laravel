@@ -213,6 +213,7 @@ class GLabsController extends Controller
             'ss' => (int)$gsmSignalStrength,
             'fpm' => (int)$flashPg,
             'message' => $smsMsg,
+            'data_count' => array_sum($metVarStat),
             'data_status' => implode("", $metVarStat),
             'timestamp' => $dateTime
           ];
