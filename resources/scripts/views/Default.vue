@@ -13,7 +13,7 @@
       </a>
     </div>
 
-    <DataTable :data="tableData" :showIdColumn="showIdColumn" @fetchData="fetchData"> </DataTable>
+    <DataTable :data="tableData" :showIdColumn="showIdColumn" @pageChange="fetchData"> </DataTable>
   </div>
 </template>
 
@@ -37,7 +37,7 @@
   export default defineComponent({
     props: {
       title: { type: String, default: '' },
-      fetchUrl: { type: String, required: true },
+      fetchUrl: { type: String, default: '' },
       features: { type: Object as PropType<Feature[]>, required: true },
       baseUrl: { type: String, required: true },
       showCreateBtn: { type: Boolean, default: false },
@@ -51,21 +51,22 @@
 
       const { fetchUrl, baseUrl, features, hasEditPage } = toRefs(props)
 
-      const fetchData = async (url: string) => {
-        if (url) {
-          const featHrefs = features.value.filter(({ href }) => href !== undefined).map(({ href }) => href)
-          const dat = await axios.get(url).then(({ data: d }) => d)
-          const newDat = dat.data.map((d: Datum) => ({
-            ...d,
-            statusUrl: featHrefs.includes('statusUrl') ? `${baseUrl.value}/${d.id}/logs` : undefined,
-            editUrl: hasEditPage.value ? `${baseUrl.value}/${d.id}/edit` : undefined,
-          }))
+      const fetchData = async (page = 1) => {
+        const url = new URL(fetchUrl.value === '' ? `${baseUrl.value}?view=0` : fetchUrl.value)
+        url.searchParams.append('page', `${page}`)
 
-          tableData.value = {
-            ...dat,
-            data: newDat,
-            features: features.value,
-          }
+        const featHrefs = features.value.filter(({ href }) => href !== undefined).map(({ href }) => href)
+        const dat = await axios.get(url.toString()).then(({ data: d }) => d)
+        const newDat = dat.data.map((d: Datum) => ({
+          ...d,
+          statusUrl: featHrefs.includes('statusUrl') ? `${baseUrl.value}/${d.id}/logs` : undefined,
+          editUrl: hasEditPage.value ? `${baseUrl.value}/${d.id}/edit` : undefined,
+        }))
+
+        tableData.value = {
+          ...dat,
+          data: newDat,
+          features: features.value,
         }
       }
 
@@ -76,7 +77,7 @@
         }
         localStorage.removeItem('redirect')
 
-        await fetchData(fetchUrl.value)
+        await fetchData()
       })
 
       return {

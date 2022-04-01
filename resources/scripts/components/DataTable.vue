@@ -31,7 +31,7 @@
     </table>
   </div>
   <div class="mt-6">
-    <Pagination v-if="showPagination" :data="data" @pageChange="$emit('fetchData', $event)" />
+    <Pagination v-if="showPagination" :data="data" @pageChange="$emit('pageChange', $event)" />
   </div>
 </template>
 
@@ -50,7 +50,7 @@
       ActionBtn,
       Pagination,
     },
-    emits: ['fetchData'],
+    emits: ['pageChange'],
     setup(props) {
       const { data } = toRefs(props)
 

@@ -1,6 +1,5 @@
 <template>
-  <Default title="Roles" :fetchUrl="fetchUrl" :baseUrl="baseUrl" :showCreateBtn="showCreateBtn" :features="features">
-  </Default>
+  <Default title="Roles" :baseUrl="baseUrl" :showCreateBtn="showCreateBtn" :features="features"> </Default>
 </template>
 
 <script lang="ts">
@@ -10,7 +9,6 @@
 
   export default defineComponent({
     props: {
-      fetchUrl: { type: String, required: true },
       baseUrl: { type: String, required: true },
       showCreateBtn: { type: Boolean, default: false },
     },

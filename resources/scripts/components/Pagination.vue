@@ -8,7 +8,7 @@
           ? 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'
           : 'text-gray-400'
       "
-      @click="$emit('pageChange', data.prev_page_url)"
+      @click="$emit('pageChange', getPage(data.prev_page_url))"
     >
       « Previous
     </div>
@@ -22,7 +22,7 @@
         v-else-if="!isNaN(+link.label)"
         class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
         :class="link.active ? 'bg-white' : 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'"
-        @click="$emit('pageChange', link.url)"
+        @click="$emit('pageChange', getPage(link.url))"
       >
         {{ link.label }}
       </div>
@@ -36,7 +36,7 @@
           ? 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'
           : 'text-gray-400'
       "
-      @click="$emit('pageChange', data.next_page_url)"
+      @click="$emit('pageChange', getPage(data.next_page_url))"
     >
       Next »
     </div>
@@ -49,5 +49,13 @@
   export default defineComponent({
     props: ['data'],
     emits: ['pageChange'],
+    setup() {
+      const getPage = (pageUrl: string) => {
+        const url = new URL(pageUrl)
+        return parseInt(url.searchParams.get('page') ?? '1', 10)
+      }
+
+      return { getPage }
+    },
   })
 </script>
