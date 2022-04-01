@@ -32,6 +32,7 @@ class ObservationsStationHealth extends Model
     'message',
     'data_count',
     'data_status',
+    'minutes_difference',
     'timestamp',
   ];
 

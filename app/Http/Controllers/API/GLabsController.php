@@ -98,6 +98,7 @@ class GLabsController extends Controller
     # Message Received
     # Parse and store to the database
     if (Arr::has($request->post(), 'inboundSMSMessageList')) {
+      $dtNow = new Carbon();
       $senderAddress = $request->post('inboundSMSMessageList')['inboundSMSMessage'][0]['senderAddress'];
       $subNum = Str::substr($senderAddress, 5); #63XXXXXXXXXX
       $smsMsg = $request->post('inboundSMSMessageList')['inboundSMSMessage'][0]['message'];
@@ -215,6 +216,7 @@ class GLabsController extends Controller
             'message' => $smsMsg,
             'data_count' => array_sum($metVarStat),
             'data_status' => implode("", $metVarStat),
+            'minutes_difference' => $dateTime->diffInMinutes($dtNow),
             'timestamp' => $dateTime
           ];
 
