@@ -13,6 +13,5 @@ if ($subURL != '') {
 
 Route::get($subURL, [HomeController::class, 'index'])->name('home');
 
-Route::get('/{vue_capture?}', function () {
-    return view('home');
-})->middleware(['auth'])->where('vue_capture', '^(?!storage).*$');
+Route::view('/{any?}', 'home')
+    ->where('any', '.*');
