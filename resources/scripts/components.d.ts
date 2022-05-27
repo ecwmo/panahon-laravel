@@ -12,6 +12,8 @@ declare module '@vue/runtime-core' {
     Header: typeof import('./components/Header.vue')['default']
     Modal: typeof import('./components/Modal.vue')['default']
     Pagination: typeof import('./components/Pagination.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./components/Sidebar.vue')['default']
     StatusMessage: typeof import('./components/StatusMessage.vue')['default']
   }

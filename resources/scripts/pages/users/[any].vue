@@ -1,5 +1,12 @@
 <template>
-  <Form title="Users" :data="user" :baseUrl="baseUrl" @formError="handleError">
+  <Form
+    title="Users"
+    :itemName="user?.name"
+    :showDelete="user?.id !== undefined"
+    :isUpdate="user?.id !== undefined"
+    @formSubmit="handleFormSubmit"
+    @delete="handleDelete"
+  >
     <div class="p-8 flex flex-wrap">
       <div class="mb-3 w-full">
         <label for="name" class="form-label">User Name</label>
@@ -79,30 +86,71 @@
   import { Role } from '@/types/role'
   import { User, UserFormError } from '@/types/user'
 
-  const props = defineProps({
-    data: { type: Object, required: true },
-    baseUrl: { type: String, default: '' },
-    roles: { type: Object, required: true },
-  })
+  const route = useRoute()
+  const router = useRouter()
+  const authStore = useAuthStore()
+  const itemId = ref(-1)
 
-  const { data, roles } = toRefs(props)
   const user = ref(<User>{
     name: '',
     roles: [],
   })
+  const roles = ref()
   const errors = ref(<UserFormError>{})
   const showRoleDrpDwn = ref(false)
+
+  const baseUrl = computed(() => `/${route.path.split('/')[1]}`)
 
   const userRoleNames = computed(() =>
     user.value.roles.map((id) => roles.value.filter((role: Role) => role['id'] === id)[0]['name'])
   )
 
-  const handleError = (e: UserFormError) => (errors.value = e)
+  const fetchData = async () => {
+    const { data } = await authStore.apiFetch(`/api${baseUrl.value}/${itemId.value}`)
+    user.value = data.user
+    user.value.roles = data?.userRoleIds
+    roles.value = data.roles
+  }
+
+  const fetchRoles = async () => {
+    const { data } = await authStore.apiFetch(`/api/roles?all`)
+    roles.value = data
+  }
+
+  const handleFormSubmit = async (actionType: string) => {
+    let res
+    if (actionType === 'update') {
+      res = await authStore
+        .apiUpdate(`/api${baseUrl.value}/${itemId.value}`, user.value)
+        .catch(({ response }) => response)
+    } else {
+      res = await authStore.apiCreate(`/api${baseUrl.value}`, user.value).catch(({ response }) => response)
+    }
+    if (res.status === 200) {
+      router.push(`${baseUrl.value}/${itemId.value}`)
+    } else if (res.status === 201) {
+      router.push(`${baseUrl.value}/${res.data.id}`)
+    } else {
+      errors.value = res.data.errors
+    }
+  }
+
+  const handleDelete = async () => {
+    if (confirm('Are you sure you want to delete this user?')) {
+      const res = await authStore.apiDelete(`/api${baseUrl.value}/${itemId.value}`)
+      if (res.status === 200) {
+        router.push(baseUrl.value)
+      }
+    }
+  }
 
   onMounted(() => {
-    if (data.value.id) {
-      user.value = <User>data.value
-      user.value.roles = data.value?.roles?.map(({ id }: { id: number }) => id)
+    const param = <string>route.params['any']
+    itemId.value = isNaN(+param) ? -1 : +param
+    if (itemId.value >= 0) {
+      fetchData()
+    } else {
+      fetchRoles()
     }
   })
 </script>

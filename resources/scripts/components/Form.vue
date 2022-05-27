@@ -1,80 +1,44 @@
 <template>
   <div>
-    <StatusMessage :message="message"></StatusMessage>
+    <h1 class="mb-8 font-bold text-3xl">
+      <a :href="baseUrl" class="text-blue-400 hover:text-blue-600">{{ title }}</a>
+      <span class="text-blue-400 font-medium"> / </span>
+      {{ isUpdate ? `${itemName}` : 'Create' }}
+    </h1>
+    <div class="bg-white rounded-md shadow overflow-hidden max-w-3xl">
+      <form>
+        <slot></slot>
 
-    <div>
-      <h1 class="mb-8 font-bold text-3xl">
-        <a :href="baseUrl" class="text-blue-400 hover:text-blue-600">{{ title }}</a>
-        <span class="text-blue-400 font-medium"> / </span>
-        {{ data.id ? `${data.name}` : 'Create' }}
-      </h1>
-      <div class="bg-white rounded-md shadow overflow-hidden max-w-3xl">
-        <form>
-          <slot></slot>
-
-          <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex items-center">
-            <button v-if="data.id" type="submit" class="text-red-600 hover:underline" @click.prevent="handleDelete">
-              Delete
-            </button>
-            <button type="submit" class="form-button" @click.prevent="handleFormSubmit">
-              {{ data.id ? 'Update' : 'Add' }}
-            </button>
-          </div>
-        </form>
-      </div>
+        <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex items-center">
+          <button v-if="showDelete" type="submit" class="text-red-600 hover:underline" @click.prevent="$emit('delete')">
+            Delete
+          </button>
+          <button
+            type="submit"
+            class="form-button"
+            @click.prevent="$emit('formSubmit', isUpdate ? 'update' : 'create')"
+          >
+            {{ isUpdate ? 'Update' : 'Add' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import axios from 'axios'
-
   const props = defineProps({
     title: { type: String, default: '' },
-    data: { type: Object, required: true },
-    baseUrl: { type: String, default: '' },
+    itemName: { type: String, default: '' },
+    showDelete: { type: Boolean, default: false },
+    isUpdate: { type: Boolean, default: false },
   })
 
-  const emit = defineEmits(['formError'])
+  const emit = defineEmits(['formSubmit', 'delete'])
 
-  const { data, baseUrl } = toRefs(props)
-  const message = ref({ type: 'delete', text: '', show: false })
+  const route = useRoute()
 
-  const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this station?')) {
-      const res = await axios.delete(`${baseUrl.value}/${data.value.id}`)
-      if (res.status === 200) {
-        localStorage.setItem('redirect', 'delete')
-        window.location.assign(baseUrl.value)
-      }
-    }
-  }
-
-  const handleFormSubmit = async () => {
-    let res
-    if (data.value.id) {
-      res = await axios.patch(`${baseUrl.value}/${data.value.id}`, data.value).catch(({ response }) => response)
-    } else {
-      res = await axios.post(baseUrl.value, data.value).catch(({ response }) => response)
-    }
-    if (res.status === 200) {
-      localStorage.setItem('redirect', 'update')
-      window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
-    } else if (res.status === 201) {
-      localStorage.setItem('redirect', 'create')
-      window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
-    } else emit('formError', res?.data?.errors)
-  }
-
-  onMounted(() => {
-    const redirectType = localStorage.getItem('redirect')
-    if (redirectType === 'create') {
-      message.value = { type: 'create', text: 'Added successfully', show: true }
-    } else if (redirectType === 'update') {
-      message.value = { type: 'update', text: 'Updated successfully', show: true }
-    }
-    localStorage.removeItem('redirect')
-  })
+  const baseUrl = computed(() => `/${route.path.split('/')[1]}`)
 </script>
 
 <style lang="sass" scoped>

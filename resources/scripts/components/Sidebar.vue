@@ -23,16 +23,17 @@
 <script setup lang="ts">
   const props = defineProps({
     isPopup: { type: Boolean, default: false },
-    isSuperAdmin: { type: Boolean, default: false },
     subUrl: { type: String, default: '/' },
   })
 
-  const { isSuperAdmin, subUrl } = toRefs(props)
+  const { subUrl } = toRefs(props)
+  const authStore = useAuthStore()
+
   const menu = ref([
     { href: `${subUrl.value}`, label: 'Dashboard', icon: 'tachometer-alt', display: true, active: false },
     { href: `${subUrl.value}stations`, label: 'Weather Stations', icon: 'umbrella', display: true, active: false },
-    { href: `${subUrl.value}users`, label: 'User', icon: 'user', display: isSuperAdmin.value, active: false },
-    { href: `${subUrl.value}roles`, label: 'Roles', icon: 'user-tag', display: isSuperAdmin.value, active: false },
+    { href: `${subUrl.value}users`, label: 'User', icon: 'user', display: authStore.isSuperAdmin, active: false },
+    { href: `${subUrl.value}roles`, label: 'Roles', icon: 'user-tag', display: authStore.isSuperAdmin, active: false },
   ])
 
   onMounted(() => {

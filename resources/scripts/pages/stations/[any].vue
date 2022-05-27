@@ -1,5 +1,12 @@
 <template>
-  <Form title="Stations" :data="station" :baseUrl="baseUrl" @formError="handleError">
+  <Form
+    title="Stations"
+    :itemName="station?.name"
+    :showDelete="station?.id !== undefined"
+    :isUpdate="station?.id !== undefined"
+    @formSubmit="handleFormSubmit"
+    @delete="handleDelete"
+  >
     <div class="p-8 flex flex-wrap">
       <div class="mb-3 w-full">
         <label for="name" class="form-label">Station Name</label>
@@ -173,24 +180,59 @@
 <script setup lang="ts">
   import { Station, StationFormError } from '@/types/station'
 
-  const props = defineProps({
-    data: { type: Object, required: true },
-    baseUrl: { type: String, default: '' },
-  })
+  const route = useRoute()
+  const router = useRouter()
+  const authStore = useAuthStore()
+  const itemId = ref(-1)
 
-  const { data } = toRefs(props)
   const station = ref(<Station>{
     name: '',
     address: '',
   })
   const errors = ref(<StationFormError>{})
 
+  const baseUrl = computed(() => `/${route.path.split('/')[1]}`)
+
   const mobileNumberInputEnabled = computed(() => station.value.station_type === 'SMS')
 
-  const handleError = (e: StationFormError) => (errors.value = e)
+  const fetchData = async () => {
+    const { data } = await authStore.apiFetch(`/api${baseUrl.value}/${itemId.value}`)
+    station.value = data
+  }
+
+  const handleFormSubmit = async (actionType: string) => {
+    let res
+    if (actionType === 'update') {
+      res = await authStore
+        .apiUpdate(`/api${baseUrl.value}/${itemId.value}`, station.value)
+        .catch(({ response }) => response)
+    } else {
+      res = await authStore.apiCreate(`/api${baseUrl.value}`, station.value).catch(({ response }) => response)
+    }
+    if (res.status === 200) {
+      router.push(`${baseUrl.value}/${itemId.value}`)
+    } else if (res.status === 201) {
+      router.push(`${baseUrl.value}/${res.data.id}`)
+    } else {
+      errors.value = res.data.errors
+    }
+  }
+
+  const handleDelete = async () => {
+    if (confirm('Are you sure you want to delete this station?')) {
+      const res = await authStore.apiDelete(`/api${baseUrl.value}/${itemId.value}`)
+      if (res.status === 200) {
+        router.push(baseUrl.value)
+      }
+    }
+  }
 
   onMounted(() => {
-    if (data.value.id) station.value = <Station>data.value
+    const param = <string>route.params['any']
+    itemId.value = isNaN(+param) ? -1 : +param
+    if (itemId.value >= 0) {
+      fetchData()
+    }
   })
 </script>
 

@@ -1,13 +1,8 @@
 <template>
-  <Default title="Stations" :baseUrl="baseUrl" :showCreateBtn="showCreateBtn" :features="features"> </Default>
+  <Default title="Stations" :showCreateBtn="true" :features="features" />
 </template>
 
 <script setup lang="ts">
-  const props = defineProps({
-    baseUrl: { type: String, required: true },
-    showCreateBtn: { type: Boolean, default: false },
-  })
-
   const features = [
     { name: 'name', title: 'Name' },
     // { name: 'address', title: 'Address' },

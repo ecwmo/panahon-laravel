@@ -13,18 +13,18 @@
         <i class="text-white w-6 h-6 fas fa-bars"></i>
         <div v-show="showMenu" class="absolute z-50 top-0 right-0 mt-5">
           <div class="mt-2 px-8 py-4 shadow-lg bg-blue-800 rounded">
-            <Sidebar :isPopup="true" :isSuperAdmin="isSuperAdmin" :subUrl="subUrl" />
+            <Sidebar :isPopup="true" :subUrl="subUrl" />
           </div>
         </div>
       </button>
     </div>
     <div class="bg-white border-b w-full p-4 md:py-0 md:px-12 text-sm md:text-md flex justify-end items-center">
-      <button v-if="isLoggedIn" type="button" class="mt-1 relative" @click.prevent="showSubmenu = true">
+      <button v-if="authStore.isLoggedIn" type="button" class="mt-1 relative" @click.prevent="showSubmenu = true">
         <div class="flex items-center cursor-pointer select-none group">
           <div
             class="font-semibold text-gray-500 group-hover:text-blue-500 focus:text-blue-500 transition duration-300 mr-1 whitespace-nowrap"
           >
-            <span>{{ username }}</span>
+            <span>{{ authStore.user.name }}</span>
           </div>
           <i
             class="w-3 h-3 stroke-current group-hover:text-blue-500 text-gray-700 focus:text-blue-500 fas fa-chevron-down"
@@ -37,9 +37,9 @@
         </div>
       </button>
       <div v-else>
-        <a class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" :href="loginUrl"
-          >Login</a
-        >
+        <RouterLink class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/login">
+          Login
+        </RouterLink>
         <a class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" :href="registerUrl"
           >Register</a
         >
@@ -53,26 +53,20 @@
 
   const props = defineProps({
     title: { type: String, default: '' },
-    username: { type: String, default: '' },
-    loginUrl: { type: String, default: '' },
     logoutUrl: { type: String, default: '' },
     registerUrl: { type: String, default: '' },
     subUrl: { type: String, default: '' },
-    isSuperAdmin: { type: Boolean, default: false },
   })
 
   const showMenu = ref(false)
   const showSubmenu = ref(false)
-  const isLoggedIn = ref(false)
 
-  const { username, logoutUrl } = toRefs(props)
-
-  isLoggedIn.value = username.value?.length > 0
+  const { logoutUrl } = toRefs(props)
+  const authStore = useAuthStore()
 
   const logout = async () => {
     const res = await axios.post(logoutUrl.value)
     if (res.status >= 200 && res.status < 300) {
-      isLoggedIn.value = false
       showSubmenu.value = false
     }
   }

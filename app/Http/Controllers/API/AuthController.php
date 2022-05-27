@@ -19,7 +19,6 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-
         $request->validate([
             'name' => 'required|min:4',
             'email' => 'required|email',
@@ -58,8 +57,12 @@ class AuthController extends Controller
     public function userInfo()
     {
         $user = auth()->user();
+        $user = [
+          'name' => $user->name,
+          'email' => $user->email,
+          'roles' => $user->roles->pluck('name')
+        ];
 
         return response()->json(['user' => $user], 200);
-
     }
 }
