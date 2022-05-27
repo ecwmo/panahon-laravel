@@ -13,7 +13,7 @@
         <i class="text-white w-6 h-6 fas fa-bars"></i>
         <div v-show="showMenu" class="absolute z-50 top-0 right-0 mt-5">
           <div class="mt-2 px-8 py-4 shadow-lg bg-blue-800 rounded">
-            <Sidebar :isPopup="true" :subUrl="subUrl" />
+            <Sidebar :isPopup="true" />
           </div>
         </div>
       </button>
@@ -37,9 +37,9 @@
         </div>
       </button>
       <div v-else>
-        <RouterLink class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/login">
+        <router-link class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/login">
           Login
-        </RouterLink>
+        </router-link>
         <a class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" :href="registerUrl"
           >Register</a
         >
@@ -55,7 +55,6 @@
     title: { type: String, default: '' },
     logoutUrl: { type: String, default: '' },
     registerUrl: { type: String, default: '' },
-    subUrl: { type: String, default: '' },
   })
 
   const showMenu = ref(false)

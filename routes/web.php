@@ -2,6 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::view('/{any}', 'home')
+use App\Http\Controllers\HomeController;
+
+$subURL = config('misc.suburl');
+if ($subURL != '') {
+    $subURL = "{$subURL}/";
+} else {
+    $subURL = "/";
+}
+
+Route::get($subURL, [HomeController::class, 'index'])->name('home');
+
+Route::view($subURL.'{any?}', 'home')
     ->middleware(['auth'])
     ->where('any', '.*');
