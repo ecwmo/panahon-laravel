@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 
-use App\Models\ObservationsStation;
+use App\Models\GLabs;
 
 use App\Http\Controllers\Controller;
 
@@ -20,11 +20,10 @@ class GLabsLoadController extends Controller
         # Parse and store to the database
         if (Arr::has($request->post(), 'outboundRewardRequest')) {
             $subNum = $request->post('outboundRewardRequest')['address'];
-            $station = ObservationsStation::where('mobile_number', "63" . $subNum)->firstOrFail();
-            $stGLabsSubs = $station->glabs_subscription;
+            $glab = GLabs::where('mobile_number', "63" . $subNum)->firstOrFail();
 
-            if ($stGLabsSubs) {
-                $stGLabsSubs->topups()->create([
+            if ($glab) {
+                $glab->topups()->create([
                     'status' => $request->post('outboundRewardRequest')['status'],
                     'promo' => $request->post('outboundRewardRequest')['promo'],
                     'transaction_id' => (int)($request->post('outboundRewardRequest')['transaction_id'])

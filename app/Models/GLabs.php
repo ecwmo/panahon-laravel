@@ -17,8 +17,8 @@ class GLabs extends Model
     protected $table = 'glabs';
 
     protected $fillable = [
-        'station_id',
-        'access_token'
+        'access_token',
+        'mobile_number',
     ];
 
     protected $hidden = [
@@ -27,7 +27,7 @@ class GLabs extends Model
 
     public function station()
     {
-        return $this->belongsTo(ObservationsStation::class);
+        return $this->belongsTo(ObservationsStation::class, 'mobile_number', 'mobile_number');
     }
 
     public function topups()

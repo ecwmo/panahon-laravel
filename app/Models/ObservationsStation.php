@@ -38,22 +38,22 @@ class ObservationsStation extends Model
      */
     protected $table = 'observations_station';
 
-    public function observationRaw() {
+    public function observationRaw()
+    {
         return $this
             ->hasMany(ObservationsObservationRaw::class, 'station_id', 'id');
     }
 
-    public function observation() {
+    public function observation()
+    {
         return $this
             ->hasMany(ObservationsObservation::class, 'station_id', 'id');
     }
 
-    public function latestObservationRaw() {
+    public function latestObservationRaw()
+    {
         $startDate = Carbon::now()->addMinutes(10);
         $endDate = Carbon::now()->addMinutes(10);
-
-        // $startDate = Carbon::create(2018, 05, 01, 0, 0, 0, 'Asia/Manila');
-        // $endDate = Carbon::create(2018, 05, 01, 0, 20, 0, 'Asia/Manila');
 
         $obsModel = ObservationsObservationRaw::class;
         if ($this->station_type == "MO") {
@@ -62,19 +62,19 @@ class ObservationsStation extends Model
         return $this
             ->hasOne($obsModel, 'station_id', 'id')
             ->whereBetween(
-                'timestamp', [
-                    $startDate,
-                    $endDate
-                ])
+                'timestamp',
+                [
+                $startDate,
+                $endDate
+                ]
+            )
             ->latest('timestamp');
     }
 
-    public function latestObservation() {
+    public function latestObservation()
+    {
         $startDate = Carbon::now()->addMinutes(10);
         $endDate = Carbon::now()->addMinutes(10);
-
-        $startDate = Carbon::create(2018, 05, 01, 0, 0, 0, 'Asia/Manila');
-        $endDate = Carbon::create(2018, 05, 01, 0, 20, 0, 'Asia/Manila');
 
         $obsModel = ObservationsObservation::class;
         if ($this->station_type == "MO") {
@@ -83,20 +83,24 @@ class ObservationsStation extends Model
         return $this
             ->hasOne($obsModel, 'station_id', 'id')
             ->whereBetween(
-                'timestamp', [
+                'timestamp',
+                [
                     $startDate,
                     $endDate
-                ])
+                ]
+            )
             ->latest('timestamp');
     }
 
-    public function health() {
+    public function health()
+    {
         return $this
             ->hasMany(ObservationsStationHealth::class, 'station_id', 'id');
     }
 
-    public function glabs_subscription() {
+    public function glabs_subscription()
+    {
         return $this
-            ->hasOne(GLabs::class, 'station_id', 'id');
+            ->hasOne(GLabs::class, 'mobile_number', 'mobile_number');
     }
 }
