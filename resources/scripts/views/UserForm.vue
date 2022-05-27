@@ -81,11 +81,8 @@
   import { Role } from '@/types/role'
   import { User, UserFormError } from '@/types/user'
 
-  import Form from '@/views/Form.vue'
-
   export default defineComponent({
     props: ['data', 'roles', 'baseUrl'],
-    components: { Form },
     setup(props) {
       const { data, roles } = toRefs(props)
       const user = ref(<User>{

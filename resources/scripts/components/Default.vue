@@ -21,9 +21,6 @@
   import { ref, toRefs, onMounted, defineComponent, PropType } from 'vue'
   import axios from 'axios'
 
-  import StatusMessage from '@/components/StatusMessage.vue'
-  import DataTable from '@/components/DataTable.vue'
-
   interface Datum {
     [k: string]: any
   }
@@ -44,7 +41,6 @@
       showIdColumn: { type: Boolean, default: true },
       hasEditPage: { type: Boolean, default: true },
     },
-    components: { StatusMessage, DataTable },
     setup(props) {
       const tableData = ref({})
       const message = ref({ type: 'delete', text: '', show: false })

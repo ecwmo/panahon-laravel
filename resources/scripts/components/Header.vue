@@ -52,11 +52,8 @@
   import { defineComponent, ref, toRefs } from 'vue'
   import axios from 'axios'
 
-  import Sidebar from '@/components/Sidebar.vue'
-
   export default defineComponent({
     props: ['title', 'username', 'loginUrl', 'logoutUrl', 'registerUrl', 'subUrl', 'isSuperAdmin'],
-    components: { Sidebar },
     setup(props) {
       const showMenu = ref(false)
       const showSubmenu = ref(false)

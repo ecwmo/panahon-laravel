@@ -36,19 +36,12 @@
 </template>
 
 <script lang="ts">
-  import { computed, ref, toRefs, defineComponent } from 'vue'
-
-  import ActionBtn from '@/components/ActionBtn.vue'
-  import Pagination from '@/components/Pagination.vue'
+  import { computed, toRefs, defineComponent } from 'vue'
 
   export default defineComponent({
     props: {
       data: { type: Object, required: true },
       showIdColumn: { type: Boolean, default: true },
-    },
-    components: {
-      ActionBtn,
-      Pagination,
     },
     emits: ['pageChange'],
     setup(props) {

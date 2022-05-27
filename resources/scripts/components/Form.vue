@@ -30,12 +30,9 @@
   import { ref, toRefs, onMounted, defineComponent } from 'vue'
   import axios from 'axios'
 
-  import StatusMessage from '@/components/StatusMessage.vue'
-
   export default defineComponent({
     props: ['title', 'data', 'baseUrl'],
     emit: ['formError'],
-    components: { StatusMessage },
     setup(props, { emit }) {
       const { data, baseUrl } = toRefs(props)
       const message = ref({ type: 'delete', text: '', show: false })

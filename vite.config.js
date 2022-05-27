@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import vue from '@vitejs/plugin-vue'
+import Components from 'unplugin-vue-components/vite'
 
 export default defineConfig(({ command }) => ({
   base: command === 'serve' ? '' : '/build/',
@@ -25,6 +26,11 @@ export default defineConfig(({ command }) => ({
         }
       },
     },
+    Components({
+      dirs: ['resources/scripts/components'],
+      dts: 'resources/scripts/components.d.ts',
+      directoryAsNamespace: true,
+    }),
   ],
   resolve: {
     alias: {

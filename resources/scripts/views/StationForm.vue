@@ -175,11 +175,8 @@
 
   import { Station, StationFormError } from '@/types/station'
 
-  import Form from '@/views/Form.vue'
-
   export default defineComponent({
     props: ['data', 'baseUrl'],
-    components: { Form },
     setup(props) {
       const { data } = toRefs(props)
       const station = ref(<Station>{

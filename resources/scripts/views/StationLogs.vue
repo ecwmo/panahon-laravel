@@ -14,15 +14,12 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
 
-  import Default from '../views/Default.vue'
-
   export default defineComponent({
     props: {
       fetchUrl: { type: String, required: true },
       baseUrl: { type: String, required: true },
       showCreateBtn: { type: Boolean, default: false },
     },
-    components: { Default },
     setup() {
       const features = [
         { name: 'timestamp', title: 'Timestamp' },
