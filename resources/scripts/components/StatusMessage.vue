@@ -10,8 +10,8 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, PropType } from 'vue'
+<script setup lang="ts">
+  import { PropType } from 'vue'
 
   type Message = {
     text: string
@@ -19,9 +19,7 @@
     type?: string
   }
 
-  export default defineComponent({
-    props: {
-      message: { type: Object as PropType<Message>, required: true },
-    },
+  const props = defineProps({
+    message: { type: Object as PropType<Message>, required: true },
   })
 </script>

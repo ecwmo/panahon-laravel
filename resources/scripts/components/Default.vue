@@ -17,8 +17,8 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { ref, toRefs, onMounted, defineComponent, PropType } from 'vue'
+<script setup lang="ts">
+  import { PropType } from 'vue'
   import axios from 'axios'
 
   interface Datum {
@@ -31,56 +31,47 @@
     href?: string
   }
 
-  export default defineComponent({
-    props: {
-      title: { type: String, default: '' },
-      fetchUrl: { type: String, default: '' },
-      features: { type: Object as PropType<Feature[]>, required: true },
-      baseUrl: { type: String, required: true },
-      showCreateBtn: { type: Boolean, default: false },
-      showIdColumn: { type: Boolean, default: true },
-      hasEditPage: { type: Boolean, default: true },
-    },
-    setup(props) {
-      const tableData = ref({})
-      const message = ref({ type: 'delete', text: '', show: false })
+  const props = defineProps({
+    title: { type: String, default: '' },
+    fetchUrl: { type: String, default: '' },
+    features: { type: Object as PropType<Feature[]>, required: true },
+    baseUrl: { type: String, required: true },
+    showCreateBtn: { type: Boolean, default: false },
+    showIdColumn: { type: Boolean, default: true },
+    hasEditPage: { type: Boolean, default: true },
+  })
 
-      const { fetchUrl, baseUrl, features, hasEditPage } = toRefs(props)
+  const tableData = ref({})
+  const message = ref({ type: 'delete', text: '', show: false })
 
-      const fetchData = async (page = 1) => {
-        const url = new URL(fetchUrl.value === '' ? `${baseUrl.value}?view=0` : fetchUrl.value)
-        url.searchParams.append('page', `${page}`)
+  const { fetchUrl, baseUrl, features, hasEditPage } = toRefs(props)
 
-        const featHrefs = features.value.filter(({ href }) => href !== undefined).map(({ href }) => href)
-        const dat = await axios.get(url.toString()).then(({ data: d }) => d)
-        const newDat = dat.data.map((d: Datum) => ({
-          ...d,
-          statusUrl: featHrefs.includes('statusUrl') ? `${baseUrl.value}/${d.id}/logs` : undefined,
-          editUrl: hasEditPage.value ? `${baseUrl.value}/${d.id}/edit` : undefined,
-        }))
+  const fetchData = async (page = 1) => {
+    const url = new URL(fetchUrl.value === '' ? `${baseUrl.value}?view=0` : fetchUrl.value)
+    url.searchParams.append('page', `${page}`)
 
-        tableData.value = {
-          ...dat,
-          data: newDat,
-          features: features.value,
-        }
-      }
+    const featHrefs = features.value.filter(({ href }) => href !== undefined).map(({ href }) => href)
+    const dat = await axios.get(url.toString()).then(({ data: d }) => d)
+    const newDat = dat.data.map((d: Datum) => ({
+      ...d,
+      statusUrl: featHrefs.includes('statusUrl') ? `${baseUrl.value}/${d.id}/logs` : undefined,
+      editUrl: hasEditPage.value ? `${baseUrl.value}/${d.id}/edit` : undefined,
+    }))
 
-      onMounted(async () => {
-        const redirectType = localStorage.getItem('redirect')
-        if (redirectType === 'delete') {
-          message.value = { type: 'delete', text: 'Deleted successfully', show: true }
-        }
-        localStorage.removeItem('redirect')
+    tableData.value = {
+      ...dat,
+      data: newDat,
+      features: features.value,
+    }
+  }
 
-        await fetchData()
-      })
+  onMounted(async () => {
+    const redirectType = localStorage.getItem('redirect')
+    if (redirectType === 'delete') {
+      message.value = { type: 'delete', text: 'Deleted successfully', show: true }
+    }
+    localStorage.removeItem('redirect')
 
-      return {
-        message,
-        tableData,
-        fetchData,
-      }
-    },
+    await fetchData()
   })
 </script>

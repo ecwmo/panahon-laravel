@@ -31,32 +31,24 @@
   </Form>
 </template>
 
-<script lang="ts">
-  import { ref, toRefs, onMounted, defineComponent } from 'vue'
-
+<script setup lang="ts">
   import { Role, RoleFormError } from '@/types/role'
 
-  export default defineComponent({
-    props: ['data', 'baseUrl'],
-    setup(props) {
-      const { data } = toRefs(props)
-      const role = ref(<Role>{
-        name: '',
-      })
-      const errors = ref(<RoleFormError>{})
+  const props = defineProps({
+    data: { type: Object, required: true },
+    baseUrl: { type: String, default: '' },
+  })
 
-      const handleError = (e: RoleFormError) => (errors.value = e)
+  const { data } = toRefs(props)
+  const role = ref(<Role>{
+    name: '',
+  })
+  const errors = ref(<RoleFormError>{})
 
-      onMounted(() => {
-        if (data.value.id) role.value = data.value
-      })
+  const handleError = (e: RoleFormError) => (errors.value = e)
 
-      return {
-        role,
-        errors,
-        handleError,
-      }
-    },
+  onMounted(() => {
+    if (data.value.id) role.value = <Role>data.value
   })
 </script>
 

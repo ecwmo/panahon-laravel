@@ -2,24 +2,17 @@
   <Default title="Stations" :baseUrl="baseUrl" :showCreateBtn="showCreateBtn" :features="features"> </Default>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
-
-  export default defineComponent({
-    props: {
-      baseUrl: { type: String, required: true },
-      showCreateBtn: { type: Boolean, default: false },
-    },
-    setup() {
-      const features = [
-        { name: 'name', title: 'Name' },
-        // { name: 'address', title: 'Address' },
-        { name: 'station_type', title: 'Type' },
-        { name: 'status', title: 'Status', href: 'statusUrl' },
-        { name: 'date_installed', title: 'Install Date' },
-      ]
-
-      return { features }
-    },
+<script setup lang="ts">
+  const props = defineProps({
+    baseUrl: { type: String, required: true },
+    showCreateBtn: { type: Boolean, default: false },
   })
+
+  const features = [
+    { name: 'name', title: 'Name' },
+    // { name: 'address', title: 'Address' },
+    { name: 'station_type', title: 'Type' },
+    { name: 'status', title: 'Status', href: 'statusUrl' },
+    { name: 'date_installed', title: 'Install Date' },
+  ]
 </script>

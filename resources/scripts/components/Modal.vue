@@ -28,12 +28,10 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
-
-  export default defineComponent({
-    name: 'Modal',
-    props: { btnLabel: { default: 'Delete' } },
-    emits: ['btnClick', 'close'],
+<script setup lang="ts">
+  const props = defineProps({
+    btnLabel: { default: 'Delete' },
   })
+
+  const emit = defineEmits(['btnClick', 'close'])
 </script>

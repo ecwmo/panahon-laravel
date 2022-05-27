@@ -48,35 +48,32 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, toRefs } from 'vue'
+<script setup lang="ts">
   import axios from 'axios'
 
-  export default defineComponent({
-    props: ['title', 'username', 'loginUrl', 'logoutUrl', 'registerUrl', 'subUrl', 'isSuperAdmin'],
-    setup(props) {
-      const showMenu = ref(false)
-      const showSubmenu = ref(false)
-      const isLoggedIn = ref(false)
-
-      const { username, logoutUrl } = toRefs(props)
-
-      isLoggedIn.value = username.value?.length > 0
-
-      const logout = async () => {
-        const res = await axios.post(logoutUrl.value)
-        if (res.status >= 200 && res.status < 300) {
-          isLoggedIn.value = false
-          showSubmenu.value = false
-        }
-      }
-
-      return {
-        showMenu,
-        showSubmenu,
-        isLoggedIn,
-        logout,
-      }
-    },
+  const props = defineProps({
+    title: { type: String, default: '' },
+    username: { type: String, default: '' },
+    loginUrl: { type: String, default: '' },
+    logoutUrl: { type: String, default: '' },
+    registerUrl: { type: String, default: '' },
+    subUrl: { type: String, default: '' },
+    isSuperAdmin: { type: Boolean, default: false },
   })
+
+  const showMenu = ref(false)
+  const showSubmenu = ref(false)
+  const isLoggedIn = ref(false)
+
+  const { username, logoutUrl } = toRefs(props)
+
+  isLoggedIn.value = username.value?.length > 0
+
+  const logout = async () => {
+    const res = await axios.post(logoutUrl.value)
+    if (res.status >= 200 && res.status < 300) {
+      isLoggedIn.value = false
+      showSubmenu.value = false
+    }
+  }
 </script>

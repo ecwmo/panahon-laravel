@@ -35,25 +35,17 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { computed, toRefs, defineComponent } from 'vue'
-
-  export default defineComponent({
-    props: {
-      data: { type: Object, required: true },
-      showIdColumn: { type: Boolean, default: true },
-    },
-    emits: ['pageChange'],
-    setup(props) {
-      const { data } = toRefs(props)
-
-      const showPagination = computed(
-        () => Object.prototype.hasOwnProperty.call(data.value, 'links') && data.value.links.length > 3
-      )
-
-      return {
-        showPagination,
-      }
-    },
+<script setup lang="ts">
+  const props = defineProps({
+    data: { type: Object, required: true },
+    showIdColumn: { type: Boolean, default: true },
   })
+
+  const emit = defineEmits(['pageChange'])
+
+  const { data } = toRefs(props)
+
+  const showPagination = computed(
+    () => Object.prototype.hasOwnProperty.call(data.value, 'links') && data.value.links.length > 3
+  )
 </script>

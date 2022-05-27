@@ -43,19 +43,13 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
+<script setup lang="ts">
+  const props = defineProps({ data: { type: Object, required: true } })
 
-  export default defineComponent({
-    props: ['data'],
-    emits: ['pageChange'],
-    setup() {
-      const getPage = (pageUrl: string) => {
-        const url = new URL(pageUrl)
-        return parseInt(url.searchParams.get('page') ?? '1', 10)
-      }
+  const emit = defineEmits(['pageChange'])
 
-      return { getPage }
-    },
-  })
+  const getPage = (pageUrl: string) => {
+    const url = new URL(pageUrl)
+    return parseInt(url.searchParams.get('page') ?? '1', 10)
+  }
 </script>

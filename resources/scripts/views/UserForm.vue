@@ -75,44 +75,35 @@
   </Form>
 </template>
 
-<script lang="ts">
-  import { ref, toRefs, computed, onMounted, defineComponent } from 'vue'
-
+<script setup lang="ts">
   import { Role } from '@/types/role'
   import { User, UserFormError } from '@/types/user'
 
-  export default defineComponent({
-    props: ['data', 'roles', 'baseUrl'],
-    setup(props) {
-      const { data, roles } = toRefs(props)
-      const user = ref(<User>{
-        name: '',
-        roles: [],
-      })
-      const errors = ref(<UserFormError>{})
-      const showRoleDrpDwn = ref(false)
+  const props = defineProps({
+    data: { type: Object, required: true },
+    baseUrl: { type: String, default: '' },
+    roles: { type: Object, required: true },
+  })
 
-      const userRoleNames = computed(() =>
-        user.value.roles.map((id) => roles.value.filter((role: Role) => role['id'] === id)[0]['name'])
-      )
+  const { data, roles } = toRefs(props)
+  const user = ref(<User>{
+    name: '',
+    roles: [],
+  })
+  const errors = ref(<UserFormError>{})
+  const showRoleDrpDwn = ref(false)
 
-      const handleError = (e: UserFormError) => (errors.value = e)
+  const userRoleNames = computed(() =>
+    user.value.roles.map((id) => roles.value.filter((role: Role) => role['id'] === id)[0]['name'])
+  )
 
-      onMounted(() => {
-        if (data.value.id) {
-          user.value = data.value
-          user.value.roles = data.value?.roles?.map(({ id }: { id: number }) => id)
-        }
-      })
+  const handleError = (e: UserFormError) => (errors.value = e)
 
-      return {
-        user,
-        userRoleNames,
-        errors,
-        showRoleDrpDwn,
-        handleError,
-      }
-    },
+  onMounted(() => {
+    if (data.value.id) {
+      user.value = <User>data.value
+      user.value.roles = data.value?.roles?.map(({ id }: { id: number }) => id)
+    }
   })
 </script>
 

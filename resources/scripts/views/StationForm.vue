@@ -170,31 +170,27 @@
   </Form>
 </template>
 
-<script lang="ts">
-  import { ref, toRefs, computed, onMounted, defineComponent } from 'vue'
-
+<script setup lang="ts">
   import { Station, StationFormError } from '@/types/station'
 
-  export default defineComponent({
-    props: ['data', 'baseUrl'],
-    setup(props) {
-      const { data } = toRefs(props)
-      const station = ref(<Station>{
-        name: '',
-        address: '',
-      })
-      const errors = ref(<StationFormError>{})
+  const props = defineProps({
+    data: { type: Object, required: true },
+    baseUrl: { type: String, default: '' },
+  })
 
-      const mobileNumberInputEnabled = computed(() => station.value.station_type === 'SMS')
+  const { data } = toRefs(props)
+  const station = ref(<Station>{
+    name: '',
+    address: '',
+  })
+  const errors = ref(<StationFormError>{})
 
-      const handleError = (e: StationFormError) => (errors.value = e)
+  const mobileNumberInputEnabled = computed(() => station.value.station_type === 'SMS')
 
-      onMounted(() => {
-        if (data.value.id) station.value = data.value
-      })
+  const handleError = (e: StationFormError) => (errors.value = e)
 
-      return { station, errors, mobileNumberInputEnabled, handleError }
-    },
+  onMounted(() => {
+    if (data.value.id) station.value = <Station>data.value
   })
 </script>
 

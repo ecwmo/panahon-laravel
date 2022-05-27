@@ -51,6 +51,7 @@ library.add(
 dom.watch()
 
 const app = createApp({})
+//@ts-ignore
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.component('v-header', Header)
 app.component('v-sidebar', Sidebar)

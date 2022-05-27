@@ -26,59 +26,54 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { ref, toRefs, onMounted, defineComponent } from 'vue'
+<script setup lang="ts">
   import axios from 'axios'
 
-  export default defineComponent({
-    props: ['title', 'data', 'baseUrl'],
-    emit: ['formError'],
-    setup(props, { emit }) {
-      const { data, baseUrl } = toRefs(props)
-      const message = ref({ type: 'delete', text: '', show: false })
+  const props = defineProps({
+    title: { type: String, default: '' },
+    data: { type: Object, required: true },
+    baseUrl: { type: String, default: '' },
+  })
 
-      const handleDelete = async () => {
-        if (confirm('Are you sure you want to delete this station?')) {
-          const res = await axios.delete(`${baseUrl.value}/${data.value.id}`)
-          if (res.status === 200) {
-            localStorage.setItem('redirect', 'delete')
-            window.location.assign(baseUrl.value)
-          }
-        }
+  const emit = defineEmits(['formError'])
+
+  const { data, baseUrl } = toRefs(props)
+  const message = ref({ type: 'delete', text: '', show: false })
+
+  const handleDelete = async () => {
+    if (confirm('Are you sure you want to delete this station?')) {
+      const res = await axios.delete(`${baseUrl.value}/${data.value.id}`)
+      if (res.status === 200) {
+        localStorage.setItem('redirect', 'delete')
+        window.location.assign(baseUrl.value)
       }
+    }
+  }
 
-      const handleFormSubmit = async () => {
-        let res
-        if (data.value.id) {
-          res = await axios.patch(`${baseUrl.value}/${data.value.id}`, data.value).catch(({ response }) => response)
-        } else {
-          res = await axios.post(baseUrl.value, data.value).catch(({ response }) => response)
-        }
-        if (res.status === 200) {
-          localStorage.setItem('redirect', 'update')
-          window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
-        } else if (res.status === 201) {
-          localStorage.setItem('redirect', 'create')
-          window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
-        } else emit('formError', res?.data?.errors)
-      }
+  const handleFormSubmit = async () => {
+    let res
+    if (data.value.id) {
+      res = await axios.patch(`${baseUrl.value}/${data.value.id}`, data.value).catch(({ response }) => response)
+    } else {
+      res = await axios.post(baseUrl.value, data.value).catch(({ response }) => response)
+    }
+    if (res.status === 200) {
+      localStorage.setItem('redirect', 'update')
+      window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
+    } else if (res.status === 201) {
+      localStorage.setItem('redirect', 'create')
+      window.location.assign(<any>`${baseUrl.value}/${res.data.id}/edit`)
+    } else emit('formError', res?.data?.errors)
+  }
 
-      onMounted(() => {
-        const redirectType = localStorage.getItem('redirect')
-        if (redirectType === 'create') {
-          message.value = { type: 'create', text: 'Added successfully', show: true }
-        } else if (redirectType === 'update') {
-          message.value = { type: 'update', text: 'Updated successfully', show: true }
-        }
-        localStorage.removeItem('redirect')
-      })
-
-      return {
-        message,
-        handleFormSubmit,
-        handleDelete,
-      }
-    },
+  onMounted(() => {
+    const redirectType = localStorage.getItem('redirect')
+    if (redirectType === 'create') {
+      message.value = { type: 'create', text: 'Added successfully', show: true }
+    } else if (redirectType === 'update') {
+      message.value = { type: 'update', text: 'Updated successfully', show: true }
+    }
+    localStorage.removeItem('redirect')
   })
 </script>
 

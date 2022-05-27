@@ -5,16 +5,13 @@
   ></a>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
-
-  export default defineComponent({
-    props: {
-      title: { type: String, required: true },
-      className: { type: String, required: true },
-      btnClassName: { type: String, required: true },
-      href: { type: String, default: '#' },
-    },
-    emits: ['btnClicked'],
+<script setup lang="ts">
+  const props = defineProps({
+    title: { type: String, required: true },
+    className: { type: String, required: true },
+    btnClassName: { type: String, required: true },
+    href: { type: String, default: '#' },
   })
+
+  const emit = defineEmits(['btnClicked'])
 </script>

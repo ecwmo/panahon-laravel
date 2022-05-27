@@ -20,30 +20,24 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, toRefs, computed, onMounted } from 'vue'
-  export default defineComponent({
-    props: {
-      isPopup: { type: Boolean, default: false },
-      isSuperAdmin: { type: Boolean, default: false },
-      subUrl: { type: String, default: '/' },
-    },
-    setup(props) {
-      const { isSuperAdmin, subUrl } = toRefs(props)
-      const menu = ref([
-        { href: `${subUrl.value}`, label: 'Dashboard', icon: 'tachometer-alt', display: true, active: false },
-        { href: `${subUrl.value}stations`, label: 'Weather Stations', icon: 'umbrella', display: true, active: false },
-        { href: `${subUrl.value}users`, label: 'User', icon: 'user', display: isSuperAdmin.value, active: false },
-        { href: `${subUrl.value}roles`, label: 'Roles', icon: 'user-tag', display: isSuperAdmin.value, active: false },
-      ])
+<script setup lang="ts">
+  const props = defineProps({
+    isPopup: { type: Boolean, default: false },
+    isSuperAdmin: { type: Boolean, default: false },
+    subUrl: { type: String, default: '/' },
+  })
 
-      onMounted(() => {
-        const activeIdx = menu.value.slice(1).findIndex((m) => window.location.pathname.indexOf(m.href) !== -1)
-        if (activeIdx === -1) menu.value[0].active = true
-        else menu.value[activeIdx + 1].active = true
-      })
+  const { isSuperAdmin, subUrl } = toRefs(props)
+  const menu = ref([
+    { href: `${subUrl.value}`, label: 'Dashboard', icon: 'tachometer-alt', display: true, active: false },
+    { href: `${subUrl.value}stations`, label: 'Weather Stations', icon: 'umbrella', display: true, active: false },
+    { href: `${subUrl.value}users`, label: 'User', icon: 'user', display: isSuperAdmin.value, active: false },
+    { href: `${subUrl.value}roles`, label: 'Roles', icon: 'user-tag', display: isSuperAdmin.value, active: false },
+  ])
 
-      return { menu }
-    },
+  onMounted(() => {
+    const activeIdx = menu.value.slice(1).findIndex((m) => window.location.pathname.indexOf(m.href) !== -1)
+    if (activeIdx === -1) menu.value[0].active = true
+    else menu.value[activeIdx + 1].active = true
   })
 </script>
