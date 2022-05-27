@@ -15,15 +15,6 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 </head>
 
-@php
-$subURL = config('misc.suburl');
-if ($subURL != '') {
-    $subURL = "/{$subURL}/";
-} else {
-    $subURL = '/';
-}
-@endphp
-
 <body class="font-sans leading-none text-gray-700 bg-gray-100 antialiased">
     <div id="app">
     </div>
