@@ -6,7 +6,7 @@
       <h1 class="font-bold text-3xl">{{ title }}</h1>
       <router-link
         v-if="showCreateBtn"
-        :to="`${route.path}/create`"
+        :to="`${appRoute.basePath}/create`"
         class="rounded px-3 py-2 m-1 shadow bg-blue-600 border-blue-700 hover:bg-amber-400"
       >
         <i class="text-white fas fa-plus"></i>
@@ -41,7 +41,6 @@
   const tableData = ref({})
   const message = ref({ type: 'delete', text: '', show: false })
 
-  const route = useRoute()
   const appRoute = useAppRoute()
 
   const { features, hasEditPage } = toRefs(props)
@@ -51,8 +50,8 @@
     const { data: dat } = await appRoute.apiFetch({ page: page })
     const newDat = dat.data.map((d: Datum) => ({
       ...d,
-      statusUrl: featHrefs.includes('statusUrl') ? `${route.path}/${d.id}/logs` : undefined,
-      editUrl: hasEditPage.value ? `${route.path}/${d.id}` : undefined,
+      statusUrl: featHrefs.includes('statusUrl') ? `${appRoute.basePath}/${d.id}/logs` : undefined,
+      editUrl: hasEditPage.value ? `${appRoute.basePath}/${d.id}` : undefined,
     }))
 
     tableData.value = {
