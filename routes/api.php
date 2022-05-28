@@ -16,6 +16,8 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('stations/{id}/logs', [ObservationsStationController::class, 'fetchLogs']);
 Route::resource('stations', ObservationsStationController::class)->only(['index', 'show']);
 Route::middleware('auth:api')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+
     Route::get('auth/user', [AuthController::class, 'userInfo']);
     Route::resource('stations', ObservationsStationController::class)->except(['index', 'show']);
     Route::resource('users', UserController::class);

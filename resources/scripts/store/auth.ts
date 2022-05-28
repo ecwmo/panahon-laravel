@@ -33,9 +33,22 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = { ...user.value, name, email, roles }
   }
 
+  const logout = async () => {
+    const res = await axios.post(`${apiPath}/logout`, {}, axiosConfig.value)
+    if (res.status === 200) {
+      user.value = {
+        name: '',
+        email: '',
+        roles: <string[]>[],
+        token: '',
+      }
+    }
+    return res
+  }
+
   const isLoggedIn = computed(() => user?.value?.token?.length > 0)
   const isAdmin = computed(() => user?.value?.roles?.includes('ADMIN'))
   const isSuperAdmin = computed(() => user?.value?.roles?.includes('SUPERADMIN'))
 
-  return { user, login, isLoggedIn, isAdmin, isSuperAdmin }
+  return { user, login, logout, isLoggedIn, isAdmin, isSuperAdmin }
 })

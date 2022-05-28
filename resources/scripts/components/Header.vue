@@ -49,22 +49,18 @@
 </template>
 
 <script setup lang="ts">
-  import axios from 'axios'
-
   const props = defineProps({
     title: { type: String, default: '' },
-    logoutUrl: { type: String, default: '' },
     registerUrl: { type: String, default: '' },
   })
 
   const showMenu = ref(false)
   const showSubmenu = ref(false)
 
-  const { logoutUrl } = toRefs(props)
   const authStore = useAuthStore()
 
   const logout = async () => {
-    const res = await axios.post(logoutUrl.value)
+    const res = await authStore.logout()
     if (res.status >= 200 && res.status < 300) {
       showSubmenu.value = false
     }
