@@ -2,8 +2,9 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
+import Layouts from 'vite-plugin-vue-layouts'
 import Pages from 'vite-plugin-pages'
+import Components from 'unplugin-vue-components/vite'
 
 export default defineConfig(({ command }) => ({
   base: command === 'serve' ? '' : '/build/',
@@ -34,10 +35,8 @@ export default defineConfig(({ command }) => ({
       dirs: ['resources/scripts/composables', 'resources/scripts/store'],
       vueTemplate: true,
     }),
-    Components({
-      dirs: ['resources/scripts/components'],
-      dts: 'resources/scripts/components.d.ts',
-      directoryAsNamespace: true,
+    Layouts({
+      layoutsDirs: 'resources/scripts/layouts',
     }),
     Pages({
       importMode: 'async',
@@ -51,6 +50,11 @@ export default defineConfig(({ command }) => ({
           baseRoute: '',
         },
       ],
+    }),
+    Components({
+      dirs: ['resources/scripts/components'],
+      dts: 'resources/scripts/components.d.ts',
+      directoryAsNamespace: true,
     }),
   ],
   resolve: {

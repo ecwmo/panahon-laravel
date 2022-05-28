@@ -58,3 +58,8 @@
     else user.value = { email: '', password: '' }
   }
 </script>
+
+<route lang="yaml">
+meta:
+  layout: auth
+</route>

@@ -1,26 +1,26 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "useDefineForClassFields": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "strict": true,
-        "jsx": "preserve",
-        "sourceMap": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "lib": ["esnext", "dom"],
-        "types": ["vite/client"],
-        "baseUrl": "resources/scripts",
-        "paths": {
-            "@/*": ["./*"]
-        }
-    },
-    "include": [
-        "resources/scripts/**/*.ts",
-        "resources/scripts/**/*.d.ts",
-        "resources/scripts/**/*.tsx",
-        "resources/scripts/**/*.vue"
-    ],
-    "references": [{ "path": "./tsconfig.node.json" }]
+  "compilerOptions": {
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["esnext", "dom"],
+    "types": ["vite/client", "vite-plugin-pages/client", "vite-plugin-vue-layouts/client"],
+    "baseUrl": "resources/scripts",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "resources/scripts/**/*.ts",
+    "resources/scripts/**/*.d.ts",
+    "resources/scripts/**/*.tsx",
+    "resources/scripts/**/*.vue"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
