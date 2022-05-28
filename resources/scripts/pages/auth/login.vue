@@ -3,7 +3,12 @@
     <div class="px-10 py-12">
       <h1 class="text-center font-bold text-3xl">Login</h1>
       <div class="mx-auto mt-6 w-24 border-b-2"></div>
-      <div class="mt-10">
+
+      <div v-show="hasError" class="w-full flex justify-center">
+        <span class="mt-3 text-xs text-red-500" role="alert"> incorrect email or password </span>
+      </div>
+
+      <div :class="hasError ? 'mt-7' : 'mt-10'">
         <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">E-Mail Address</label>
         <input
           id="email"
@@ -14,6 +19,7 @@
           required
           autofocus
           v-model="user.email"
+          @focus="hasError = false"
         />
       </div>
       <div class="mt-6">
@@ -26,6 +32,7 @@
           placeholder="************"
           required
           v-model="user.password"
+          @focus="hasError = false"
         />
       </div>
     </div>
@@ -48,14 +55,20 @@
     password: '',
   })
 
+  const hasError = ref(false)
+
   const authStore = useAuthStore()
   const route = useRoute()
   const router = useRouter()
 
   const handleLogin = async () => {
-    await authStore.login(user.value)
+    hasError.value = false
+    await authStore.login(user.value).catch((r) => r)
     if (authStore.isLoggedIn) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
-    else user.value = { email: '', password: '' }
+    else {
+      hasError.value = true
+      user.value.password = ''
+    }
   }
 </script>
 
