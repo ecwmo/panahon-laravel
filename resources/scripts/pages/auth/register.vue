@@ -104,8 +104,7 @@
   const router = useRouter()
 
   const handleRegister = async () => {
-    const res = await authStore.register(user.value).catch((r) => r)
-    console.log(res)
+    const res = await authStore.register(user.value)
     if (res.status === 200) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
     else {
       errors.value = res.data.errors

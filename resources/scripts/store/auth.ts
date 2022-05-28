@@ -29,18 +29,25 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = async (userData: Object) => {
-    const {
-      data: { token },
-    } = await axios.post(`${apiPath}/login`, userData)
-    user.value = { ...user.value, token }
+    const getTokenRes = await axios.post(`${apiPath}/login`, userData).catch(({ response: r }) => r)
+    const token = getTokenRes?.data?.token
 
-    const {
-      data: {
-        user: { name, email, roles },
-      },
-    } = await axios.get(`${apiPath}/auth/user`, axiosConfig.value)
+    if (!token) return getTokenRes
 
-    user.value = { ...user.value, name, email, roles }
+    user.value.token = token
+    const getUserRes = await axios.get(`${apiPath}/auth/user`, axiosConfig.value).catch(({ response: r }) => r)
+
+    try {
+      const {
+        data: {
+          user: { name, email, roles },
+        },
+      } = getUserRes
+
+      if (email) user.value = { token, name, email, roles }
+    } catch {}
+
+    return getUserRes
   }
 
   const logout = async () => {

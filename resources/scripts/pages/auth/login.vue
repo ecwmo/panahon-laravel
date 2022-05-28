@@ -63,8 +63,8 @@
 
   const handleLogin = async () => {
     hasError.value = false
-    await authStore.login(user.value).catch((r) => r)
-    if (authStore.isLoggedIn) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
+    const res = await authStore.login(user.value)
+    if (res.status === 200) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
     else {
       hasError.value = true
       user.value.password = ''
