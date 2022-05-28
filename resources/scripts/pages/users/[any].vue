@@ -87,7 +87,7 @@
   import { User, UserFormError } from '@/types/user'
 
   const route = useRoute()
-  const apiRoute = useApiRoute()
+  const appRoute = useAppRoute()
   const router = useRouter()
   const itemId = ref(-1)
 
@@ -99,35 +99,33 @@
   const errors = ref(<UserFormError>{})
   const showRoleDrpDwn = ref(false)
 
-  const baseUrl = computed(() => `/${route.path.split('/')[1]}`)
-
   const userRoleNames = computed(() =>
     user.value.roles.map((id) => roles.value.filter((role: Role) => role['id'] === id)[0]['name'])
   )
 
   const fetchData = async () => {
-    const { data } = await apiRoute.apiShow()
+    const { data } = await appRoute.apiShow()
     user.value = data.user
     user.value.roles = data?.userRoleIds
     roles.value = data.roles
   }
 
   const fetchRoles = async () => {
-    const { data } = await apiRoute.apiFetch({ url: `/api/roles?all` })
+    const { data } = await appRoute.apiFetch({ url: `/api/roles?all` })
     roles.value = data
   }
 
   const handleFormSubmit = async (actionType: string) => {
     let res
     if (actionType === 'update') {
-      res = await apiRoute.apiUpdate(user.value).catch(({ response }) => response)
+      res = await appRoute.apiUpdate(user.value).catch(({ response }) => response)
     } else {
-      res = await apiRoute.apiCreate(user.value).catch(({ response }) => response)
+      res = await appRoute.apiCreate(user.value).catch(({ response }) => response)
     }
     if (res.status === 200) {
-      router.push(`${baseUrl.value}/${itemId.value}`)
+      router.push(`${appRoute.basePath}/${itemId.value}`)
     } else if (res.status === 201) {
-      router.push(`${baseUrl.value}/${res.data.id}`)
+      router.push(`${appRoute.basePath}/${res.data.id}`)
     } else {
       errors.value = res.data.errors
     }
@@ -135,9 +133,9 @@
 
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this user?')) {
-      const res = await apiRoute.apiDelete()
+      const res = await appRoute.apiDelete()
       if (res.status === 200) {
-        router.push(baseUrl.value)
+        router.push(appRoute.basePath)
       }
     }
   }

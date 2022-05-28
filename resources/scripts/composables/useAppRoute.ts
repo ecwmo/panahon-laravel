@@ -11,6 +11,8 @@ export default () => {
     headers: { Authorization: `Bearer ${authStore.user.token}` },
   }
 
+  const basePath = `${BASE_URL}/${route.path}`.replace(/[0-9]/g, '').replace(/\/+/g, '/')
+
   const apiPath = `${BASE_URL}/${API_URL}/${route.path}`.replace(/\/+/g, '/')
 
   const apiFetch = async ({ url = apiPath, page = -1 } = {}) => {
@@ -30,5 +32,5 @@ export default () => {
   const apiUpdate = async (data: object) => await axios.patch(apiPath, data, axiosConfig)
   const apiDelete = async () => await axios.delete(apiPath, axiosConfig)
 
-  return { apiPath, apiFetch, apiShow, apiCreate, apiUpdate, apiDelete }
+  return { basePath, apiPath, apiFetch, apiShow, apiCreate, apiUpdate, apiDelete }
 }

@@ -14,9 +14,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   const apiPath = `${BASE_URL}/${API_URL}`.replace(/\/+/g, '/')
 
-  const axiosConfig = {
+  const axiosConfig = computed(() => ({
     headers: { Authorization: `Bearer ${user.value.token}` },
-  }
+  }))
 
   const login = async (userData: Object) => {
     const {
@@ -28,7 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
       data: {
         user: { name, email, roles },
       },
-    } = await axios.get(`${apiPath}/auth/user`, axiosConfig)
+    } = await axios.get(`${apiPath}/auth/user`, axiosConfig.value)
 
     user.value = { ...user.value, name, email, roles }
   }

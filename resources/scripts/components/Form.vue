@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="mb-8 font-bold text-3xl">
-      <a :href="baseUrl" class="text-blue-400 hover:text-blue-600">{{ title }}</a>
+      <a :href="appRoute.basePath" class="text-blue-400 hover:text-blue-600">{{ title }}</a>
       <span class="text-blue-400 font-medium"> / </span>
       {{ isUpdate ? `${itemName}` : 'Create' }}
     </h1>
@@ -36,9 +36,7 @@
 
   const emit = defineEmits(['formSubmit', 'delete'])
 
-  const route = useRoute()
-
-  const baseUrl = computed(() => `/${route.path.split('/')[1]}`)
+  const appRoute = useAppRoute()
 </script>
 
 <style lang="sass" scoped>

@@ -49,7 +49,6 @@
   })
 
   const authStore = useAuthStore()
-  const route = useRoute()
 
   const handleLogin = () => {
     authStore.login(user.value)
