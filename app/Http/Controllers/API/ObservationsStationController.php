@@ -9,6 +9,11 @@ use App\Http\Controllers\Controller;
 
 class ObservationsStationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         return  ObservationsStation::where([
@@ -26,6 +31,12 @@ class ObservationsStationController extends Controller
           ->paginate(15);
     }
 
+    /**
+    * Display the specified resource.
+    *
+    * @param  \App\Models\ObservationsStation  $station
+    * @return \Illuminate\Http\Response
+    */
     public function show(ObservationsStation $station)
     {
         return $station;
@@ -40,16 +51,16 @@ class ObservationsStationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-      'name' => 'required|max:200',
-      'lon' => 'numeric|nullable',
-      'lat' => 'numeric|nullable',
-      'elevation' => 'numeric|nullable',
-      'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number',
-      'date_installed' => 'nullable|date_format:Y-m-d',
-      'address' => 'max:255|nullable',
-      'province' => 'max:255|nullable',
-      'region' => 'max:255|nullable',
-    ]);
+            'name' => 'required|max:200',
+            'lon' => 'numeric|nullable',
+            'lat' => 'numeric|nullable',
+            'elevation' => 'numeric|nullable',
+            'mobile_number' => 'regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number',
+            'date_installed' => 'nullable|date_format:Y-m-d',
+            'address' => 'max:255|nullable',
+            'province' => 'max:255|nullable',
+            'region' => 'max:255|nullable',
+        ]);
 
         $station = ObservationsStation::create($request->all());
         return $station;
