@@ -42,8 +42,8 @@
   import { Role, RoleFormError } from '@/types/role'
 
   const route = useRoute()
+  const apiRoute = useApiRoute()
   const router = useRouter()
-  const authStore = useAuthStore()
   const itemId = ref(-1)
 
   const role = ref(<Role>{
@@ -54,18 +54,16 @@
   const baseUrl = computed(() => `/${route.path.split('/')[1]}`)
 
   const fetchData = async () => {
-    const { data } = await authStore.apiFetch(`/api${baseUrl.value}/${itemId.value}`)
+    const { data } = await apiRoute.apiShow()
     role.value = data
   }
 
   const handleFormSubmit = async (actionType: string) => {
     let res
     if (actionType === 'update') {
-      res = await authStore
-        .apiUpdate(`/api${baseUrl.value}/${itemId.value}`, role.value)
-        .catch(({ response }) => response)
+      res = await apiRoute.apiUpdate(role.value).catch(({ response }) => response)
     } else {
-      res = await authStore.apiCreate(`/api${baseUrl.value}`, role.value).catch(({ response }) => response)
+      res = await apiRoute.apiCreate(role.value).catch(({ response }) => response)
     }
     if (res.status === 200) {
       router.push(`${baseUrl.value}/${itemId.value}`)
@@ -78,7 +76,7 @@
 
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this station?')) {
-      const res = await authStore.apiDelete(`/api${baseUrl.value}/${itemId.value}`)
+      const res = await apiRoute.apiDelete()
       if (res.status === 200) {
         router.push(baseUrl.value)
       }

@@ -42,15 +42,13 @@
   const message = ref({ type: 'delete', text: '', show: false })
 
   const route = useRoute()
-  const authStore = useAuthStore()
+  const apiRoute = useApiRoute()
 
   const { features, hasEditPage } = toRefs(props)
 
   const fetchData = async (page = 1) => {
-    const url = `/api${route.path}?page=${page}`
-
     const featHrefs = features.value.filter(({ href }) => href !== undefined).map(({ href }) => href)
-    const { data: dat } = await authStore.apiFetch(url.toString())
+    const { data: dat } = await apiRoute.apiFetch({ page: page })
     const newDat = dat.data.map((d: Datum) => ({
       ...d,
       statusUrl: featHrefs.includes('statusUrl') ? `${route.path}/${d.id}/logs` : undefined,

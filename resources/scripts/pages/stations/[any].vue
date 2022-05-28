@@ -181,8 +181,8 @@
   import { Station, StationFormError } from '@/types/station'
 
   const route = useRoute()
+  const apiRoute = useApiRoute()
   const router = useRouter()
-  const authStore = useAuthStore()
   const itemId = ref(-1)
 
   const station = ref(<Station>{
@@ -196,18 +196,16 @@
   const mobileNumberInputEnabled = computed(() => station.value.station_type === 'SMS')
 
   const fetchData = async () => {
-    const { data } = await authStore.apiFetch(`/api${baseUrl.value}/${itemId.value}`)
+    const { data } = await apiRoute.apiShow()
     station.value = data
   }
 
   const handleFormSubmit = async (actionType: string) => {
     let res
     if (actionType === 'update') {
-      res = await authStore
-        .apiUpdate(`/api${baseUrl.value}/${itemId.value}`, station.value)
-        .catch(({ response }) => response)
+      res = await apiRoute.apiUpdate(station.value).catch(({ response }) => response)
     } else {
-      res = await authStore.apiCreate(`/api${baseUrl.value}`, station.value).catch(({ response }) => response)
+      res = await apiRoute.apiCreate(station.value).catch(({ response }) => response)
     }
     if (res.status === 200) {
       router.push(`${baseUrl.value}/${itemId.value}`)
@@ -220,7 +218,7 @@
 
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this station?')) {
-      const res = await authStore.apiDelete(`/api${baseUrl.value}/${itemId.value}`)
+      const res = await apiRoute.apiDelete()
       if (res.status === 200) {
         router.push(baseUrl.value)
       }
