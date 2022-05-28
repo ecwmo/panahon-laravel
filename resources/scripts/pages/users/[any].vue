@@ -95,6 +95,7 @@
 
   const user = ref(<UserForm>{
     name: '',
+    email: '',
     roles: [],
   })
   const roles = ref()
@@ -102,7 +103,7 @@
   const showRoleDrpDwn = ref(false)
 
   const userRoleNames = computed(() =>
-    user.value.roles.map((id) => roles.value.filter((role: RoleForm) => role['id'] === id)[0]['name'])
+    user.value.roles?.map((id) => roles.value.filter((role: RoleForm) => role['id'] === id)[0]['name'])
   )
 
   const fetchData = async () => {

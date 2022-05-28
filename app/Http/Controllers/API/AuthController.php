@@ -22,7 +22,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|min:4',
             'email' => 'required|email',
-            'password' => 'required|min:8',
+            'password' => 'required|confirmed|min:8',
         ]);
 
         $user = User::create([

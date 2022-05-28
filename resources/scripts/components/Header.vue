@@ -37,12 +37,12 @@
         </div>
       </button>
       <div v-else>
-        <router-link class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/login">
+        <RouterLink class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/login">
           Login
-        </router-link>
-        <a class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" :href="registerUrl"
-          >Register</a
-        >
+        </RouterLink>
+        <RouterLink class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/register">
+          Register
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -51,7 +51,6 @@
 <script setup lang="ts">
   const props = defineProps({
     title: { type: String, default: '' },
-    registerUrl: { type: String, default: '' },
   })
 
   const showMenu = ref(false)

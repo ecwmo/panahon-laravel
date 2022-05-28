@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+import { UserForm } from '@/types/form'
+
 const BASE_URL = import.meta.env.BASE_URL
 const API_URL = 'api'
 
@@ -17,6 +19,14 @@ export const useAuthStore = defineStore('auth', () => {
   const axiosConfig = computed(() => ({
     headers: { Authorization: `Bearer ${user.value.token}` },
   }))
+
+  const register = async (userData: UserForm) => {
+    const res = await axios.post(`${apiPath}/register`, userData).catch(({ response: r }) => r)
+    const token = res?.data?.token
+    const { name, email } = userData
+    if (token) user.value = { ...user.value, token, name, email }
+    return res
+  }
 
   const login = async (userData: Object) => {
     const {
@@ -50,5 +60,5 @@ export const useAuthStore = defineStore('auth', () => {
   const isSuperAdmin = computed(() => user?.value?.roles?.includes('SUPERADMIN'))
   const isAdmin = computed(() => user?.value?.roles?.includes('ADMIN') || isSuperAdmin.value)
 
-  return { user, login, logout, isLoggedIn, isAdmin, isSuperAdmin }
+  return { user, register, login, logout, isLoggedIn, isAdmin, isSuperAdmin }
 })

@@ -5,9 +5,10 @@ export interface FormError {
 export interface UserForm {
   id?: number
   name: string
-  email?: string
+  email: string
   password?: string
-  roles: number[]
+  password_confirm?: string
+  roles?: number[]
 }
 
 export interface RoleForm {
