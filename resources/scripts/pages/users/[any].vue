@@ -2,7 +2,8 @@
   <Form
     title="Users"
     :itemName="user?.name"
-    :showDelete="user?.id !== undefined"
+    :showDelete="user?.id !== undefined && isSuperAdmin"
+    :showSubmitBtn="isSuperAdmin"
     :isUpdate="user?.id !== undefined"
     @formSubmit="handleFormSubmit"
     @delete="handleDelete"
@@ -90,6 +91,8 @@
   const appRoute = useAppRoute()
   const router = useRouter()
   const itemId = ref(-1)
+
+  const { isSuperAdmin } = useAuthStore()
 
   const user = ref(<User>{
     name: '',

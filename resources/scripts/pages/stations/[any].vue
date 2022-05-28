@@ -2,7 +2,8 @@
   <Form
     title="Stations"
     :itemName="station?.name"
-    :showDelete="station?.id !== undefined"
+    :showDelete="station?.id !== undefined && isAdmin"
+    :showSubmitBtn="isAdmin"
     :isUpdate="station?.id !== undefined"
     @formSubmit="handleFormSubmit"
     @delete="handleDelete"
@@ -184,6 +185,8 @@
   const appRoute = useAppRoute()
   const router = useRouter()
   const itemId = ref(-1)
+
+  const { isAdmin } = useAuthStore()
 
   const station = ref(<Station>{
     name: '',

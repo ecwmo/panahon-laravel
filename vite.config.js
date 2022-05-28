@@ -51,15 +51,6 @@ export default defineConfig(({ command }) => ({
           baseRoute: '',
         },
       ],
-      // extendRoute(route, parent) {
-      //   if (route.path === '/newreport') {
-      //     return {
-      //       ...route,
-      //       meta: { requiresAuth: true },
-      //     }
-      //   }
-      //   return route
-      // },
     }),
   ],
   resolve: {

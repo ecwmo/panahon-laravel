@@ -14,6 +14,7 @@
             Delete
           </button>
           <button
+            v-if="showSubmitBtn"
             type="submit"
             class="form-button"
             @click.prevent="$emit('formSubmit', isUpdate ? 'update' : 'create')"
@@ -31,6 +32,7 @@
     title: { type: String, default: '' },
     itemName: { type: String, default: '' },
     showDelete: { type: Boolean, default: false },
+    showSubmitBtn: { type: Boolean, default: false },
     isUpdate: { type: Boolean, default: false },
   })
 

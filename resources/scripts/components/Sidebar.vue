@@ -6,15 +6,10 @@
         :to="m.href"
         class="flex items-center group"
         :class="isPopup ? 'py-1.5' : 'py-3'"
-        @click.stop
+        :exact="m.exact"
       >
-        <i
-          :class="[
-            `w-4 h-4 mr-2 fas fa-${m.icon} fa-fw`,
-            m.active ? 'text-white' : 'text-blue-300 group-hover:text-white',
-          ]"
-        ></i>
-        <span :class="m.active ? 'text-white' : 'text-blue-300 group-hover:text-white'">{{ m.label }}</span>
+        <i :class="`w-4 h-4 mr-2 fas fa-${m.icon} fa-fw`"></i>
+        <span>{{ m.label }}</span>
       </router-link>
     </div>
   </div>
@@ -25,18 +20,25 @@
     isPopup: { type: Boolean, default: false },
   })
 
-  const authStore = useAuthStore()
+  const { isLoggedIn } = useAuthStore()
 
   const menu = ref([
-    { href: '/', label: 'Dashboard', icon: 'tachometer-alt', display: true, active: false },
-    { href: '/stations', label: 'Weather Stations', icon: 'umbrella', display: true, active: false },
-    { href: '/users', label: 'User', icon: 'user', display: authStore.isSuperAdmin, active: false },
-    { href: '/roles', label: 'Roles', icon: 'user-tag', display: authStore.isSuperAdmin, active: false },
+    { href: '/', label: 'Dashboard', icon: 'tachometer-alt', display: true, exact: true },
+    { href: '/stations', label: 'Weather Stations', icon: 'umbrella', display: true, exact: false },
+    { href: '/users', label: 'User', icon: 'user', display: isLoggedIn, exact: false },
+    { href: '/roles', label: 'Roles', icon: 'user-tag', display: isLoggedIn, exact: false },
   ])
-
-  onMounted(() => {
-    const activeIdx = menu.value.slice(1).findIndex((m) => window.location.pathname.indexOf(m.href) !== -1)
-    if (activeIdx === -1) menu.value[0].active = true
-    else menu.value[activeIdx + 1].active = true
-  })
 </script>
+
+<style lang="sass" scoped>
+  a
+    svg
+      @apply text-blue-300 group-hover:text-white
+    span
+      @apply text-blue-300 group-hover:text-white
+  a.router-link-active, a.router-link-exact-active
+      svg
+        @apply text-white
+      span
+        @apply text-white
+</style>

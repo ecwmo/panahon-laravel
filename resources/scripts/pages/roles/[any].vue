@@ -2,7 +2,8 @@
   <Form
     title="Roles"
     :itemName="role?.name"
-    :showDelete="role?.id !== undefined"
+    :showDelete="role?.id !== undefined && isSuperAdmin"
+    :showSubmitBtn="isSuperAdmin"
     :isUpdate="role?.id !== undefined"
     @formSubmit="handleFormSubmit"
     @delete="handleDelete"
@@ -45,6 +46,8 @@
   const appRoute = useAppRoute()
   const router = useRouter()
   const itemId = ref(-1)
+
+  const { isSuperAdmin } = useAuthStore()
 
   const role = ref(<Role>{
     name: '',

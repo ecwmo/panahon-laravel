@@ -49,8 +49,12 @@
   })
 
   const authStore = useAuthStore()
+  const route = useRoute()
+  const router = useRouter()
 
-  const handleLogin = () => {
-    authStore.login(user.value)
+  const handleLogin = async () => {
+    await authStore.login(user.value)
+    if (authStore.isLoggedIn) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
+    else user.value = { email: '', password: '' }
   }
 </script>

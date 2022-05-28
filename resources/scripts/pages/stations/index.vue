@@ -1,8 +1,9 @@
 <template>
-  <Default title="Stations" :showCreateBtn="true" :features="features" />
+  <Default title="Stations" :showCreateBtn="isAdmin" :features="features" />
 </template>
 
 <script setup lang="ts">
+  const { isAdmin } = useAuthStore()
   const features = [
     { name: 'name', title: 'Name' },
     // { name: 'address', title: 'Address' },
