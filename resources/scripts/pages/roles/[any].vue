@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Role, RoleFormError } from '@/types/role'
+  import { RoleForm, FormError } from '@/types/form'
 
   const route = useRoute()
   const appRoute = useAppRoute()
@@ -49,10 +49,10 @@
 
   const { isSuperAdmin } = useAuthStore()
 
-  const role = ref(<Role>{
+  const role = ref(<RoleForm>{
     name: '',
   })
-  const errors = ref(<RoleFormError>{})
+  const errors = ref(<FormError>{})
 
   const fetchData = async () => {
     const { data } = await appRoute.apiShow()

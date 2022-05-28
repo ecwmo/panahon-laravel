@@ -84,8 +84,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Role } from '@/types/role'
-  import { User, UserFormError } from '@/types/user'
+  import { UserForm, RoleForm, FormError } from '@/types/form'
 
   const route = useRoute()
   const appRoute = useAppRoute()
@@ -94,16 +93,16 @@
 
   const { isSuperAdmin } = useAuthStore()
 
-  const user = ref(<User>{
+  const user = ref(<UserForm>{
     name: '',
     roles: [],
   })
   const roles = ref()
-  const errors = ref(<UserFormError>{})
+  const errors = ref(<FormError>{})
   const showRoleDrpDwn = ref(false)
 
   const userRoleNames = computed(() =>
-    user.value.roles.map((id) => roles.value.filter((role: Role) => role['id'] === id)[0]['name'])
+    user.value.roles.map((id) => roles.value.filter((role: RoleForm) => role['id'] === id)[0]['name'])
   )
 
   const fetchData = async () => {

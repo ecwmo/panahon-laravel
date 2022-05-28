@@ -179,7 +179,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Station, StationFormError } from '@/types/station'
+  import { StationForm, FormError } from '@/types/form'
 
   const route = useRoute()
   const appRoute = useAppRoute()
@@ -188,11 +188,11 @@
 
   const { isAdmin } = useAuthStore()
 
-  const station = ref(<Station>{
+  const station = ref(<StationForm>{
     name: '',
     address: '',
   })
-  const errors = ref(<StationFormError>{})
+  const errors = ref(<FormError>{})
 
   const mobileNumberInputEnabled = computed(() => station.value.station_type === 'SMS')
 
