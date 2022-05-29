@@ -11,11 +11,7 @@ export default () => {
     headers: { Authorization: `Bearer ${authStore.user.token}` },
   }
 
-  const basePath = `${BASE_URL}/${route.path}`
-    .replace('create', '')
-    .replace(/[0-9]/g, '')
-    .replace(/\/+/g, '/')
-    .replace(/\/$/g, '')
+  const basePath = route.path.replace('create', '').replace(/[0-9]/g, '').replace(/\/+/g, '/').replace(/\/$/g, '')
 
   const apiPath = `${BASE_URL}/${API_URL}/${route.path}`.replace('create', '').replace(/\/+/g, '/').replace(/\/$/g, '')
 
