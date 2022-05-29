@@ -5,17 +5,14 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ActionBtn: typeof import('./components/ActionBtn.vue')['default']
     DataTable: typeof import('./components/DataTable.vue')['default']
     Default: typeof import('./components/Default.vue')['default']
     Form: typeof import('./components/Form.vue')['default']
     Header: typeof import('./components/Header.vue')['default']
-    Modal: typeof import('./components/Modal.vue')['default']
     Pagination: typeof import('./components/Pagination.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./components/Sidebar.vue')['default']
-    StatusMessage: typeof import('./components/StatusMessage.vue')['default']
   }
 }
 

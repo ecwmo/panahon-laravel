@@ -1,7 +1,5 @@
 <template>
   <div>
-    <StatusMessage :message="message"></StatusMessage>
-
     <div class="mb-6 flex justify-between items-center">
       <h1 class="font-bold text-3xl">{{ title }}</h1>
       <router-link
@@ -39,7 +37,6 @@
   })
 
   const tableData = ref({})
-  const message = ref({ type: 'delete', text: '', show: false })
 
   const appRoute = useAppRoute()
 
