@@ -227,8 +227,7 @@
   }
 
   onMounted(() => {
-    const param = <string>route.params['any']
-    itemId.value = isNaN(+param) ? -1 : +param
+    itemId.value = +route.params['id']
     if (itemId.value >= 0) {
       fetchData()
     }
