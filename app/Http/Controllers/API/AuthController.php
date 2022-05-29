@@ -6,36 +6,54 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Models\Role;
 
-use Validator;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 
 use Carbon\Carbon;
 
 class AuthController extends Controller
 {
     /**
-     * Registration Req
+     * Create user
+     *
+     * @param  [string] name
+     * @param  [string] email
+     * @param  [string] password
+     * @param  [string] password_confirmation
+     * @return [string] message
      */
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|min:4',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:8',
         ]);
 
+        $role = Role::firstOrCreate(['name' => 'USER']);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
+        $user->roles()->attach($role->id);
 
-        $token = $user->createToken('PanahonAPIPassportAuth')->accessToken;
 
-        return response()->json(['token' => $token], 200);
+        $tokenResult = $user->createToken('PanahonAPIPassportAuth');
+        $token = $tokenResult->token;
+        $token->expires_at = Carbon::now()->addHours(12);
+
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $user->roles->pluck('name'),
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
+        ], 201);
     }
 
     /**

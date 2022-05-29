@@ -100,12 +100,11 @@
   const errors = ref(<FormError>{})
 
   const authStore = useAuthStore()
-  const route = useRoute()
   const router = useRouter()
 
   const handleRegister = async () => {
     const res = await authStore.register(user.value)
-    if (res.status === 200) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
+    if (res.status === 201) router.push('/')
     else {
       errors.value = res.data.errors
       user.value.password = ''
