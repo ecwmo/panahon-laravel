@@ -12,52 +12,42 @@ export const useAuthStore = defineStore('auth', () => {
     email: '',
     roles: <string[]>[],
     token: '',
+    tokenExpiresAt: new Date(),
   })
 
   const apiPath = `${BASE_URL}/${API_URL}`.replace(/\/+/g, '/')
-
-  const axiosConfig = computed(() => ({
-    headers: { Authorization: `Bearer ${user.value.token}` },
-  }))
 
   const register = async (userData: UserForm) => {
     const res = await axios.post(`${apiPath}/register`, userData).catch(({ response: r }) => r)
     const token = res?.data?.token
     const { name, email } = userData
-    if (token) user.value = { ...user.value, token, name, email }
+    if (token) user.value = { ...user.value, name, email }
     return res
   }
 
   const login = async (userData: Object) => {
-    const getTokenRes = await axios.post(`${apiPath}/login`, userData).catch(({ response: r }) => r)
-    const token = getTokenRes?.data?.token
-
-    if (!token) return getTokenRes
-
-    user.value.token = token
-    const getUserRes = await axios.get(`${apiPath}/auth/user`, axiosConfig.value).catch(({ response: r }) => r)
+    const res = await axios.post(`${apiPath}/login`, userData).catch(({ response: r }) => r)
 
     try {
       const {
-        data: {
-          user: { name, email, roles },
-        },
-      } = getUserRes
+        data: { name, email, roles, access_token, expires_at },
+      } = res
 
-      if (email) user.value = { token, name, email, roles }
+      if (email) user.value = { name, email, roles, token: access_token, tokenExpiresAt: new Date(expires_at) }
     } catch {}
 
-    return getUserRes
+    return res
   }
 
   const logout = async () => {
-    const res = await axios.post(`${apiPath}/logout`, {}, axiosConfig.value)
+    const res = await axios.post(`${apiPath}/logout`)
     if (res.status === 200) {
       user.value = {
         name: '',
         email: '',
         roles: <string[]>[],
         token: '',
+        tokenExpiresAt: new Date(),
       }
     }
     return res

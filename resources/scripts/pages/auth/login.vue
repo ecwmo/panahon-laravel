@@ -4,11 +4,7 @@
       <h1 class="text-center font-bold text-3xl">Login</h1>
       <div class="mx-auto mt-6 w-24 border-b-2"></div>
 
-      <div v-show="hasError" class="w-full flex justify-center">
-        <span class="mt-3 text-xs text-red-500" role="alert"> incorrect email or password </span>
-      </div>
-
-      <div :class="hasError ? 'mt-7' : 'mt-10'">
+      <div class="mt-10">
         <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">E-Mail Address</label>
         <input
           id="email"
@@ -19,9 +15,14 @@
           required
           autofocus
           v-model="user.email"
-          @focus="hasError = false"
         />
+        <template v-if="errors">
+          <span class="form-error" role="alert" v-for="(e, i) in errors.email" :key="i">
+            {{ e }}
+          </span>
+        </template>
       </div>
+
       <div class="mt-6">
         <label for="password" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Password</label>
         <input
@@ -32,8 +33,25 @@
           placeholder="************"
           required
           v-model="user.password"
-          @focus="hasError = false"
         />
+        <template v-if="errors">
+          <span class="form-error" role="alert" v-for="(e, i) in errors.password" :key="i">
+            {{ e }}
+          </span>
+        </template>
+      </div>
+
+      <div class="mt-6">
+        <label class="inline-flex items-center">
+          <input
+            type="checkbox"
+            class="form-checkbox h-5 w-5 text-gray-600"
+            name="remember_me"
+            id="remember_me"
+            v-model="user.remember_me"
+          />
+          <span class="ml-2 text-gray-700"> Remember Me </span>
+        </label>
       </div>
     </div>
 
@@ -50,27 +68,40 @@
 </template>
 
 <script setup lang="ts">
+  import { FormError } from '@/types/form'
+
   const user = ref({
     email: '',
     password: '',
+    remember_me: false,
   })
 
-  const hasError = ref(false)
+  const errors = ref(<FormError>{})
 
   const authStore = useAuthStore()
   const route = useRoute()
   const router = useRouter()
 
   const handleLogin = async () => {
-    hasError.value = false
     const res = await authStore.login(user.value)
     if (res.status === 200) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
     else {
-      hasError.value = true
+      errors.value = res.data.errors
       user.value.password = ''
     }
   }
 </script>
+
+<style lang="sass" scoped>
+  .form-label
+      @apply block mb-2 text-sm text-gray-600
+  .form-control
+      @apply w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md
+      &:focus
+          @apply outline-none ring ring-blue-100 border-blue-300
+  .form-error
+      @apply mb-3 text-xs text-red-500
+</style>
 
 <route lang="yaml">
 meta:
