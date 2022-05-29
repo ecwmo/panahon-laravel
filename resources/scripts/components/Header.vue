@@ -6,9 +6,9 @@
   ></div>
   <div class="md:flex md:flex-shrink-0">
     <div class="bg-blue-900 md:flex-shrink-0 md:w-56 px-6 py-4 flex items-center justify-between md:justify-center">
-      <a href="/" class="mt-1">
+      <RouterLink to="/" class="mt-1">
         <span class="font-semibold text-gray-200 text-lg md:text-2xl">{{ title }}</span>
-      </a>
+      </RouterLink>
       <button @click.prevent="showMenu = true" class="md:hidden relative">
         <i class="text-white w-6 h-6 fas fa-bars"></i>
         <div v-show="showMenu" class="absolute z-50 top-0 right-0 mt-5">

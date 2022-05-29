@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="mb-8 font-bold text-3xl">
-      <a :href="appRoute.basePath" class="text-blue-400 hover:text-blue-600">{{ title }}</a>
+      <RouterLink :to="appRoute.basePath" class="text-blue-400 hover:text-blue-600">{{ title }}</RouterLink>
       <span class="text-blue-400 font-medium"> / </span>
       {{ isUpdate ? `${itemName}` : 'Create' }}
     </h1>

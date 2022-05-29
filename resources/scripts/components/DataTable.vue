@@ -12,20 +12,23 @@
           {{ td.id }}
         </td>
         <td v-for="f in data.features" :key="f.name" class="p-2 text-justify border-t">
-          <a
+          <RouterLink
             v-if="f.href"
             tabindex="-1"
             class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
-            :href="td[f.href]"
-            >{{ td[f.name] }}</a
+            :to="td[f.href]"
           >
-          <a v-else-if="td.editUrl" tabindex="-1" class="px-4 flex items-center" :href="td.editUrl">{{ td[f.name] }}</a>
+            {{ td[f.name] }}
+          </RouterLink>
+          <RouterLink v-else-if="td.editUrl" tabindex="-1" class="px-4 flex items-center" :to="td.editUrl">
+            {{ td[f.name] }}
+          </RouterLink>
           <span v-else>{{ td[f.name] }}</span>
         </td>
         <td v-if="td.editUrl" class="p-3 text-justify border-t w-px">
-          <a :href="td.editUrl" tabindex="-1" class="px-4 flex items-center">
+          <RouterLink :to="td.editUrl" tabindex="-1" class="px-4 flex items-center">
             <i class="block w-4 h-4 text-gray-400 fas fa-chevron-right"></i>
-          </a>
+          </RouterLink>
         </td>
       </tr>
     </table>
