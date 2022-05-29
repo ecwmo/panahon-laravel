@@ -115,6 +115,7 @@
 
   const fetchRoles = async () => {
     const { data } = await appRoute.apiFetch({ url: `/api/roles?all` })
+    user.value.roles = [data?.find(({ name }: RoleForm) => name === 'USER')?.id]
     roles.value = data
   }
 
