@@ -38,37 +38,10 @@ class ObservationsStation extends Model
      */
     protected $table = 'observations_station';
 
-    public function observationRaw()
-    {
-        return $this
-            ->hasMany(ObservationsObservationRaw::class, 'station_id', 'id');
-    }
-
     public function observation()
     {
         return $this
             ->hasMany(ObservationsObservation::class, 'station_id', 'id');
-    }
-
-    public function latestObservationRaw()
-    {
-        $startDate = Carbon::now()->addMinutes(10);
-        $endDate = Carbon::now()->addMinutes(10);
-
-        $obsModel = ObservationsObservationRaw::class;
-        if ($this->station_type == "MO") {
-            $obsModel = ObservationsMOObservationRaw::class;
-        }
-        return $this
-            ->hasOne($obsModel, 'station_id', 'id')
-            ->whereBetween(
-                'timestamp',
-                [
-                $startDate,
-                $endDate
-                ]
-            )
-            ->latest('timestamp');
     }
 
     public function latestObservation()

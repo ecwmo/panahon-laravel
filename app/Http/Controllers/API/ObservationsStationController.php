@@ -122,7 +122,7 @@ class ObservationsStationController extends Controller
                 ];
             });
         }
-        return ObservationsStation::find($id)->observationRaw;
+        return ObservationsStation::find($id)->observation;
     }
 
     public function fetchLogs(Request $request, $id)
