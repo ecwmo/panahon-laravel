@@ -4,14 +4,14 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 
-$subURL = config('misc.suburl');
-if ($subURL != '') {
-    $subURL = "{$subURL}/";
+$baseURL = config('app.base_url');
+if ($baseURL != '') {
+    $baseURL = "{$baseURL}/";
 } else {
-    $subURL = "/";
+    $baseURL = "/";
 }
 
-Route::get($subURL, [HomeController::class, 'index'])->name('home');
+Route::get($baseURL, [HomeController::class, 'index'])->name('home');
 
 Route::view('/{any?}', 'home')
     ->where('any', '.*');

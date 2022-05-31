@@ -6,12 +6,12 @@ use Illuminate\Support\HtmlString;
 function vite_assets(): HtmlString
 {
     $devServerIsRunning = false;
-    $hostIP = env('HOST_IP', 'localhost');
-    $vitePort = env('VITE_PORT', '3000');
-    $subURL = env('APP_SUBURL', '');
+    $hostIP = config('dev.host_ip');
+    $vitePort = config('dev.vite_port');
+    $baseURL = config('app.base_url');
 
-    if (strlen($subURL) > 0) {
-        $subURL = "/{$subURL}";
+    if (strlen($baseURL) > 0) {
+        $baseURL = "/{$baseURL}";
     }
 
     if (app()->environment('local')) {
@@ -31,7 +31,7 @@ function vite_assets(): HtmlString
     ), true);
 
     return new HtmlString(<<<HTML
-        <script type="module" src="{$subURL}/build/{$manifest['resources/scripts/main.ts']['file']}"></script>
-        <link rel="stylesheet" href="{$subURL}/build/{$manifest['resources/scripts/main.ts']['css'][0]}">
+        <script type="module" src="{$baseURL}/build/{$manifest['resources/scripts/main.ts']['file']}"></script>
+        <link rel="stylesheet" href="{$baseURL}/build/{$manifest['resources/scripts/main.ts']['css'][0]}">
     HTML);
 }
