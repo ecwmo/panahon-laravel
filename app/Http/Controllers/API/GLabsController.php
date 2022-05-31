@@ -174,22 +174,8 @@ class GLabsController extends Controller
             }
 
             if ($station) {
-                $record = $station->observationRaw()->firstWhere('timestamp', $dateTime);
+                $record = $station->observation()->firstWhere('timestamp', $dateTime);
                 if (is_null($record)) {
-                    $obsRaw = [
-                        'temp' => $this->toFloat($tempC, 1.0, true),
-                        'rh' => $this->toFloat($relHum, 1.0, true),
-                        'pres' => $this->toFloat($airPresHPA, 1.0, true),
-                        'wspd' => $this->toFloat($windSpeedKPH, 1.0, true),
-                        'wspdx' => $this->toFloat($windGustKPH, 1.0, true),
-                        'wdir' => $this->toFloat($windDirDeg, 1.0, true),
-                        'srad' => $this->toFloat($solRadWPM2, 1.0, true),
-                        'td' => $this->toFloat($dewPtC, 1.0, true),
-                        'wchill' => $this->toFloat($windChillC, 1.0, true),
-                        'rr' => $this->toFloat($rainTip, 1.0, true),
-                        'timestamp' => $dateTime
-                    ];
-
                     $obs = [
                         'temp' => $this->toFloat($tempC),
                         'rh' => $this->toFloat($relHum),
@@ -204,7 +190,6 @@ class GLabsController extends Controller
                         'timestamp' => $dateTime
                     ];
 
-                    $station->observationRaw()->create($obsRaw);
                     $station->observation()->create($obs);
 
                     $metVars = [
