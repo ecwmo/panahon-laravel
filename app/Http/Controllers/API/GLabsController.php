@@ -111,7 +111,7 @@ class GLabsController extends Controller
             $subNum = Str::substr($senderAddress, 5); #63XXXXXXXXXX
             $smsMsg = $request->post('inboundSMSMessageList')['inboundSMSMessage'][0]['message'];
 
-            $varArray = explode("+", Str::of($smsMsg)->trim()->replaceMatches('/%20/', '+'));
+            $varArray = explode("+", Str::of($smsMsg)->trim()->replaceMatches('/(%20)|\s/', '+'));
             $varCount = count($varArray);
 
             if ($subNum) {
