@@ -106,7 +106,7 @@ class GLabsController extends Controller
         # Message Received
         # Parse and store to the database
         if (Arr::has($request->post(), 'inboundSMSMessageList')) {
-            $dtNow = new Carbon();
+            $dtNow = Carbon::now('Asia/Manila');
             $senderAddress = $request->post('inboundSMSMessageList')['inboundSMSMessage'][0]['senderAddress'];
             $subNum = Str::substr($senderAddress, 5); #63XXXXXXXXXX
             $smsMsg = $request->post('inboundSMSMessageList')['inboundSMSMessage'][0]['message'];
@@ -174,6 +174,21 @@ class GLabsController extends Controller
             }
 
             if ($station) {
+                $errorMsg = "";
+                $minMinutesThresh =  -90 * 24 * 60; # 90 days behind
+                $maxMinutesThresh =  1 * 24 * 60; # 1 day ahead
+                $dtDiff = $dtNow->diffInMinutes($dateTime, false);
+                $dtDiffStr = $dateTime->diffForHumans($dtNow);
+                if ($dtDiff < $minMinutesThresh) {
+                    $absVal = abs($dtDiff);
+                    $errorMsg = "timestamp is {$dtDiffStr} ({$absVal} minutes behind)";
+                } elseif ($dtDiff > $maxMinutesThresh) {
+                    $errorMsg = "timestamp is {$dtDiffStr} ({$dtDiff} minutes ahead)";
+                }
+                if (($dtDiff < $minMinutesThresh) || ($dtDiff > $maxMinutesThresh)) {
+                    $dateTime = $dtNow;
+                }
+
                 $record = $station->observation()->firstWhere('timestamp', $dateTime);
                 if (is_null($record)) {
                     $obs = [
@@ -209,7 +224,8 @@ class GLabsController extends Controller
                         'message' => $smsMsg,
                         'data_count' => array_sum($metVarStat),
                         'data_status' => implode("", $metVarStat),
-                        'minutes_difference' => $dateTime->diffInMinutes($dtNow),
+                        'err_msg' => $errorMsg,
+                        'minutes_difference' => $dtDiff,
                         'timestamp' => $dateTime
                     ];
 
