@@ -224,7 +224,7 @@ class GLabsController extends Controller
                         'message' => $smsMsg,
                         'data_count' => array_sum($metVarStat),
                         'data_status' => implode("", $metVarStat),
-                        'err_msg' => $errorMsg,
+                        'error_msg' => $errorMsg,
                         'minutes_difference' => $dtDiff,
                         'timestamp' => $dateTime
                     ];

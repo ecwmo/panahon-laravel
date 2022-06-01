@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class ObservationsStationHealth extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The table associated with the model.
-   *
-   * @var string
-   */
-  protected $table = 'observations_stationhealth';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'observations_stationhealth';
 
-  protected $fillable = [
+    protected $fillable = [
     'station_id',
     'vb1',
     'vb2',
@@ -28,7 +28,7 @@ class ObservationsStationHealth extends Model
     'temp_arq',
     'rh_arq',
     'fpm',
-    'err_msg',
+    'error_msg',
     'message',
     'data_count',
     'data_status',
@@ -36,9 +36,9 @@ class ObservationsStationHealth extends Model
     'timestamp',
   ];
 
-  public function station()
-  {
-    return $this
+    public function station()
+    {
+        return $this
       ->belongsTo(ObservationsStation::class);
-  }
+    }
 }
