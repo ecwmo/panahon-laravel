@@ -25,6 +25,7 @@
   const menu = ref([
     { href: '/', label: 'Dashboard', icon: 'tachometer-alt', display: true, exact: true },
     { href: '/stations', label: 'Weather Stations', icon: 'umbrella', display: true, exact: false },
+    { href: '/globelabs', label: 'Globe Labs', icon: 'signal', display: isLoggedIn, exact: false },
     { href: '/users', label: 'User', icon: 'user', display: isLoggedIn, exact: false },
     { href: '/roles', label: 'Roles', icon: 'user-tag', display: isLoggedIn, exact: false },
   ])

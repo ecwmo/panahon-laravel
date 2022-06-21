@@ -33,6 +33,12 @@ class GLabs extends Model
     public function topups()
     {
         return $this
-            ->hasMany(GLabsLoad::class, 'glabs_id', 'id');
+            ->hasMany(GLabsLoad::class, 'glabs_id', 'id')->orderBy('created_at', 'desc');
+    }
+
+    public function latest_topup()
+    {
+        return $this
+            ->hasOne(GLabsLoad::class, 'glabs_id', 'id')->where('status', 'SUCCESS')->latest();
     }
 }

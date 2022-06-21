@@ -96,9 +96,13 @@ class GLabsController extends Controller
                 $station->status = 'ACTIVE';
                 $station->save();
             }
+
+            return response()->json(['message' => $msg]);
         }
 
-        return response()->json(['message' => $msg]);
+        $glabs = GLabs::with(['station:id,mobile_number', 'latest_topup:glabs_id,created_at'])->paginate(15);
+
+        return $glabs;
     }
 
     public function post(Request $request)
