@@ -36,7 +36,7 @@ class GLabs extends Model
             ->hasMany(GLabsLoad::class, 'glabs_id', 'id');
     }
 
-    public function latest_topup()
+    public function latestTopup()
     {
         return $this
             ->hasOne(GLabsLoad::class, 'glabs_id', 'id')->where('status', 'SUCCESS')->latest();

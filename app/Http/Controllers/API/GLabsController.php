@@ -100,7 +100,7 @@ class GLabsController extends Controller
             return response()->json(['message' => $msg]);
         }
 
-        $glabs = GLabs::with(['station:id,mobile_number', 'latest_topup:glabs_id,created_at'])->paginate(15);
+        $glabs = GLabs::with(['station:id,mobile_number', 'latestTopup:glabs_id,created_at'])->paginate(15);
 
         return $glabs;
     }
