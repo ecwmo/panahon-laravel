@@ -100,7 +100,7 @@ class GLabsController extends Controller
             return response()->json(['message' => $msg]);
         }
 
-        $glabs = GLabs::with(['station:id,mobile_number', 'latestTopup:glabs_id,created_at'])
+        $glabs = GLabs::with(['station:id,mobile_number,name', 'latestTopup:glabs_id,created_at'])
             ->orderBy('id')
             ->paginate(15);
 

@@ -47,7 +47,7 @@
     const { data: dat } = await appRoute.apiFetch({ page: page })
     const newDat = dat.data.map((d: Datum) => ({
       ...d,
-      station_id: d.station?.id,
+      station_name: d.station?.name,
       topup_date: d.latest_topup?.created_at,
       statusUrl: featHrefs.includes('statusUrl') ? `${appRoute.basePath}/${d.id}/logs` : undefined,
       editUrl: hasEditPage.value ? `${appRoute.basePath}/${d.id}` : undefined,
