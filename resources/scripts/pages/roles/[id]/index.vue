@@ -67,8 +67,10 @@
       res = await appRoute.apiCreate(role.value).catch(({ response }) => response)
     }
     if (res.status === 200) {
+      alert('Updated successfully')
       router.push(`${appRoute.basePath}/${itemId.value}`)
     } else if (res.status === 201) {
+      alert('Created successfully')
       router.push(`${appRoute.basePath}/${res.data.id}`)
     } else {
       errors.value = res.data.errors
