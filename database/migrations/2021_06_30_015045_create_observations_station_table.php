@@ -33,6 +33,7 @@ class CreateObservationsStationTable extends Migration
             $table->string('province', 255)->nullable();
             $table->string('region', 255)->nullable();
             $table->timestampsTz();
+            $table->softDeletes();
         });
     }
 
