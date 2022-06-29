@@ -53,7 +53,9 @@ class GLabsController extends Controller
                 'code' => $code
             ]);
             if (!$response->ok() || Arr::has($response->json(), 'error')) {
-                return response()->json(['message' => 'Invalid code']);
+                $msg = 'Invalid code';
+                Log::debug('[GlobeLabs] Web Subscribe:' . $subNum . ' message:' . $msg);
+                return response()->json(['message' => $msg]);
             }
             $bdy = $response->json();
             $accessToken = $bdy['access_token'];
@@ -67,6 +69,7 @@ class GLabsController extends Controller
             # Test if token is already used
             if (GLabs::where('access_token', $accessToken)->first()) {
                 $msg = "Error: Token already used";
+                Log::debug('[GlobeLabs] Subscribe:' . $subNum . ' message:' . $msg);
                 return response()->json(['message' => $msg]);
             }
 
@@ -97,6 +100,7 @@ class GLabsController extends Controller
                 $station->save();
             }
 
+            Log::debug('[GlobeLabs] Subscribe:' . $subNum . ' message:' . $msg);
             return response()->json(['message' => $msg]);
         }
 
