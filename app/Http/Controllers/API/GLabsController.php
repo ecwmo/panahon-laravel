@@ -188,7 +188,7 @@ class GLabsController extends Controller
                 return response()->json(['message' => "Error: Message not understood", 'data' => $smsMsg]);
             }
 
-            if ($logType == 1) {
+            if (strpos($dateTimeStr, '/') === false) {
                 $dateTime = Carbon::createFromFormat("y:m:d:H:i:s", $dateTimeStr, 'Asia/Manila');
             } else {
                 if (strlen($dateTimeStr) == 13) {
