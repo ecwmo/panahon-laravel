@@ -153,6 +153,18 @@ class GLabsController extends Controller
                 ] = $varArray;
 
                 $voltPB1 = explode("#", $voltPB1)[0];
+            } elseif ($varCount == 20) {
+                $logType = 1;
+                [
+                    $_,
+                    $tempC, $relHum, $airPresHPA, $windSpeedKPH, $windGustKPH, $_, $windDirDeg,
+                    $solRadWPM2, $dewPtC, $windChillC, $rainTip, $rainCumTip,
+                    $arqTemp, $arqRH, $gsmSignalStrength,
+                    $voltPB1, $boostPB1, $flashPg,
+                    $dateTimeStr
+                ] = $varArray;
+
+                $voltPB1 = explode("#", $voltPB1)[0];
             } elseif ($varCount == 24) {
                 [
                     $_,
