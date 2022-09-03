@@ -10,5 +10,6 @@
   "[php]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "junstyle.php-cs-fixer"
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

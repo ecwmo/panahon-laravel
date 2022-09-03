@@ -1,55 +1,51 @@
 <template>
   <div class="flex flex-wrap -mb-1">
     <!-- Previous Page Link -->
-    <div
+    <Link
       class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
       :class="
         data.prev_page_url !== null
-          ? 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'
-          : 'text-gray-400'
+          ? 'hover:bg-white focus:border-blue-500 focus:text-blue-500'
+          : 'cursor-not-allowed text-gray-400'
       "
-      @click="$emit('pageChange', getPage(data.prev_page_url))"
+      :href="data.prev_page_url"
     >
       « Previous
-    </div>
+    </Link>
 
     <!-- Pagination Elements -->
     <template v-for="link in data.links" :key="link.label">
       <div v-if="link.label === '...'" class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded text-gray-400">
         {{ link.label }}
       </div>
-      <div
+      <Link
         v-else-if="!isNaN(+link.label)"
         class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
-        :class="link.active ? 'bg-white' : 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'"
-        @click="$emit('pageChange', getPage(link.url))"
+        :class="
+          link.active ? 'cursor-not-allowed bg-white' : 'hover:bg-white focus:border-blue-500 focus:text-blue-500'
+        "
+        :href="link.url"
       >
         {{ link.label }}
-      </div>
+      </Link>
     </template>
 
     <!-- Next Page Link -->
-    <div
+    <Link
       class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
       :class="
         data.next_page_url !== null
-          ? 'cursor-pointer hover:bg-white focus:border-blue-500 focus:text-blue-500'
-          : 'text-gray-400'
+          ? 'hover:bg-white focus:border-blue-500 focus:text-blue-500'
+          : 'cursor-not-allowed text-gray-400'
       "
-      @click="$emit('pageChange', getPage(data.next_page_url))"
+      :href="data.next_page_url"
     >
       Next »
-    </div>
+    </Link>
   </div>
 </template>
 
 <script setup lang="ts">
-  const props = defineProps({ data: { type: Object, required: true } })
-
-  const emit = defineEmits(['pageChange'])
-
-  const getPage = (pageUrl: string) => {
-    const url = new URL(pageUrl)
-    return parseInt(url.searchParams.get('page') ?? '1', 10)
-  }
+  import { Link } from '@inertiajs/inertia-vue3'
+  defineProps({ data: { type: Object, required: true } })
 </script>

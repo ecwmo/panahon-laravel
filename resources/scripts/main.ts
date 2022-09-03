@@ -1,5 +1,12 @@
+import './bootstrap'
+import '../styles/app.scss'
+
+import { DefineComponent, createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/inertia-vue3'
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/vue-fontawesome'
 import {
   faTachometerAlt,
   faUmbrella,
@@ -19,11 +26,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 
-import App from '@/App.vue'
-import router from '@/router'
-import { createPinia } from 'pinia'
-
-import '../styles/app.scss'
+//@ts-ignore
+import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 
 library.add(
   faTachometerAlt,
@@ -44,9 +48,16 @@ library.add(
 )
 dom.watch()
 
-const app = createApp(App)
-//@ts-ignore
-app.component('font-awesome-icon', FontAwesomeIcon)
-app.use(router)
-app.use(createPinia())
-app.mount('#app')
+createInertiaApp({
+  resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+  setup({ el, app, props, plugin }) {
+    const VueApp = createApp({ render: () => h(app, props) })
+
+    VueApp
+      // https://github.com/FortAwesome/vue-fontawesome/issues/295#issuecomment-823411585
+      .component('font-awesome-icon', FontAwesomeIcon as unknown as DefineComponent<FontAwesomeIconProps>)
+      .use(plugin)
+      .use(ZiggyVue)
+      .mount(el)
+  },
+})

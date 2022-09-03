@@ -2,66 +2,29 @@
   <div>
     <div class="mb-6 flex justify-between items-center">
       <h1 class="font-bold text-3xl">{{ title }}</h1>
-      <router-link
+      <Link
         v-if="showCreateBtn"
-        :to="`${appRoute.basePath}/create`"
+        :href="route(`${basePath}.create`)"
         class="rounded px-3 py-2 m-1 shadow bg-blue-600 border-blue-700 hover:bg-amber-400"
+        as="button"
       >
         <i class="text-white fas fa-plus"></i>
-      </router-link>
+      </Link>
     </div>
 
-    <DataTable :data="tableData" :showIdColumn="showIdColumn" @pageChange="fetchData" />
+    <DataTable :basePath="basePath" :data="data" :show-id-column="showIdColumn" :hasEditPage="hasEditPage" />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { PropType } from 'vue'
+  import { Link } from '@inertiajs/inertia-vue3'
 
-  interface Datum {
-    [k: string]: any
-  }
-
-  interface Feature {
-    name: string
-    title: string
-    href?: string
-  }
-
-  const props = defineProps({
+  defineProps({
     title: { type: String, default: '' },
-    features: { type: Object as PropType<Feature[]>, required: true },
+    basePath: { type: String, default: '' },
+    data: { type: Object, required: true },
     showCreateBtn: { type: Boolean, default: false },
     showIdColumn: { type: Boolean, default: true },
     hasEditPage: { type: Boolean, default: true },
-  })
-
-  const tableData = ref({})
-
-  const appRoute = useAppRoute()
-
-  const { features, hasEditPage } = toRefs(props)
-
-  const fetchData = async (page = 1) => {
-    const featHrefs = features.value.filter(({ href }) => href !== undefined).map(({ href }) => href)
-    const { data: dat } = await appRoute.apiFetch({ page: page })
-    const newDat = dat.data.map((d: Datum) => ({
-      ...d,
-      station_name: d.station?.name,
-      topup_date: d.latest_topup?.created_at,
-      statusUrl: featHrefs.includes('statusUrl') ? `${appRoute.basePath}/${d.id}/logs` : undefined,
-      editUrl: hasEditPage.value ? `${appRoute.basePath}/${d.id}` : undefined,
-      stationUrl: featHrefs.includes('stationUrl') ? `${appRoute.basePath}/${d.station?.id}/station` : undefined,
-    }))
-
-    tableData.value = {
-      ...dat,
-      data: newDat,
-      features: features.value,
-    }
-  }
-
-  onMounted(async () => {
-    await fetchData()
   })
 </script>

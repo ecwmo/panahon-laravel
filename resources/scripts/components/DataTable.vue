@@ -12,41 +12,47 @@
           {{ td.id }}
         </td>
         <td v-for="f in data.features" :key="f.name" class="p-2 text-justify border-t">
-          <RouterLink
+          <Link
             v-if="f.href"
             tabindex="-1"
             class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
-            :to="td[f.href]"
+            :href="td[f.href]"
           >
             {{ getValue(f.name, td) }}
-          </RouterLink>
-          <RouterLink v-else-if="td.editUrl" tabindex="-1" class="px-4 flex items-center" :to="td.editUrl">
+          </Link>
+          <Link
+            v-else-if="hasEditPage"
+            tabindex="-1"
+            class="px-4 flex items-center"
+            :href="route(`${basePath}.update`, td.id)"
+          >
             {{ getValue(f.name, td) }}
-          </RouterLink>
+          </Link>
           <span v-else>{{ getValue(f.name, td) }}</span>
         </td>
-        <td v-if="td.editUrl" class="p-3 text-justify border-t w-px">
-          <RouterLink :to="td.editUrl" tabindex="-1" class="px-4 flex items-center">
+        <td v-if="hasEditPage" class="p-3 text-justify border-t w-px">
+          <Link :href="route(`${basePath}.update`, td.id)" tabindex="-1" class="px-4 flex items-center">
             <i class="block w-4 h-4 text-gray-400 fas fa-chevron-right"></i>
-          </RouterLink>
+          </Link>
         </td>
       </tr>
     </table>
   </div>
   <div class="mt-6">
-    <Pagination v-if="showPagination" :data="data" @pageChange="$emit('pageChange', $event)" />
+    <Pagination v-if="showPagination" :data="data" />
   </div>
 </template>
 
 <script setup lang="ts">
+  import { Link } from '@inertiajs/inertia-vue3'
   import { isValid, format } from 'date-fns'
 
   const props = defineProps({
+    basePath: { type: String, default: '' },
     data: { type: Object, required: true },
     showIdColumn: { type: Boolean, default: true },
+    hasEditPage: { type: Boolean, default: true },
   })
-
-  const emit = defineEmits(['pageChange'])
 
   const { data } = toRefs(props)
 

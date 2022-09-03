@@ -1,55 +1,30 @@
-import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
+
 import vue from '@vitejs/plugin-vue'
+import inertia from './resources/scripts/vite/inertia-layout'
+
 import AutoImport from 'unplugin-auto-import/vite'
-import Layouts from 'vite-plugin-vue-layouts'
-import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
 
-export default defineConfig(({ command }) => ({
-  base: command === 'serve' ? '' : '/build/',
-  publicDir: false,
-  build: {
-    manifest: true,
-    outDir: 'public/build',
-    rollupOptions: {
-      input: 'resources/scripts/main.ts',
-    },
-  },
+export default defineConfig({
   plugins: [
-    vue(),
-    {
-      name: 'blade',
-      handleHotUpdate({ file, server }) {
-        if (file.endsWith('.blade.php')) {
-          server.ws.send({
-            type: 'full-reload',
-            path: '*',
-          })
-        }
+    inertia(),
+    laravel(['resources/scripts/main.ts']),
+    vue({
+      template: {
+        transformAssetUrls: {
+          base: null,
+          includeAbsolute: false,
+        },
       },
-    },
+    }),
     AutoImport({
-      imports: ['vue', 'vue-router', '@vueuse/core'],
+      imports: ['vue', { '@inertiajs/inertia-vue3': ['usePage', 'useForm'] }],
       dts: 'resources/scripts/auto-imports.d.ts',
       dirs: ['resources/scripts/composables', 'resources/scripts/store'],
       vueTemplate: true,
-    }),
-    Layouts({
-      layoutsDirs: 'resources/scripts/layouts',
-    }),
-    Pages({
-      importMode: 'async',
-      dirs: [
-        {
-          dir: 'resources/scripts/pages',
-          baseRoute: '',
-        },
-        {
-          dir: 'resources/scripts/pages/auth',
-          baseRoute: '',
-        },
-      ],
     }),
     Components({
       dirs: ['resources/scripts/components'],
@@ -59,11 +34,7 @@ export default defineConfig(({ command }) => ({
   ],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './resources/scripts'),
-      vue: 'vue/dist/vue.esm-bundler.js',
+      '@': resolve('resources'),
     },
   },
-  optimizeDeps: {
-    include: ['axios', 'vue'],
-  },
-}))
+})

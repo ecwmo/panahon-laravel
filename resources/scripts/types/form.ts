@@ -8,7 +8,7 @@ export interface UserForm {
   email: string
   password?: string
   password_confirm?: string
-  roles?: number[]
+  roleIds?: number[]
 }
 
 export interface RoleForm {
@@ -24,6 +24,7 @@ export interface StationForm {
   lon?: number | string
   elevation?: number | string
   mobile_number?: string
+  station_url: string
   date_installed?: Date | string
   address?: string
   province?: string

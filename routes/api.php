@@ -10,21 +10,23 @@ use App\Http\Controllers\API\ObservationsStationController;
 use App\Http\Controllers\API\GLabsController;
 use App\Http\Controllers\API\GLabsLoadController;
 
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
+Route::name('api.')->group(function () {
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('stations/{id}/logs', [ObservationsStationController::class, 'fetchLogs']);
-Route::resource('stations', ObservationsStationController::class)->only(['index', 'show']);
-Route::middleware('auth:api')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::resource('stations', ObservationsStationController::class)->only(['index', 'show']);
+    Route::get('/stations/{id}/logs', [ObservationsStationController::class, 'fetchLogs']);
 
-    Route::get('auth/user', [AuthController::class, 'userInfo']);
-    Route::resource('stations', ObservationsStationController::class)->except(['index', 'show']);
-    Route::resource('users', UserController::class);
-    Route::resource('roles', RoleController::class);
+    Route::get('/globelabs', [GLabsController::class, 'index'])->name('glabs.index');
+    Route::post('/globelabs', [GLabsController::class, 'post'])->name('glabs.post');
+    Route::post('/globelabs/load', [GLabsLoadController::class, 'post'])->name('glabs.load');
+
+    Route::middleware('auth:api')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+        Route::get('auth/user', [AuthController::class, 'userInfo']);
+        Route::resource('station', ObservationsStationController::class)->except(['index', 'show']);
+        Route::resource('users', UserController::class);
+        Route::resource('roles', RoleController::class);
+    });
 });
-
-Route::get('globelabs', [GLabsController::class, 'index']);
-Route::post('globelabs', [GLabsController::class, 'post']);
-
-Route::post('globelabs/load', [GLabsLoadController::class, 'post']);

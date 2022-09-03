@@ -1,45 +1,36 @@
 <template>
   <div :class="isPopup ? 'text-sm' : 'hidden md:block bg-blue-700 flex-shrink-0 w-56 p-12 overflow-y-auto'">
-    <div v-for="m in menu" :class="isPopup ? 'mb-2' : 'mb-4'">
-      <router-link
+    <div v-for="m in menu" :key="m.label" :class="isPopup ? 'mb-2' : 'mb-4'">
+      <Link
         v-if="m.display"
-        :to="m.href"
+        :href="m.href"
         class="flex items-center group"
-        :class="isPopup ? 'py-1.5' : 'py-3'"
-        :exact="m.exact"
+        :class="[
+          isPopup ? 'py-1.5' : 'py-3',
+          $page.component.includes(m.name) ? 'text-white' : 'text-blue-300 group-hover:text-white',
+        ]"
       >
         <i :class="`w-4 h-4 mr-2 fas fa-${m.icon} fa-fw`"></i>
         <span>{{ m.label }}</span>
-      </router-link>
+      </Link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  const props = defineProps({
+  import { Link } from '@inertiajs/inertia-vue3'
+
+  defineProps({
     isPopup: { type: Boolean, default: false },
   })
 
-  const { isLoggedIn } = useAuthStore()
+  const { isLoggedIn } = useUser()
 
   const menu = ref([
-    { href: '/', label: 'Dashboard', icon: 'tachometer-alt', display: true, exact: true },
-    { href: '/stations', label: 'Weather Stations', icon: 'umbrella', display: true, exact: false },
-    { href: '/globelabs', label: 'Globe Labs', icon: 'signal', display: true, exact: false },
-    { href: '/users', label: 'User', icon: 'user', display: isLoggedIn, exact: false },
-    { href: '/roles', label: 'Roles', icon: 'user-tag', display: isLoggedIn, exact: false },
+    { href: '/', name: 'index', label: 'Dashboard', icon: 'tachometer-alt', display: true },
+    { href: '/stations', name: 'station', label: 'Weather Stations', icon: 'umbrella', display: true },
+    { href: '/glabs', name: 'glab', label: 'Globe Labs', icon: 'signal', display: isLoggedIn },
+    { href: '/users', name: 'user', label: 'User', icon: 'user', display: isLoggedIn },
+    { href: '/roles', name: 'role', label: 'Roles', icon: 'user-tag', display: isLoggedIn },
   ])
 </script>
-
-<style lang="sass" scoped>
-  a
-    svg
-      @apply text-blue-300 group-hover:text-white
-    span
-      @apply text-blue-300 group-hover:text-white
-  a.router-link-active, a.router-link-exact-active
-      svg
-        @apply text-white
-      span
-        @apply text-white
-</style>

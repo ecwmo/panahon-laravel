@@ -6,62 +6,50 @@
   ></div>
   <div class="md:flex md:flex-shrink-0">
     <div class="bg-blue-900 md:flex-shrink-0 md:w-56 px-6 py-4 flex items-center justify-between md:justify-center">
-      <RouterLink to="/" class="mt-1">
+      <a href="/" class="mt-1">
         <span class="font-semibold text-gray-200 text-lg md:text-2xl">{{ title }}</span>
-      </RouterLink>
-      <button @click.prevent="showMenu = true" class="md:hidden relative">
+      </a>
+      <button class="md:hidden relative" @click.prevent="showMenu = true">
         <i class="text-white w-6 h-6 fas fa-bars"></i>
         <div v-show="showMenu" class="absolute z-50 top-0 right-0 mt-5">
           <div class="mt-2 px-8 py-4 shadow-lg bg-blue-800 rounded">
-            <Sidebar :isPopup="true" />
+            <Sidebar :is-popup="true" />
           </div>
         </div>
       </button>
     </div>
     <div class="bg-white border-b w-full p-4 md:py-0 md:px-12 text-sm md:text-md flex justify-end items-center">
-      <button v-if="authStore.isLoggedIn" type="button" class="mt-1 relative" @click.prevent="showSubmenu = true">
-        <div class="flex items-center cursor-pointer select-none group">
-          <div
-            class="font-semibold text-gray-500 group-hover:text-blue-500 focus:text-blue-500 transition duration-300 mr-1 whitespace-nowrap"
-          >
-            <span>{{ authStore.user.name }}</span>
-          </div>
-          <i
-            class="w-3 h-3 stroke-current group-hover:text-blue-500 text-gray-700 focus:text-blue-500 fas fa-chevron-down"
-          ></i>
-        </div>
-        <div v-show="showSubmenu" class="absolute z-50 top-0 right-0 mt-5">
-          <div class="mt-2 py-2 shadow-xl bg-white rounded text-sm">
-            <a href="#" class="block px-6 py-2 hover:bg-blue-500 hover:text-white" @click.prevent="logout">Logout</a>
-          </div>
-        </div>
-      </button>
+      <div v-if="isLoggedIn">
+        <Link
+          class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300"
+          href="/logout"
+          method="post"
+          as="button"
+        >
+          Logout
+        </Link>
+      </div>
       <div v-else>
-        <RouterLink class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/login">
+        <Link class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" href="/login">
           Login
-        </RouterLink>
-        <RouterLink class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" to="/register">
+        </Link>
+        <Link class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" href="/register">
           Register
-        </RouterLink>
+        </Link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  const props = defineProps({
+  import { Link } from '@inertiajs/inertia-vue3'
+
+  defineProps({
     title: { type: String, default: '' },
   })
 
+  const { isLoggedIn } = useUser()
+
   const showMenu = ref(false)
   const showSubmenu = ref(false)
-
-  const authStore = useAuthStore()
-
-  const logout = async () => {
-    const res = await authStore.logout()
-    if (res.status >= 200 && res.status < 300) {
-      showSubmenu.value = false
-    }
-  }
 </script>

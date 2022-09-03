@@ -1,109 +1,84 @@
-<template>
-  <form>
-    <div class="px-10 py-12">
-      <h1 class="text-center font-bold text-3xl">Login</h1>
-      <div class="mx-auto mt-6 w-24 border-b-2"></div>
+<template layout="auth">
+  <div class="px-6 py-8">
+    <Head title="Log in" />
 
-      <div class="mt-10">
-        <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">E-Mail Address</label>
-        <input
+    <h1 class="text-center font-bold text-3xl">Login</h1>
+    <div class="mx-auto my-6 w-24 border-b-2"></div>
+
+    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+      {{ status }}
+    </div>
+
+    <form @submit.prevent="submit">
+      <div>
+        <BreezeLabel for="email" value="Email" />
+        <BreezeInput
           id="email"
           type="email"
-          class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('email') is-invalid @enderror"
-          name="email"
-          placeholder="username@domain.com"
+          class="mt-1 block w-full"
+          v-model="form.email"
           required
           autofocus
-          v-model="user.email"
+          autocomplete="username"
         />
-        <template v-if="errors">
-          <span class="form-error" role="alert" v-for="(e, i) in errors.email" :key="i">
-            {{ e }}
-          </span>
-        </template>
+        <BreezeInputError class="mt-2" :message="form.errors.email" />
       </div>
 
-      <div class="mt-6">
-        <label for="password" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Password</label>
-        <input
+      <div class="mt-4">
+        <BreezeLabel for="password" value="Password" />
+        <BreezeInput
           id="password"
           type="password"
-          class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500 @error('password') is-invalid @enderror"
-          name="password"
-          placeholder="************"
+          class="mt-1 block w-full"
+          v-model="form.password"
           required
-          v-model="user.password"
+          autofocus
+          autocomplete="current-password"
         />
-        <template v-if="errors">
-          <span class="form-error" role="alert" v-for="(e, i) in errors.password" :key="i">
-            {{ e }}
-          </span>
-        </template>
+        <BreezeInputError class="mt-2" :message="form.errors.password" />
       </div>
 
-      <div class="mt-6">
-        <label class="inline-flex items-center">
-          <input
-            type="checkbox"
-            class="form-checkbox h-5 w-5 text-gray-600"
-            name="remember_me"
-            id="remember_me"
-            v-model="user.remember_me"
-          />
-          <span class="ml-2 text-gray-700"> Remember Me </span>
+      <div class="block mt-4">
+        <label class="flex items-center">
+          <BreezeCheckbox name="remember" v-model:checked="form.remember" />
+          <span class="ml-2 text-sm text-gray-600">Remember me</span>
         </label>
       </div>
-    </div>
 
-    <div class="px-10 py-4 bg-gray-100 border-t border-gray-100 flex">
-      <button
-        type="submit"
-        class="flex items-center ml-auto px-7 py-3 font-semibold text-white bg-blue-500 rounded-md hover:bg-amber-400 focus:bg-amber-400 focus:outline-none"
-        @click.prevent="handleLogin"
-      >
-        Login
-      </button>
-    </div>
-  </form>
+      <div class="flex items-center justify-end mt-4">
+        <Link
+          v-if="canResetPassword"
+          :href="route('password.request')"
+          class="underline text-sm text-gray-600 hover:text-gray-900"
+        >
+          Forgot your password?
+        </Link>
+
+        <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+          Log in
+        </BreezeButton>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { FormError } from '@/types/form'
+  import { Head, Link } from '@inertiajs/inertia-vue3'
 
-  const user = ref({
-    email: '',
-    password: '',
-    remember_me: false,
+  defineProps({
+    canResetPassword: Boolean,
+    status: String,
   })
 
-  const errors = ref(<FormError>{})
+  const form = useForm({
+    email: null,
+    password: null,
+    remember: false,
+  })
 
-  const authStore = useAuthStore()
-  const route = useRoute()
-  const router = useRouter()
-
-  const handleLogin = async () => {
-    const res = await authStore.login(user.value)
-    if (res.status === 200) route?.query?.redirect ? router.push(<string>route?.query?.redirect) : router.go(-1)
-    else {
-      errors.value = res.data.errors
-      user.value.password = ''
-    }
+  const submit = () => {
+    form.post(route('login'), {
+      onFinish: () => form.reset('password'),
+    })
   }
 </script>
-
-<style lang="sass" scoped>
-  .form-label
-      @apply block mb-2 text-sm text-gray-600
-  .form-control
-      @apply w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md
-      &:focus
-          @apply outline-none ring ring-blue-100 border-blue-300
-  .form-error
-      @apply mb-3 text-xs text-red-500
-</style>
-
-<route lang="yaml">
-meta:
-  layout: auth
-</route>

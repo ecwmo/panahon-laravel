@@ -1,129 +1,91 @@
-<template>
-  <form>
-    <div class="px-10 py-12">
-      <h1 class="text-center font-bold text-3xl">Register</h1>
-      <div class="mx-auto mt-6 w-24 border-b-2"></div>
+<template layout="auth">
+  <div class="px-6 py-8">
+    <Head title="Register" />
 
-      <div class="mt-10">
-        <label for="name" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Name</label>
-        <input
+    <h1 class="text-center font-bold text-3xl">Register</h1>
+    <div class="mx-auto mt-6 w-24 border-b-2"></div>
+
+    <form @submit.prevent="submit">
+      <div>
+        <BreezeLabel for="name" value="Name" />
+        <BreezeInput
           id="name"
           type="text"
-          class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
-          placeholder="John Doe"
-          name="name"
-          v-model="user.name"
+          class="mt-1 block w-full"
+          v-model="form.name"
           required
           autofocus
+          autocomplete="name"
         />
-        <template v-if="errors">
-          <span class="form-error" role="alert" v-for="(e, i) in errors.name" :key="i">
-            {{ e }}
-          </span>
-        </template>
+        <BreezeInputError class="mt-2" :message="form.errors.name" />
       </div>
 
-      <div class="mt-6">
-        <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">E-Mail Address</label>
-        <input
+      <div class="mt-4">
+        <BreezeLabel for="email" value="Email" />
+        <BreezeInput
           id="email"
           type="email"
-          class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
-          placeholder="username@domain.com"
-          name="email"
-          v-model="user.email"
+          class="mt-1 block w-full"
+          v-model="form.email"
           required
+          autocomplete="username"
         />
-        <template v-if="errors">
-          <span class="form-error" role="alert" v-for="(e, i) in errors.email" :key="i">
-            {{ e }}
-          </span>
-        </template>
+        <BreezeInputError class="mt-2" :message="form.errors.email" />
       </div>
 
-      <div class="mt-6">
-        <label for="password" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Password</label>
-        <input
+      <div class="mt-4">
+        <BreezeLabel for="password" value="Password" />
+        <BreezeInput
           id="password"
           type="password"
-          class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
-          placeholder="************"
-          name="password"
-          v-model="user.password"
+          class="mt-1 block w-full"
+          v-model="form.password"
           required
+          autocomplete="new-password"
         />
-        <template v-if="errors">
-          <span class="form-error" role="alert" v-for="(e, i) in errors.password" :key="i">
-            {{ e }}
-          </span>
-        </template>
+        <BreezeInputError class="mt-2" :message="form.errors.password" />
       </div>
 
-      <div class="mt-6">
-        <label for="password-confirm" class="block mb-2 text-sm text-gray-600 dark:text-gray-400"
-          >Confirm Password</label
-        >
-        <input
-          id="password-confirm"
+      <div class="mt-4">
+        <BreezeLabel for="password_confirmation" value="Confirm Password" />
+        <BreezeInput
+          id="password_confirmation"
           type="password"
-          class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
-          placeholder="************"
-          name="password_confirmation"
-          v-model="user.password_confirmation"
+          class="mt-1 block w-full"
+          v-model="form.password_confirmation"
           required
+          autocomplete="new-password"
         />
+        <BreezeInputError class="mt-2" :message="form.errors.password_confirmation" />
       </div>
-    </div>
 
-    <div class="px-10 py-4 bg-gray-100 border-t border-gray-100 flex">
-      <button
-        type="submit"
-        class="flex items-center ml-auto px-7 py-3 font-semibold text-white bg-blue-500 rounded-md hover:bg-amber-400 focus:bg-amber-400 focus:outline-none"
-        @click.prevent="handleRegister"
-      >
-        Register
-      </button>
-    </div>
-  </form>
+      <div class="flex items-center justify-end mt-4">
+        <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
+          Already registered?
+        </Link>
+
+        <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+          Register
+        </BreezeButton>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { FormError } from '@/types/form'
+  import { Head, Link } from '@inertiajs/inertia-vue3'
 
-  const user = ref({
+  const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    terms: false,
   })
 
-  const errors = ref(<FormError>{})
-
-  const authStore = useAuthStore()
-  const router = useRouter()
-
-  const handleRegister = async () => {
-    const res = await authStore.register(user.value)
-    if (res.status === 201) router.push('/')
-    else {
-      errors.value = res.data.errors
-      user.value.password = ''
-    }
+  const submit = () => {
+    form.post(route('register'), {
+      onFinish: () => form.reset('password', 'password_confirmation'),
+    })
   }
 </script>
-
-<style lang="sass" scoped>
-  .form-label
-      @apply block mb-2 text-sm text-gray-600
-  .form-control
-      @apply w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md
-      &:focus
-          @apply outline-none ring ring-blue-100 border-blue-300
-  .form-error
-      @apply mb-3 text-xs text-red-500
-</style>
-
-<route lang="yaml">
-meta:
-  layout: auth
-</route>
