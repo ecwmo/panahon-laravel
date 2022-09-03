@@ -27,10 +27,10 @@
   const { isLoggedIn } = useUser()
 
   const menu = ref([
-    { href: '/', name: 'index', label: 'Dashboard', icon: 'tachometer-alt', display: true },
-    { href: '/stations', name: 'station', label: 'Weather Stations', icon: 'umbrella', display: true },
-    { href: '/glabs', name: 'glab', label: 'Globe Labs', icon: 'signal', display: isLoggedIn },
-    { href: '/users', name: 'user', label: 'User', icon: 'user', display: isLoggedIn },
-    { href: '/roles', name: 'role', label: 'Roles', icon: 'user-tag', display: isLoggedIn },
+    { href: route('home'), name: 'index', label: 'Dashboard', icon: 'tachometer-alt', display: true },
+    { href: route('stations.index'), name: 'station', label: 'Weather Stations', icon: 'umbrella', display: true },
+    { href: route('glabs.index'), name: 'glab', label: 'Globe Labs', icon: 'signal', display: isLoggedIn },
+    { href: route('users.index'), name: 'user', label: 'User', icon: 'user', display: isLoggedIn },
+    { href: route('roles.index'), name: 'role', label: 'Roles', icon: 'user-tag', display: isLoggedIn },
   ])
 </script>

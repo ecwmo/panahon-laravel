@@ -6,7 +6,7 @@
   ></div>
   <div class="md:flex md:flex-shrink-0">
     <div class="bg-blue-900 md:flex-shrink-0 md:w-56 px-6 py-4 flex items-center justify-between md:justify-center">
-      <a href="/" class="mt-1">
+      <a :href="route('home')" class="mt-1">
         <span class="font-semibold text-gray-200 text-lg md:text-2xl">{{ title }}</span>
       </a>
       <button class="md:hidden relative" @click.prevent="showMenu = true">
@@ -22,7 +22,7 @@
       <div v-if="isLoggedIn">
         <Link
           class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300"
-          href="/logout"
+          :href="route('logout')"
           method="post"
           as="button"
         >
@@ -30,10 +30,16 @@
         </Link>
       </div>
       <div v-else>
-        <Link class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" href="/login">
+        <Link
+          class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300"
+          :href="route('login')"
+        >
           Login
         </Link>
-        <Link class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300" href="/register">
+        <Link
+          class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300"
+          :href="route('register')"
+        >
           Register
         </Link>
       </div>
