@@ -32,7 +32,6 @@
           class="mt-1 block w-full"
           v-model="form.password"
           required
-          autofocus
           autocomplete="current-password"
         />
         <BreezeInputError class="mt-2" :message="form.errors.password" />
