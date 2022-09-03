@@ -3,14 +3,12 @@ import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 
 import vue from '@vitejs/plugin-vue'
-import inertia from './resources/scripts/vite/inertia-layout'
 
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 
 export default defineConfig({
   plugins: [
-    inertia(),
     laravel(['resources/scripts/main.ts']),
     vue({
       template: {
@@ -34,7 +32,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': resolve('resources'),
+      '@': resolve('resources/scripts'),
     },
   },
 })

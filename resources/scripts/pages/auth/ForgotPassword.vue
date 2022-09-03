@@ -1,5 +1,5 @@
-<template layout="auth">
-  <div class="px-6 py-8">
+<template>
+  <AuthLayout>
     <Head title="Forgot Password" />
 
     <h1 class="text-center font-bold text-3xl">Forgot Password</h1>
@@ -35,11 +35,12 @@
         </BreezeButton>
       </div>
     </form>
-  </div>
+  </AuthLayout>
 </template>
 
 <script setup lang="ts">
   import { Head } from '@inertiajs/inertia-vue3'
+  import AuthLayout from '@/layouts/Auth.vue'
 
   defineProps({
     status: String,

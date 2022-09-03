@@ -22,6 +22,6 @@ class GLabsController extends Controller
             }
         }
 
-        return Inertia::render('glabs', compact('glabs'));
+        return Inertia::render('Glabs', compact('glabs'));
     }
 }

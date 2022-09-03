@@ -28,7 +28,7 @@ class ObservationsStationController extends Controller
         foreach ($stations as $station) {
             $station->status_url = route('stations.index').'/'.$station->id.'/logs';
         }
-        return Inertia::render('stations', compact('stations'));
+        return Inertia::render('Stations', compact('stations'));
     }
 
     /**
@@ -38,7 +38,7 @@ class ObservationsStationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('station.form', []);
+        return Inertia::render('StationForm', []);
     }
 
     /**
@@ -74,7 +74,7 @@ class ObservationsStationController extends Controller
     */
     public function show(ObservationsStation $station)
     {
-        return Inertia::render('station.form', compact('station'));
+        return Inertia::render('StationForm', compact('station'));
     }
 
     /**
@@ -118,6 +118,6 @@ class ObservationsStationController extends Controller
     public function logs(Request $request, ObservationsStation $station)
     {
         $logs = $station->health()->orderBy('timestamp', 'DESC')->paginate(20, array('timestamp', 'message'));
-        return Inertia::render('station.logs', compact('logs'));
+        return Inertia::render('StationLogs', compact('logs'));
     }
 }

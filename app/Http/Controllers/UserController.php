@@ -24,7 +24,7 @@ class UserController extends Controller
         foreach ($users as $user) {
             $user->roleList = $user->roles->pluck('name')->implode(', ');
         }
-        return Inertia::render('users', compact('users'));
+        return Inertia::render('Users', compact('users'));
     }
 
     /**
@@ -34,7 +34,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('user.form', ['user'=>[], 'roles'=> Role::all()]);
+        return Inertia::render('UserForm', ['user'=>[], 'roles'=> Role::all()]);
     }
 
     /**
@@ -72,7 +72,7 @@ class UserController extends Controller
     {
         // $user->roleList = $user->roles->pluck('name')->implode(', ');
         $user->roleIds = $user->roles->pluck('id');
-        return Inertia::render('user.form', [
+        return Inertia::render('UserForm', [
             'user' => $user,
             // 'userRoleIds' => $user->roles->pluck('id'),
             'roles' => Role::all()

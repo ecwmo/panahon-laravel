@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-8">
+  <AuthLayout>
     <Head title="Email Verification" />
 
     <h1 class="text-center font-bold text-3xl">Email Verification</h1>
@@ -29,15 +29,16 @@
         >
       </div>
     </form>
-  </div>
+  </AuthLayout>
 </template>
 
 <script setup lang="ts">
   import { Head, Link } from '@inertiajs/inertia-vue3'
+  import AuthLayout from '@/layouts/Auth.vue'
 
-  const props = defineProps({
-    status: String,
-  })
+  const props = defineProps<{
+    status: string
+  }>()
 
   const form = useForm({})
 

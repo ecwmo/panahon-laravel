@@ -1,5 +1,5 @@
-<template layout="auth">
-  <div class="px-6 py-8">
+<template>
+  <AuthLayout>
     <Head title="Log in" />
 
     <h1 class="text-center font-bold text-3xl">Login</h1>
@@ -58,16 +58,17 @@
         </BreezeButton>
       </div>
     </form>
-  </div>
+  </AuthLayout>
 </template>
 
 <script setup lang="ts">
   import { Head, Link } from '@inertiajs/inertia-vue3'
+  import AuthLayout from '@/layouts/Auth.vue'
 
-  defineProps({
-    canResetPassword: Boolean,
-    status: String,
-  })
+  defineProps<{
+    canResetPassword: boolean
+    status?: string
+  }>()
 
   const form = useForm({
     email: null,

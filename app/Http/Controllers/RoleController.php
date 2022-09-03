@@ -17,7 +17,7 @@ class RoleController extends Controller
     public function index(RoleRequest $request)
     {
         $roles = Role::paginate(10);
-        return Inertia::render('roles', compact('roles'));
+        return Inertia::render('Roles', compact('roles'));
     }
 
     /**
@@ -27,7 +27,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return Inertia::render('role.form', []);
+        return Inertia::render('RoleForm', []);
     }
 
     /**
@@ -56,7 +56,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        return Inertia::render('role.form', compact('role'));
+        return Inertia::render('RoleForm', compact('role'));
     }
 
 
