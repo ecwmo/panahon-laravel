@@ -12,8 +12,8 @@
 
   defineProps({
     type: {
-      type: Object as PropType<ButtonHTMLAttributes['type']>,
-      default: () => 'submit' as ButtonHTMLAttributes['type'],
+      type: String as PropType<ButtonHTMLAttributes['type']>,
+      default: () => 'submit',
     },
   })
 </script>
