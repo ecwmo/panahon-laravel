@@ -9,13 +9,21 @@
       <form @submit.prevent="handleFormSubmit(isUpdate ? 'update' : 'create')">
         <slot></slot>
 
-        <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex items-center">
-          <button v-if="showDelete" type="submit" class="text-red-600 hover:underline" @click.prevent="handleDelete">
+        <div
+          class="w-full px-8 py-4 bg-gray-50 border-t border-gray-100 flex items-center"
+          :class="[showDelete ? 'justify-between' : 'justify-end']"
+        >
+          <button
+            v-if="showDelete"
+            type="submit"
+            class="text-sm uppercase font-semibold tracking-widest text-red-600 hover:underline"
+            @click.prevent="handleDelete"
+          >
             Delete
           </button>
-          <button v-if="showSubmitBtn" type="submit" class="form-button">
+          <BreezeButton v-if="showSubmitBtn" type="submit">
             {{ isUpdate ? 'Update' : 'Add' }}
-          </button>
+          </BreezeButton>
         </div>
       </form>
     </div>
@@ -51,18 +59,3 @@
     }
   }
 </script>
-
-<style lang="sass" scoped>
-  .form-label
-      @apply block mb-2 text-sm text-gray-600
-  .form-control
-      @apply w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md
-      &:focus
-          @apply outline-none ring ring-blue-100 border-blue-300
-  .form-button
-      @apply px-5 py-3 flex items-center text-white bg-blue-500 rounded-md ml-auto
-      &:focus
-          @apply bg-blue-600 outline-none
-  .form-error
-      @apply mb-3 text-xs text-red-500
-</style>

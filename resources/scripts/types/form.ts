@@ -32,3 +32,8 @@ export interface StationForm {
   station_type?: string
   status?: string
 }
+
+export interface SelectOption {
+  name: string
+  value?: string | number
+}

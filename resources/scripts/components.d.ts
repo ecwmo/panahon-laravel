@@ -20,7 +20,9 @@ declare module '@vue/runtime-core' {
     Default: typeof import('./components/Default.vue')['default']
     Form: typeof import('./components/Form.vue')['default']
     Header: typeof import('./components/Header.vue')['default']
+    MultiSelectInput: typeof import('./components/MultiSelectInput.vue')['default']
     Pagination: typeof import('./components/Pagination.vue')['default']
+    SelectInput: typeof import('./components/SelectInput.vue')['default']
     Sidebar: typeof import('./components/Sidebar.vue')['default']
   }
 }

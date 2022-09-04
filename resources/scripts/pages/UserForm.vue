@@ -10,69 +10,41 @@
       :isUpdate="form?.id !== undefined"
     >
       <div class="p-8 flex flex-wrap">
-        <div class="mb-3 w-full">
-          <label for="name" class="form-label">User Name</label>
-          <input type="text" class="form-control" placeholder="User Name" name="name" v-model="form.name" required />
-          <span v-if="form.errors.name" class="form-error" role="alert">
-            {{ form.errors.name }}
-          </span>
+        <div class="w-full">
+          <BreezeLabel for="name" value="Name" />
+          <BreezeInput
+            id="name"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.name"
+            required
+            autofocus
+            autocomplete="name"
+          />
+          <BreezeInputError class="mt-2" :message="form.errors.name" />
         </div>
 
-        <div class="mb-3 w-full">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" placeholder="Email" name="email" v-model="form.email" required />
-          <span v-if="form.errors.email" class="form-error" role="alert">
-            {{ form.errors.email }}
-          </span>
+        <div class="mt-4 w-full">
+          <BreezeLabel for="email" value="Email" />
+          <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
+          <BreezeInputError class="mt-2" :message="form.errors.email" />
         </div>
 
-        <div class="mb-3 w-full">
-          <label for="password" class="form-label">Password</label>
-          <input
+        <div class="mt-4 w-full">
+          <BreezeLabel for="password" value="Password" />
+          <BreezeInput
+            id="password"
             type="password"
-            class="form-control"
-            placeholder="Password"
-            name="password"
+            class="mt-1 block w-full"
             v-model="form.password"
             :required="form.id === null"
           />
-          <span v-if="form.errors.password" class="form-error" role="alert">
-            {{ form.errors.password }}
-          </span>
+          <BreezeInputError class="mt-2" :message="form.errors.password" />
         </div>
 
-        <div class="mb-3 w-full" @mouseleave="showRoleDrpDwn = false">
-          <label for="roles" class="form-label">Roles</label>
-          <div class="w-full flex">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Roles"
-              id="roles"
-              @focus="showRoleDrpDwn = true"
-              :value="userRoleNames"
-              readonly
-            />
-            <button
-              class="px-3 py-2 border bg-blue-300 border-blue-400 rounded-r-md"
-              type="button"
-              id="roleDrpDwnBtn"
-              @click="showRoleDrpDwn = !showRoleDrpDwn"
-            >
-              <i class="fas" :class="showRoleDrpDwn ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-            </button>
-          </div>
-          <select
-            class="form-control"
-            v-model="form.roleIds"
-            v-show="showRoleDrpDwn"
-            @blur="showRoleDrpDwn = false"
-            multiple
-          >
-            <option v-for="role in roles" :key="role.id" :value="role.id">
-              {{ role?.name }}
-            </option>
-          </select>
+        <div class="mt-4 w-full">
+          <BreezeLabel for="roles" value="Roles" />
+          <MultiSelectInput v-model="form.roleIds" :data="mSelecData"></MultiSelectInput>
         </div>
       </div>
     </Form>
@@ -81,7 +53,7 @@
 
 <script setup lang="ts">
   import DefaultLayout from '@/layouts/Default.vue'
-  import { UserForm, RoleForm } from '@/types/form'
+  import { UserForm, RoleForm, SelectOption } from '@/types/form'
 
   const { isSuperAdmin } = useUser()
 
@@ -99,20 +71,7 @@
     ...props.user,
   })
 
-  const showRoleDrpDwn = ref(false)
-
-  const userRoleNames = computed(() =>
-    form.roleIds?.map((id: number) => props.roles?.filter((role: RoleForm) => role['id'] === id)[0]['name'])
+  const mSelecData = computed(() =>
+    props.roles.map((role: RoleForm): SelectOption => ({ name: role.name, value: role.id }))
   )
 </script>
-
-<style lang="sass" scoped>
-  .form-label
-      @apply block mb-2 text-sm text-gray-600
-  .form-control
-      @apply w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md
-      &:focus
-          @apply outline-none ring ring-blue-100 border-blue-300
-  .form-error
-      @apply mb-3 text-xs text-red-500
-</style>

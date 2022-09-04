@@ -10,151 +10,90 @@
       :isUpdate="form?.id !== undefined"
     >
       <div class="p-8 flex flex-wrap">
-        <div class="mb-3 w-full">
-          <label for="name" class="form-label">Station Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            placeholder="Station Name"
-            name="name"
-            v-model="form.name"
-          />
-          <span v-if="form.errors.name" class="form-error" role="alert">
-            {{ form.errors.name }}
-          </span>
+        <div class="w-full">
+          <BreezeLabel for="name" value="Station Name" />
+          <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+          <BreezeInputError class="mt-2" :message="form.errors.name" />
         </div>
 
-        <div class="flex mb-3 space-x-2 w-full">
+        <div class="flex mt-4 space-x-2 w-full">
           <div class="w-1/3">
-            <label for="lat" class="form-label">Latitude</label>
-            <input type="text" class="form-control" id="lat" placeholder="Lat" name="lat" v-model="form.lat" />
-            <span v-if="form.errors.lat" class="form-error" role="alert">
-              {{ form.errors.lat }}
-            </span>
+            <BreezeLabel for="lat" value="Latitude" />
+            <BreezeInput id="lat" type="text" class="mt-1 block w-full" v-model="form.lat" />
+            <BreezeInputError class="mt-2" :message="form.errors.lat" />
           </div>
           <div class="w-1/3">
-            <label for="lon" class="form-label">Longitude</label>
-            <input type="text" class="form-control" id="lon" placeholder="Lon" name="lon" v-model="form.lon" />
-            <span v-if="form.errors.lon" class="form-error" role="alert">
-              {{ form.errors.lon }}
-            </span>
+            <BreezeLabel for="lon" value="Longitude" />
+            <BreezeInput id="lon" type="text" class="mt-1 block w-full" v-model="form.lon" />
+            <BreezeInputError class="mt-2" :message="form.errors.lon" />
           </div>
           <div class="w-1/3">
-            <label for="elevation" class="form-label">Elevation</label>
-            <input
-              type="text"
-              class="form-control"
-              id="elevation"
-              placeholder="Elevation"
-              name="elevation"
-              v-model="form.elevation"
-            />
-            <span v-if="form.errors.elevation" class="form-error" role="alert">
-              {{ form.errors.elevation }}
-            </span>
+            <BreezeLabel for="elevation" value="Elevation" />
+            <BreezeInput id="elevation" type="text" class="mt-1 block w-full" v-model="form.elevation" />
+            <BreezeInputError class="mt-2" :message="form.errors.elevation" />
           </div>
         </div>
 
-        <div class="flex mb-3 space-x-2 w-full">
+        <div class="flex mt-4 space-x-2 w-full">
           <div class="w-2/5">
-            <label for="station_type" class="form-label">Station Type</label>
-            <select
-              class="form-control"
-              id="station_type"
-              name="station_type"
-              aria-label="Station Type"
-              v-model="form.station_type"
-            >
+            <BreezeLabel for="station_type" value="Station Type" />
+            <SelectInput id="station_type" class="mt-1 block w-full" v-model="form.station_type">
               <option>SMS</option>
               <option>MO</option>
-            </select>
+            </SelectInput>
           </div>
           <div class="w-3/5">
-            <label for="mobile_number" class="form-label">Mobile Number</label>
-            <input
-              type="text"
-              class="form-control"
-              :disabled="!mobileNumberInputEnabled"
+            <BreezeLabel for="mobile_number" value="Mobile Number" />
+            <BreezeInput
               id="mobile_number"
-              placeholder="63XXXXXXXXXX"
-              name="mobile_number"
-              pattern="63[0-9]{10}"
+              type="text"
+              class="mt-1 block w-full"
               v-model="form.mobile_number"
+              :disabled="!mobileNumberInputEnabled"
+              placeholder="63XXXXXXXXXX"
+              pattern="63[0-9]{10}"
             />
-            <span v-if="form.errors.mobile_number" class="form-error" role="alert">
-              {{ form.errors.mobile_number }}
-            </span>
+            <BreezeInputError class="mt-2" :message="form.errors.mobile_number" />
           </div>
         </div>
 
-        <div class="flex mb-3 space-x-2 w-full">
+        <div class="flex mt-4 space-x-2 w-full">
           <div class="w-2/5">
-            <label for="status" class="form-label">Status</label>
-            <select class="form-control" id="status" name="status" aria-label="Station Status" v-model="form.status">
+            <BreezeLabel for="status" value="Status" />
+            <SelectInput id="status" class="mt-1 block w-full" v-model="form.status">
               <option>ACTIVE</option>
               <option>INACTIVE</option>
-            </select>
+            </SelectInput>
           </div>
           <div class="w-3/5">
-            <label for="date_installed" class="form-label">Date Installed</label>
-            <input
-              type="date"
-              class="form-control"
-              id="date_installed"
-              placeholder="YYYY-MM-dd"
-              name="date_installed"
-              v-model="form.date_installed"
-            />
-            <span v-if="form.errors.date_installed" class="form-error" role="alert">
-              {{ form.errors.date_installed }}
-            </span>
+            <BreezeLabel for="date_installed" value="Date Installed" />
+            <BreezeInput id="date_installed" type="date" class="mt-1 block w-full" v-model="form.date_installed" />
+            <BreezeInputError class="mt-2" :message="form.errors.date_installed" />
           </div>
         </div>
 
-        <div class="mb-3 w-full">
-          <label for="address" class="form-label">Address</label>
-          <input
-            type="text"
-            class="form-control"
-            id="address"
-            name="address"
-            placeholder="Address"
-            v-model="form.address"
-          />
-          <span v-if="form.errors.address" class="form-error" role="alert">
-            {{ form.errors.address }}
-          </span>
+        <div class="mt-4 w-full">
+          <BreezeLabel for="address" value="Address" />
+          <BreezeInput id="address" type="text" class="mt-1 block w-full" v-model="form.address" />
+          <BreezeInputError class="mt-2" :message="form.errors.address" />
         </div>
 
-        <div class="flex space-x-2 w-full">
+        <div class="flex mt-4 space-x-2 w-full">
           <div class="w-1/2">
-            <label for="province" class="form-label">Province</label>
-            <input
-              type="text"
-              class="form-control"
+            <BreezeLabel for="province" value="Province" />
+            <BreezeInput
               id="province"
-              placeholder="Province"
-              name="province"
+              type="text"
+              class="mt-1 block w-full"
               v-model="form.province"
+              placeholder="Province"
             />
-            <span v-if="form.errors.province" class="form-error" role="alert">
-              {{ form.errors.province }}
-            </span>
+            <BreezeInputError class="mt-2" :message="form.errors.province" />
           </div>
           <div class="w-1/2">
-            <label for="region" class="form-label">Region</label>
-            <input
-              type="text"
-              class="form-control"
-              id="region"
-              placeholder="Region"
-              name="region"
-              v-model="form.region"
-            />
-            <span v-if="form.errors.region" class="form-error" role="alert">
-              {{ form.errors.region }}
-            </span>
+            <BreezeLabel for="region" value="Region" />
+            <BreezeInput id="region" type="text" class="mt-1 block w-full" v-model="form.region" placeholder="Region" />
+            <BreezeInputError class="mt-2" :message="form.errors.region" />
           </div>
         </div>
       </div>
@@ -191,14 +130,3 @@
 
   const mobileNumberInputEnabled = computed(() => form.station_type === 'SMS')
 </script>
-
-<style lang="sass" scoped>
-  .form-label
-      @apply block mb-2 text-sm text-gray-600
-  .form-control
-      @apply w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md
-      &:focus
-          @apply outline-none ring ring-blue-100 border-blue-300
-  .form-error
-      @apply mb-3 text-xs text-red-500
-</style>

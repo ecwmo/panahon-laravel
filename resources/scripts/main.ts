@@ -1,4 +1,4 @@
-import '../styles/app.scss'
+import '../styles/app.css'
 
 import { DefineComponent, createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'

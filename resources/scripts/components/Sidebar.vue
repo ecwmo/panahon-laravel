@@ -7,7 +7,7 @@
         class="flex items-center group"
         :class="[
           isPopup ? 'py-1.5' : 'py-3',
-          $page.component.includes(m.name) ? 'text-white' : 'text-blue-300 group-hover:text-white',
+          $page.component.toLowerCase().includes(m.name) ? 'text-white' : 'text-blue-300 group-hover:text-white',
         ]"
       >
         <i :class="`w-4 h-4 mr-2 fas fa-${m.icon} fa-fw`"></i>
