@@ -1,12 +1,8 @@
-<template>
-  <DefaultLayout>
-    <Default title="Globe Labs" basePath="glabs" :showCreateBtn="false" :data="data" :hasEditPage="false" />
-  </DefaultLayout>
+<template layout>
+  <Default title="Globe Labs" basePath="glabs" :showCreateBtn="false" :data="data" :hasEditPage="false" />
 </template>
 
 <script setup lang="ts">
-  import DefaultLayout from '@/layouts/Default.vue'
-
   const props = defineProps<{ glabs: object }>()
   const features = [
     { name: 'mobile_number', title: 'Mobile Number' },

@@ -1,12 +1,8 @@
-<template>
-  <DefaultLayout>
-    <Default title="Stations" basePath="stations" :showCreateBtn="isAdmin" :data="data" />
-  </DefaultLayout>
+<template layout>
+  <Default title="Stations" basePath="stations" :showCreateBtn="isAdmin" :data="data" />
 </template>
 
 <script setup lang="ts">
-  import DefaultLayout from '@/layouts/Default.vue'
-
   const props = defineProps<{
     stations: object
   }>()

@@ -1,12 +1,8 @@
-<template>
-  <DefaultLayout>
-    <Default title="Users" basePath="users" :showCreateBtn="isSuperAdmin" :data="data" />
-  </DefaultLayout>
+<template layout>
+  <Default title="Users" basePath="users" :showCreateBtn="isSuperAdmin" :data="data" />
 </template>
 
 <script setup lang="ts">
-  import DefaultLayout from '@/layouts/Default.vue'
-
   const props = defineProps<{
     users: object
   }>()

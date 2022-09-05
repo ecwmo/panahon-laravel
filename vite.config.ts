@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
+import InertiaLayout from './resources/scripts/vite/inertia-layout'
 
 import vue from '@vitejs/plugin-vue'
 
@@ -9,6 +10,7 @@ import Components from 'unplugin-vue-components/vite'
 
 export default defineConfig({
   plugins: [
+    InertiaLayout(),
     laravel(['resources/scripts/main.ts']),
     vue({
       template: {

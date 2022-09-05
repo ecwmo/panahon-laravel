@@ -1,12 +1,8 @@
-<template>
-  <DefaultLayout>
-    <Default title="Roles" basePath="roles" :showCreateBtn="isSuperAdmin" :data="data" />
-  </DefaultLayout>
+<template layout>
+  <Default title="Roles" basePath="roles" :showCreateBtn="isSuperAdmin" :data="data" />
 </template>
 
 <script setup lang="ts">
-  import DefaultLayout from '@/layouts/Default.vue'
-
   const props = defineProps<{ roles: object }>()
   const features = [
     { name: 'name', title: 'Name' },
