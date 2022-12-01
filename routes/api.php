@@ -9,6 +9,7 @@ use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\ObservationsStationController;
 use App\Http\Controllers\API\GLabsController;
 use App\Http\Controllers\API\GLabsLoadController;
+use App\Http\Controllers\API\SMController;
 
 Route::name('api.')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -20,6 +21,9 @@ Route::name('api.')->group(function () {
     Route::get('/globelabs', [GLabsController::class, 'index'])->name('glabs.index');
     Route::post('/globelabs', [GLabsController::class, 'post'])->name('glabs.post');
     Route::post('/globelabs/load', [GLabsLoadController::class, 'post'])->name('glabs.load');
+
+    Route::get('/sm', [SMController::class, 'index'])->name('sm.index');
+    Route::post('/sm', [SMController::class, 'post'])->name('sm.post');
 
     Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
