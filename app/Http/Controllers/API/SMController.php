@@ -21,13 +21,13 @@ class SMController extends Controller
     {
         Log::debug('[SM] GET: ' . json_encode($request));
 
-        return 'SMGet';
+        return $request->all();
     }
 
     public function post(Request $request)
     {
         Log::debug('[SM] POST: ' . json_encode($request));
 
-        return 'SMPost';
+        return $request->post();
     }
 }
