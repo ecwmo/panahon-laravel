@@ -74,9 +74,9 @@ class ObservationsStation extends Model
             ->hasMany(ObservationsStationHealth::class, 'station_id', 'id');
     }
 
-    public function glabs_subscription()
+    public function sms_gateway_subscription()
     {
         return $this
-            ->hasOne(GLabs::class, 'mobile_number', 'mobile_number');
+            ->hasOne(SMSGateway::class, 'mobile_number', 'mobile_number');
     }
 }

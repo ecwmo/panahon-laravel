@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-use App\Models\GLabs;
+use App\Models\SMSGateway;
 use App\Models\ObservationsStation;
 
 use App\Http\Controllers\Controller;

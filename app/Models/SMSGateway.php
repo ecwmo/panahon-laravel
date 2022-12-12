@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GLabs extends Model
+class SMSGateway extends Model
 {
     use HasFactory;
 
@@ -14,9 +14,10 @@ class GLabs extends Model
      *
      * @var string
      */
-    protected $table = 'glabs';
+    protected $table = 'sms_gateway';
 
     protected $fillable = [
+        'type',
         'access_token',
         'mobile_number',
     ];

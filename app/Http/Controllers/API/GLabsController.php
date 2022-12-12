@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-use App\Models\GLabs;
+use App\Models\SMSGateway;
 use App\Models\ObservationsStation;
 
 use App\Http\Controllers\Controller;
@@ -67,16 +67,19 @@ class GLabsController extends Controller
             $msg = "Number already registered";
 
             # Test if token is already used
-            if (GLabs::where('access_token', $accessToken)->first()) {
+            if (SMSGateway::where('type', 'globe')->where('access_token', $accessToken)->first()) {
                 $msg = "Error: Token already used";
                 Log::debug('[GlobeLabs] Subscribe:' . $subNum . ' message:' . $msg);
                 return response()->json(['message' => $msg]);
             }
 
-            $glab = Glabs::firstWhere('mobile_number', "63" . $subNum);
+            $glab = SMSGateway::where('type', 'globe')
+                ->where('mobile_number', "63" . $subNum)
+                ->first();
 
             if (!$glab) { # Create new subscription
-                $glab = Glabs::create([
+                $glab = SMSGateway::create([
+                    'type' => 'globe',
                     'access_token' => $accessToken,
                     'mobile_number' => '63' . $subNum,
                 ]);
@@ -104,7 +107,8 @@ class GLabsController extends Controller
             return response()->json(['message' => $msg]);
         }
 
-        $glabs = GLabs::with(['station:id,mobile_number,name', 'latestTopup:glabs_id,created_at'])
+        $glabs = SMSGateway::with(['station:id,mobile_number,name', 'latestTopup:glabs_id,created_at'])
+            ->where('type', 'globe')
             ->orderBy('id')
             ->paginate(15);
 
@@ -275,7 +279,9 @@ class GLabsController extends Controller
         elseif (Arr::has($request->post(), 'unsubscribed')) {
             $subNum = $request->post('unsubscribed')['subscriber_number'];
             if ($subNum) {
-                $glab = Glabs::where('mobile_number', "63" . $subNum)->firstOrFail();
+                $glab = SMSGateway::where('type', 'globe')
+                    ->where('mobile_number', "63" . $subNum)
+                    ->firstOrFail();
                 if ($glab) { # Delete token
                     $glab->delete();
                     $station = $glab->station;
