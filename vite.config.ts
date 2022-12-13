@@ -35,6 +35,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve('resources/scripts'),
+      ziggy: resolve('vendor/tightenco/ziggy/dist/vue.m'),
     },
   },
 })

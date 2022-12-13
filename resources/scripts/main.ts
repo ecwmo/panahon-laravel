@@ -26,7 +26,7 @@ import {
 import { dom } from '@fortawesome/fontawesome-svg-core'
 
 //@ts-ignore
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
+import { ZiggyVue } from 'ziggy'
 
 library.add(
   faTachometerAlt,
