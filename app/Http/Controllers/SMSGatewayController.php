@@ -19,6 +19,12 @@ class SMSGatewayController extends Controller
             if ($subs->station) {
                 $subs->station_url = route('stations.index').'/'.$subs->station->id;
                 $subs->station_name = $subs->station->name;
+                unset($subs["station"]);
+            }
+
+            if ($subs->latestTopup) {
+                $subs->topup_date = $subs->latestTopup->created_at;
+                unset($subs["latestTopup"]);
             }
         }
 
