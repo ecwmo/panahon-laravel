@@ -24,6 +24,6 @@ class GLabsLoad extends Model
 
     public function subscription()
     {
-        return $this->belongsTo(SMSGateway::class);
+        return $this->belongsTo(SMSGateway::class, 'gateway_id');
     }
 }

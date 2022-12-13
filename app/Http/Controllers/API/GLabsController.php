@@ -91,7 +91,7 @@ class GLabsController extends Controller
             return response()->json(['message' => $msg]);
         }
 
-        $glabs = SMSGateway::with(['station:id,mobile_number,name', 'latestTopup:glabs_id,created_at'])
+        $glabs = SMSGateway::with(['station:id,mobile_number,name', 'latestTopup:gateway_id,created_at'])
             ->where('type', 'globe')
             ->orderBy('id')
             ->paginate(15);

@@ -34,12 +34,12 @@ class SMSGateway extends Model
     public function topups()
     {
         return $this
-            ->hasMany(GLabsLoad::class, 'glabs_id', 'id');
+            ->hasMany(GLabsLoad::class, 'gateway_id');
     }
 
     public function latestTopup()
     {
         return $this
-            ->hasOne(GLabsLoad::class, 'glabs_id', 'id')->where('status', 'SUCCESS')->latest();
+            ->hasOne(GLabsLoad::class, 'gateway_id')->where('status', 'SUCCESS')->latest();
     }
 }

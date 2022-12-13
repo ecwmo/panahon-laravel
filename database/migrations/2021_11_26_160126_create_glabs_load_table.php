@@ -18,8 +18,8 @@ class CreateGlabsLoadTable extends Migration
             $table->string('status')->nullable();
             $table->string('promo')->nullable();
             $table->integer('transaction_id')->nullable();
-            $table->foreignId('glabs_id')
-                ->constrained('glabs')
+            $table->foreignId('gateway_id')
+                ->constrained('sms_gateway')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->timestamps();
