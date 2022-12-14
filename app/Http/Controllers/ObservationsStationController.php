@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+
 use App\Models\ObservationsStation;
+use App\Models\SMSGateway;
 
 use Illuminate\Http\Request;
 
@@ -62,6 +64,14 @@ class ObservationsStationController extends Controller
         ]);
 
         $station = ObservationsStation::create($request->all());
+        
+        $subscription = $station->sms_gateway_subscription;
+        if (!$subscription) { # Create new subscription
+            $subscription = SMSGateway::create([
+                'mobile_number' => $request->input('mobile_number'),
+            ]);
+        }
+
         return redirect()->route('stations.show', $station)->with('message', __('Station created successfully.'));
     }
 
@@ -98,6 +108,13 @@ class ObservationsStationController extends Controller
         ]);
 
         $station->update($request->all());
+
+        $subscription = $station->sms_gateway_subscription;
+        if (!$subscription) { # Create new subscription
+            $subscription = SMSGateway::create([
+                'mobile_number' => $request->input('mobile_number'),
+            ]);
+        }
 
         return redirect()->route('stations.show', $station)->with('message', __('Station updated successfully.'));
     }
