@@ -113,7 +113,7 @@ class ObservationsStationController extends Controller
    */
     private function storeOrUpdate(Request $request, ObservationsStation $station = null)
     {
-        $cpNumValidator = 'exclude_unless:station_type,SMS|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number';
+        $cpNumValidator = 'exclude_if:station_type,MO|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number';
         $stnUrlValidator = 'exclude_unless:station_type,MO|URL|nullable|unique:observations_station,station_url';
         if ($station) {
             $cpNumValidator = $cpNumValidator . ',' . $station->id;
