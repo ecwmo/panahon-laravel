@@ -11,7 +11,7 @@ class SMSGatewayController extends Controller
 {
     public function index(Request $request)
     {
-        $subscribers = SMSGateway::with(['station:id,mobile_number,name', 'latestTopup:gateway_id,created_at'])
+        $subscribers = SMSGateway::whereNotNull('mobile_number')
             ->orderBy('id')
             ->paginate(15);
 
