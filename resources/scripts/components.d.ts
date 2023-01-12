@@ -24,5 +24,7 @@ declare module '@vue/runtime-core' {
     Pagination: typeof import('./components/Pagination.vue')['default']
     SelectInput: typeof import('./components/SelectInput.vue')['default']
     Sidebar: typeof import('./components/Sidebar.vue')['default']
+    ToastList: typeof import('./components/ToastList.vue')['default']
+    ToastListItem: typeof import('./components/ToastListItem.vue')['default']
   }
 }

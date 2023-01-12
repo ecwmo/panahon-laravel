@@ -50,6 +50,7 @@ declare global {
   const useForm: typeof import('@inertiajs/inertia-vue3')['useForm']
   const usePage: typeof import('@inertiajs/inertia-vue3')['usePage']
   const useSlots: typeof import('vue')['useSlots']
+  const useToastStore: typeof import('./store/toast')['useToastStore']
   const useUser: typeof import('./composables/useUser')['default']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
@@ -109,6 +110,7 @@ declare module '@vue/runtime-core' {
     readonly useForm: UnwrapRef<typeof import('@inertiajs/inertia-vue3')['useForm']>
     readonly usePage: UnwrapRef<typeof import('@inertiajs/inertia-vue3')['usePage']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useToastStore: UnwrapRef<typeof import('./store/toast')['useToastStore']>
     readonly useUser: UnwrapRef<typeof import('./composables/useUser')['default']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>

@@ -1,29 +1,30 @@
 import '../styles/app.css'
 
-import { DefineComponent, createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
+import { createApp, DefineComponent, h } from 'vue'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/vue-fontawesome'
+import { createPinia } from 'pinia'
+
+import { dom, library } from '@fortawesome/fontawesome-svg-core'
 import {
+  faAdd,
+  faBars,
+  faCheck,
+  faChevronDown,
+  faChevronRight,
+  faChevronUp,
+  faEdit,
+  faInfo,
+  faSignal,
   faTachometerAlt,
+  faTimes,
+  faTrash,
   faUmbrella,
   faUser,
   faUserTag,
-  faAdd,
-  faEdit,
-  faTrash,
-  faTimes,
-  faInfo,
-  faChevronUp,
-  faChevronDown,
-  faChevronRight,
-  faBars,
-  faCheck,
-  faSignal,
 } from '@fortawesome/free-solid-svg-icons'
-import { dom } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/vue-fontawesome'
 
 //@ts-ignore
 import { ZiggyVue } from 'ziggy'
@@ -56,6 +57,7 @@ createInertiaApp({
       // https://github.com/FortAwesome/vue-fontawesome/issues/295#issuecomment-823411585
       .component('font-awesome-icon', FontAwesomeIcon as unknown as DefineComponent<FontAwesomeIconProps>)
       .use(plugin)
+      .use(createPinia())
       .use(ZiggyVue)
       .mount(el)
   },
