@@ -88,7 +88,12 @@ class ObservationsStationController extends Controller
      */
     public function destroy(ObservationsStation $station)
     {
-        $station->delete();
+        $isDeleted = $station->delete();
+
+        if ($isDeleted) {
+            $station->mobile_number = null;
+            $station->save();
+        }
 
         return redirect()->route('stations.index')->with('message', __('Station deleted successfully.'));
     }
