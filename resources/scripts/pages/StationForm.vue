@@ -56,7 +56,19 @@
             <option v-for="opt in stnTypes2" :key="opt">{{ opt }}</option>
           </SelectInput>
         </div>
-        <div class="w-3/5">
+        <div v-if="form.station_type === 'MO'" class="w-3/5">
+          <BreezeLabel for="station_url" value="API" />
+          <BreezeInput
+            id="station_url"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.station_url"
+            placeholder="https://example.com"
+            pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
+          />
+          <BreezeInputError class="mt-2" :message="form.errors.station_url" />
+        </div>
+        <div v-else class="w-3/5">
           <BreezeLabel for="mobile_number" value="Mobile Number" />
           <BreezeInput
             id="mobile_number"
