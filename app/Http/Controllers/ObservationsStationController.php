@@ -113,9 +113,9 @@ class ObservationsStationController extends Controller
    */
     private function storeOrUpdate(Request $request, ObservationsStation $station = null)
     {
-        $mobile_number_validator = 'exclude_unless:station_type,SMS|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number';
+        $cpNumValidator = 'exclude_unless:station_type,SMS|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number';
         if ($station) {
-            $mobile_number_validator = $mobile_number_validator . ',' . $station->id;
+            $cpNumValidator = $cpNumValidator . ',' . $station->id;
         }
 
         $validated = $request->validate([
@@ -124,7 +124,7 @@ class ObservationsStationController extends Controller
             'lat' => 'numeric|nullable',
             'elevation' => 'numeric|nullable',
             'station_type' => 'max:255',
-            'mobile_number' => $mobile_number_validator,
+            'mobile_number' => $cpNumValidator,
             'status' => 'max:255',
             'date_installed' => 'nullable|date_format:Y-m-d',
             'address' => 'max:255|nullable',
