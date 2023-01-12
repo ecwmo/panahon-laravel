@@ -51,27 +51,7 @@ class ObservationsStationController extends Controller
    */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|max:200',
-            'lon' => 'numeric|nullable',
-            'lat' => 'numeric|nullable',
-            'elevation' => 'numeric|nullable',
-            'mobile_number' => 'exclude_unless:station_type,SMS|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number',
-            'date_installed' => 'nullable|date_format:Y-m-d',
-            'address' => 'max:255|nullable',
-            'province' => 'max:255|nullable',
-            'region' => 'max:255|nullable',
-        ]);
-
-        $station = ObservationsStation::create($request->all());
-        
-        $subscription = $station->sms_gateway_subscription;
-        if (!$subscription) { # Create new subscription
-            $subscription = SMSGateway::create([
-                'mobile_number' => $request->input('mobile_number'),
-            ]);
-        }
-
+        $station = $this->storeOrUpdate($request);
         return redirect()->route('stations.show', $station)->with('message', __('Station created successfully.'));
     }
 
@@ -96,26 +76,7 @@ class ObservationsStationController extends Controller
    */
     public function update(Request $request, ObservationsStation $station)
     {
-        $request->validate([
-            'name' => 'required|max:200',
-            'lon' => 'numeric|nullable',
-            'lat' => 'numeric|nullable',
-            'elevation' => 'numeric|nullable',
-            'mobile_number' => 'exclude_unless:station_type,SMS|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number,' . $station->id,
-            'address' => 'max:255|nullable',
-            'province' => 'max:255|nullable',
-            'region' => 'max:255|nullable',
-        ]);
-
-        $station->update($request->all());
-
-        $subscription = $station->sms_gateway_subscription;
-        if (!$subscription) { # Create new subscription
-            $subscription = SMSGateway::create([
-                'mobile_number' => $request->input('mobile_number'),
-            ]);
-        }
-
+        $station = $this->storeOrUpdate($request, $station);
         return redirect()->route('stations.show', $station)->with('message', __('Station updated successfully.'));
     }
 
@@ -136,5 +97,49 @@ class ObservationsStationController extends Controller
     {
         $logs = $station->health()->orderBy('timestamp', 'DESC')->paginate(20, array('timestamp', 'message'));
         return Inertia::render('StationLogs', compact('logs'));
+    }
+
+    /**
+   * Store or Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  \App\Models\ObservationsStation  $station
+   * @return \App\Models\ObservationsStation  $station
+   */
+    private function storeOrUpdate(Request $request, ObservationsStation $station = null)
+    {
+        $mobile_number_validator = 'exclude_unless:station_type,SMS|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number';
+        if ($station) {
+            $mobile_number_validator = $mobile_number_validator . ',' . $station->id;
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|max:200',
+            'lon' => 'numeric|nullable',
+            'lat' => 'numeric|nullable',
+            'elevation' => 'numeric|nullable',
+            'station_type' => 'max:255',
+            'mobile_number' => $mobile_number_validator,
+            'status' => 'max:255',
+            'date_installed' => 'nullable|date_format:Y-m-d',
+            'address' => 'max:255|nullable',
+            'province' => 'max:255|nullable',
+            'region' => 'max:255|nullable',
+        ]);
+
+        if (!$station) {
+            $station = ObservationsStation::create($validated);
+        } else {
+            $station->update($validated);
+        }
+
+        # Create new subscription
+        if (isset($validated['mobile_number']) && (!$station->sms_gateway_subscription)) {
+            $subscription = SMSGateway::create([
+                'mobile_number' => $validated['mobile_number'],
+            ]);
+        }
+
+        return $station;
     }
 }
