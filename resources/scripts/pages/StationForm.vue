@@ -34,11 +34,26 @@
       </div>
 
       <div class="flex mt-4 space-x-2 w-full">
-        <div class="w-2/5">
-          <BreezeLabel for="station_type" value="Station Type" />
-          <SelectInput id="station_type" class="mt-1 block w-full" v-model="form.station_type">
-            <option>SMS</option>
-            <option>MO</option>
+        <div class="w-1/5">
+          <BreezeLabel for="station_type" value="Type" />
+          <SelectInput
+            id="station_type"
+            class="mt-1 block w-full"
+            v-model="form.station_type"
+            @update:modelValue="handleStnTypeSelectChange"
+          >
+            <option v-for="opt in stnTypes" :key="opt.name">{{ opt.name }}</option>
+          </SelectInput>
+        </div>
+        <div class="w-1/5">
+          <BreezeLabel for="station_type2" value="Type2" />
+          <SelectInput
+            id="station_type2"
+            class="mt-1 block w-full"
+            v-model="form.station_type2"
+            :disabled="!stnType2SelectEnabled"
+          >
+            <option v-for="opt in stnTypes2" :key="opt">{{ opt }}</option>
           </SelectInput>
         </div>
         <div class="w-3/5">
@@ -104,13 +119,16 @@
 
   const { isAdmin } = useUser()
 
+  const stnTypes = [{ name: 'MO' }, { name: 'SMS', opts: ['Globe', 'Smart'] }, { name: 'Others', opts: ['WIFI'] }]
+
   const defaultData: StationForm = {
     name: '',
     lat: '',
     lon: '',
     elevation: '',
     mobile_number: '',
-    station_type: 'MO',
+    station_type: stnTypes[0].name,
+    station_type2: stnTypes[0]?.opts?.[0],
     station_url: '',
     status: 'INACTIVE',
     address: '',
@@ -125,5 +143,13 @@
     ...props.station,
   })
 
-  const mobileNumberInputEnabled = computed(() => form.station_type === 'SMS')
+  const mobileNumberInputEnabled = computed(() => form.station_type !== 'MO')
+
+  const stnTypes2 = computed(() => stnTypes.find(({ name }) => name === form.station_type)?.opts)
+
+  const stnType2SelectEnabled = computed(() => stnTypes2.value !== undefined)
+
+  const handleStnTypeSelectChange = () => {
+    form.station_type2 = stnTypes2.value?.[0]
+  }
 </script>

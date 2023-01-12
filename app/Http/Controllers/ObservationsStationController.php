@@ -124,6 +124,7 @@ class ObservationsStationController extends Controller
             'lat' => 'numeric|nullable',
             'elevation' => 'numeric|nullable',
             'station_type' => 'max:255',
+            'station_type2' => 'max:255|nullable',
             'mobile_number' => $cpNumValidator,
             'status' => 'max:255',
             'date_installed' => 'nullable|date_format:Y-m-d',

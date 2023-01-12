@@ -30,6 +30,7 @@ export interface StationForm {
   province?: string
   region?: string
   station_type?: string
+  station_type2?: string
   status?: string
 }
 
