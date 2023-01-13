@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 use App\Models\ObservationsStation;
 use App\Models\SIMCard;
-
-use Illuminate\Http\Request;
 
 class ObservationsStationController extends Controller
 {
@@ -113,21 +115,27 @@ class ObservationsStationController extends Controller
    */
     private function storeOrUpdate(Request $request, ObservationsStation $station = null)
     {
-        $cpNumValidator = 'exclude_if:station_type,MO|regex:/63[0-9]{10}/|size:12|nullable|unique:observations_station,mobile_number';
-        $stnUrlValidator = 'exclude_unless:station_type,MO|URL|nullable|unique:observations_station,station_url';
+        $stnNameValidator = 'required|max:200|unique:observations_station,name';
+        $cpNumUniqueValidator = 'unique:observations_station,mobile_number';
+        $stnUrlValidator = 'exclude_unless:station_type,MO|nullable|URL|unique:observations_station,station_url';
         if ($station) {
-            $cpNumValidator = $cpNumValidator . ',' . $station->id;
+            $stnNameValidator = $stnNameValidator . ',' . $station->id;
+            $cpNumUniqueValidator = $cpNumUniqueValidator . ',' . $station->id;
             $stnUrlValidator = $stnUrlValidator . ',' . $station->id;
         }
 
-        $validated = $request->validate([
-            'name' => 'required|max:200',
+        $validator = Validator::make($request->all(), [
+            'name' => $stnNameValidator,
             'lon' => 'numeric|nullable',
             'lat' => 'numeric|nullable',
             'elevation' => 'numeric|nullable',
             'station_type' => 'max:255',
             'station_type2' => 'max:255|nullable',
-            'mobile_number' => $cpNumValidator,
+            'mobile_number' => [
+                Rule::excludeIf(fn () => $request->station_type == 'MO' && $request->station_type2 == 'Default'),
+                'regex:/63[0-9]{10}/',
+                $cpNumUniqueValidator,
+            ],
             'station_url' => $stnUrlValidator,
             'status' => 'max:255',
             'date_installed' => 'nullable|date_format:Y-m-d',
@@ -135,6 +143,8 @@ class ObservationsStationController extends Controller
             'province' => 'max:255|nullable',
             'region' => 'max:255|nullable',
         ]);
+
+        $validated = $validator->validated();
 
         if (!$station) {
             $station = ObservationsStation::create($validated);

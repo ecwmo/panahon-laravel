@@ -56,31 +56,33 @@
             <option v-for="opt in stnTypes2" :key="opt">{{ opt }}</option>
           </SelectInput>
         </div>
-        <div v-if="form.station_type === 'MO'" class="w-3/5">
-          <BreezeLabel for="station_url" value="API" />
-          <BreezeInput
-            id="station_url"
-            type="text"
-            class="mt-1 block w-full"
-            v-model="form.station_url"
-            placeholder="https://example.com"
-            pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
-          />
-          <BreezeInputError class="mt-2" :message="form.errors.station_url" />
-        </div>
-        <div v-else class="w-3/5">
+        <div class="w-3/5">
           <BreezeLabel for="mobile_number" value="Mobile Number" />
           <BreezeInput
             id="mobile_number"
             type="text"
             class="mt-1 block w-full"
             v-model="form.mobile_number"
-            :disabled="!mobileNumberInputEnabled"
+            :disabled="!mobileNumberRequired"
+            :required="mobileNumberRequired"
             placeholder="63XXXXXXXXXX"
             pattern="63[0-9]{10}"
           />
           <BreezeInputError class="mt-2" :message="form.errors.mobile_number" />
         </div>
+      </div>
+
+      <div v-if="form.station_type === 'MO'" class="mt-4 w-full">
+        <BreezeLabel for="station_url" value="API" />
+        <BreezeInput
+          id="station_url"
+          type="text"
+          class="mt-1 block w-full"
+          v-model="form.station_url"
+          placeholder="https://example.com"
+          pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
+        />
+        <BreezeInputError class="mt-2" :message="form.errors.station_url" />
       </div>
 
       <div class="flex mt-4 space-x-2 w-full">
@@ -132,7 +134,7 @@
   const { isAdmin } = useUser()
 
   const stnTypes = [
-    { name: 'MO' },
+    { name: 'MO', opts: ['Default', 'Data:Globe', 'Data:Smart'] },
     { name: 'SMS', opts: ['Globe', 'Smart'] },
     { name: 'Others', opts: ['WIFI', 'Test'] },
   ]
@@ -159,7 +161,7 @@
     ...props.station,
   })
 
-  const mobileNumberInputEnabled = computed(() => form.station_type !== 'MO')
+  const mobileNumberRequired = computed(() => form.station_type !== 'MO' || form.station_type2 !== 'Default')
 
   const stnTypes2 = computed(() => stnTypes.find(({ name }) => name === form.station_type)?.opts)
 
