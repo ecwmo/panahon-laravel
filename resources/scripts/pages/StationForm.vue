@@ -10,7 +10,7 @@
   >
     <div class="p-8 flex flex-wrap">
       <div class="w-full">
-        <BreezeLabel for="name" value="Station Name" />
+        <BreezeLabel for="name" value="Station Name*" />
         <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
         <BreezeInputError class="mt-2" :message="form.errors.name" />
       </div>
@@ -57,7 +57,7 @@
           </SelectInput>
         </div>
         <div class="w-3/5">
-          <BreezeLabel for="mobile_number" value="Mobile Number" />
+          <BreezeLabel for="mobile_number" :value="`Mobile Number${mobileNumberRequired ? '*' : ''}`" />
           <BreezeInput
             id="mobile_number"
             type="text"
