@@ -131,7 +131,11 @@
 
   const { isAdmin } = useUser()
 
-  const stnTypes = [{ name: 'MO' }, { name: 'SMS', opts: ['Globe', 'Smart'] }, { name: 'Others', opts: ['WIFI'] }]
+  const stnTypes = [
+    { name: 'MO' },
+    { name: 'SMS', opts: ['Globe', 'Smart'] },
+    { name: 'Others', opts: ['WIFI', 'Test'] },
+  ]
 
   const defaultData: StationForm = {
     name: '',
