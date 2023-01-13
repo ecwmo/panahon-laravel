@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 
 
 use App\Models\SIMCard;
+use App\Models\AccessTokens;
 
 use App\Http\Controllers\Controller;
 
@@ -20,7 +21,7 @@ class GLabsLoadController extends Controller
         # Parse and store to the database
         if (Arr::has($request->post(), 'outboundRewardRequest')) {
             $subNum = $request->post('outboundRewardRequest')['address'];
-            $glab = SIMCard::where('type', 'globe')->where('mobile_number', "63" . $subNum)->firstOrFail();
+            $glab = SIMCard::where('mobile_number', "63" . $subNum)->firstOrFail();
 
             if ($glab) {
                 $glab->topups()->create([

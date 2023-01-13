@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSIMCardTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,9 +12,14 @@ class CreateSIMCardTable extends Migration
      */
     public function up()
     {
-        Schema::create('sim_card', function (Blueprint $table) {
+        Schema::create('access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('mobile_number', 50)->unique();
+            $table->string('access_token')->unique();
+            $table->string('type', 50);
+            $table->foreignId('sim_id')
+                ->constrained('sim_card')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ class CreateSIMCardTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sim_card');
+        Schema::dropIfExists('access_tokens');
     }
-}
+};

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 
 use App\Models\SIMCard;
 use App\Models\ObservationsStation;
+use App\Models\AccessTokens;
 
 use App\Helpers\Lufft;
 
@@ -51,26 +52,29 @@ class GLabsController extends Controller
             $msg = "Number already registered";
 
             # Test if token is already used
-            if (SIMCard::where('type', 'globe')->where('access_token', $accessToken)->first()) {
+            if (AccessTokens::where('type', 'globe')->where('access_token', $accessToken)->first()) {
                 $msg = "Error: Token already used";
                 Log::debug('[GlobeLabs] Subscribe:' . $subNum . ' message:' . $msg);
                 return response()->json(['message' => $msg]);
             }
 
-            $glab = SIMCard::where('type', 'globe')
-                ->where('mobile_number', "63" . $subNum)
+            $glab = SIMCard::where('mobile_number', "63" . $subNum)
                 ->first();
 
             if (!$glab) { # Create new subscription
                 $glab = SIMCard::create([
-                    'type' => 'globe',
-                    'access_token' => $accessToken,
                     'mobile_number' => '63' . $subNum,
                 ]);
+            }
+
+            $oldAccessToken = $glab->accessTokens()->where('type', 'globe')->first();
+
+            if (!$oldAccessToken) { # Add Token
+                $glab->accessTokens()->create(['type' => 'globe', 'access_token' => $accessToken]);
                 $msg = "Mobile number registered successfuly";
             } else { # Update token
-                $glab->access_token = $accessToken;
-                $glab->save();
+                $oldAccessToken->access_token = $accessToken;
+                $oldAccessToken->save();
                 $msg = "Mobile number token changed";
             }
 
@@ -149,16 +153,15 @@ class GLabsController extends Controller
         elseif (Arr::has($request->post(), 'unsubscribed')) {
             $subNum = $request->post('unsubscribed')['subscriber_number'];
             if ($subNum) {
-                $glab = SIMCard::where('type', 'globe')
-                    ->where('mobile_number', "63" . $subNum)
+                $glab = SIMCard::where('mobile_number', "63" . $subNum)
                     ->firstOrFail();
                 if ($glab) { # Delete token
-                    $glab->delete();
-                    $station = $glab->station;
-                    if ($station) {
-                        $station->mobile_number = null;
-                        $station->save();
-                    }
+                    $glab->accessTokens()->where('type', 'globe')->delete();
+                    // $station = $glab->station;
+                    // if ($station) {
+                    //     $station->mobile_number = null;
+                    //     $station->save();
+                    // }
                     return response()->json(['message' => "Unsubscribed"]);
                 }
             }

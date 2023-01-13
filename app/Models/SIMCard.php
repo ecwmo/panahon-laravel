@@ -17,13 +17,7 @@ class SIMCard extends Model
     protected $table = 'sim_card';
 
     protected $fillable = [
-        'type',
-        'access_token',
         'mobile_number',
-    ];
-
-    protected $hidden = [
-        'access_token'
     ];
 
     public function station()
@@ -41,5 +35,11 @@ class SIMCard extends Model
     {
         return $this
             ->hasOne(GLabsLoad::class, 'sim_id')->where('status', 'SUCCESS')->latest();
+    }
+
+    public function accessTokens()
+    {
+        return $this
+            ->hasMany(AccessTokens::class, 'sim_id');
     }
 }
