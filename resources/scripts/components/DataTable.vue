@@ -30,9 +30,9 @@
           </Link>
           <span v-else>{{ getValue(f.name, td) }}</span>
         </td>
-        <td v-if="hasEditPage" class="p-3 text-justify border-t w-px">
-          <Link :href="route(`${basePath}.update`, td.id)" tabindex="-1" class="px-4 flex items-center">
-            <i class="block w-4 h-4 text-gray-400 fas fa-chevron-right"></i>
+        <td v-if="hasEditPage" class="p-2 text-justify border-t w-px">
+          <Link :href="route(`${basePath}.update`, td.id)" tabindex="-1" class="flex items-center">
+            <i-mdi-chevron-right class="text-gray-400" />
           </Link>
         </td>
       </tr>
@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
   import { Link } from '@inertiajs/inertia-vue3'
-  import { isValid, format } from 'date-fns'
+  import { format, isValid } from 'date-fns'
 
   const props = defineProps({
     basePath: { type: String, default: '' },

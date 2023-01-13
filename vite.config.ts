@@ -1,11 +1,13 @@
+import laravel from 'laravel-vite-plugin'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
-import laravel from 'laravel-vite-plugin'
 import InertiaLayout from './resources/scripts/vite/inertia-layout'
 
 import vue from '@vitejs/plugin-vue'
 
 import AutoImport from 'unplugin-auto-import/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
 
 export default defineConfig({
@@ -27,10 +29,12 @@ export default defineConfig({
       vueTemplate: true,
     }),
     Components({
+      resolvers: [IconsResolver()],
       dirs: ['resources/scripts/components'],
       dts: 'resources/scripts/components.d.ts',
       directoryAsNamespace: true,
     }),
+    Icons({}),
   ],
   resolve: {
     alias: {

@@ -10,7 +10,13 @@
           $page.component.toLowerCase().includes(m.name) ? 'text-white' : 'text-blue-300 group-hover:text-white',
         ]"
       >
-        <i :class="`w-4 h-4 mr-2 fas fa-${m.icon} fa-fw`"></i>
+        <div class="text-base mr-2">
+          <i-fa6-solid-gauge-high v-if="m.icon === 'gauge-high'" />
+          <i-fa6-solid-umbrella v-else-if="m.icon === 'umbrella'" />
+          <i-material-symbols-signal-cellular-alt v-else-if="m.icon === 'signal'" />
+          <i-material-symbols-person v-else-if="m.icon === 'person'" />
+          <i-material-symbols-lock-person v-else-if="m.icon === 'lock-person'" />
+        </div>
         <span>{{ m.label }}</span>
       </Link>
     </div>
@@ -27,10 +33,10 @@
   const { isLoggedIn } = useUser()
 
   const menu = ref([
-    { href: route('home'), name: 'index', label: 'Dashboard', icon: 'tachometer-alt', display: true },
+    { href: route('home'), name: 'index', label: 'Dashboard', icon: 'gauge-high', display: true },
     { href: route('stations.index'), name: 'station', label: 'Weather Stations', icon: 'umbrella', display: true },
     { href: route('simcard.index'), name: 'simcard', label: 'SIM Card', icon: 'signal', display: isLoggedIn },
-    { href: route('users.index'), name: 'user', label: 'User', icon: 'user', display: isLoggedIn },
-    { href: route('roles.index'), name: 'role', label: 'Roles', icon: 'user-tag', display: isLoggedIn },
+    { href: route('users.index'), name: 'user', label: 'User', icon: 'person', display: isLoggedIn },
+    { href: route('roles.index'), name: 'role', label: 'Roles', icon: 'lock-person', display: isLoggedIn },
   ])
 </script>

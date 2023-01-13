@@ -14,7 +14,8 @@
       id="roleDrpDwnBtn"
       @click="showDrpDwn = !showDrpDwn"
     >
-      <i class="fas" :class="showDrpDwn ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+      <i-mdi-chevron-up v-if="showDrpDwn" />
+      <i-mdi-chevron-down v-else />
     </button>
   </div>
   <select

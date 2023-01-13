@@ -8,7 +8,7 @@
         class="rounded px-3 py-2 m-1 shadow bg-blue-600 border-blue-700 hover:bg-amber-400"
         as="button"
       >
-        <i class="text-white fas fa-plus"></i>
+        <i-mdi-plus class="text-white text-lg" />
       </Link>
     </div>
 

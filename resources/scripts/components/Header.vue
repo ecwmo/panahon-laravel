@@ -5,12 +5,14 @@
     @click=";[(showMenu = false), (showSubmenu = false)]"
   ></div>
   <div class="md:flex md:flex-shrink-0">
-    <div class="bg-blue-900 md:flex-shrink-0 md:w-56 px-6 py-4 flex items-center justify-between md:justify-center">
+    <div
+      class="bg-blue-900 md:flex-shrink-0 md:w-56 px-4 md:px-6 py-2 md:py-4 flex items-center justify-between md:justify-center"
+    >
       <a :href="route('home')" class="mt-1">
         <span class="font-semibold text-gray-200 text-lg md:text-2xl">{{ title }}</span>
       </a>
       <button class="md:hidden relative" @click.prevent="showMenu = true">
-        <i class="text-white w-6 h-6 fas fa-bars"></i>
+        <i-fa6-solid-bars class="text-white text-xl" />
         <div v-show="showMenu" class="absolute z-50 top-0 right-0 mt-5">
           <div class="mt-2 px-8 py-4 shadow-lg bg-blue-800 rounded">
             <Sidebar :is-popup="true" />
