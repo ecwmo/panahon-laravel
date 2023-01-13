@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 
 use App\Models\ObservationsStation;
-use App\Models\SMSGateway;
+use App\Models\SIMCard;
 
 use Illuminate\Http\Request;
 
@@ -142,9 +142,9 @@ class ObservationsStationController extends Controller
             $station->update($validated);
         }
 
-        # Create new subscription
-        if (isset($validated['mobile_number']) && (!$station->sms_gateway_subscription)) {
-            $subscription = SMSGateway::create([
+        # Create new SIMCard if not exist
+        if (isset($validated['mobile_number']) && (!$station->SIMCard)) {
+            SIMCard::create([
                 'mobile_number' => $validated['mobile_number'],
             ]);
         }

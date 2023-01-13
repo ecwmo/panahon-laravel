@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-use App\Models\SMSGateway;
+use App\Models\SIMCard;
 use App\Models\ObservationsStation;
 
 use App\Helpers\Lufft;
@@ -51,18 +51,18 @@ class GLabsController extends Controller
             $msg = "Number already registered";
 
             # Test if token is already used
-            if (SMSGateway::where('type', 'globe')->where('access_token', $accessToken)->first()) {
+            if (SIMCard::where('type', 'globe')->where('access_token', $accessToken)->first()) {
                 $msg = "Error: Token already used";
                 Log::debug('[GlobeLabs] Subscribe:' . $subNum . ' message:' . $msg);
                 return response()->json(['message' => $msg]);
             }
 
-            $glab = SMSGateway::where('type', 'globe')
+            $glab = SIMCard::where('type', 'globe')
                 ->where('mobile_number', "63" . $subNum)
                 ->first();
 
             if (!$glab) { # Create new subscription
-                $glab = SMSGateway::create([
+                $glab = SIMCard::create([
                     'type' => 'globe',
                     'access_token' => $accessToken,
                     'mobile_number' => '63' . $subNum,
@@ -91,7 +91,7 @@ class GLabsController extends Controller
             return response()->json(['message' => $msg]);
         }
 
-        $glabs = SMSGateway::with(['station:id,mobile_number,name', 'latestTopup:gateway_id,created_at'])
+        $glabs = SIMCard::with(['station:id,mobile_number,name', 'latestTopup:sim_id,created_at'])
             ->where('type', 'globe')
             ->orderBy('id')
             ->paginate(15);
@@ -149,7 +149,7 @@ class GLabsController extends Controller
         elseif (Arr::has($request->post(), 'unsubscribed')) {
             $subNum = $request->post('unsubscribed')['subscriber_number'];
             if ($subNum) {
-                $glab = SMSGateway::where('type', 'globe')
+                $glab = SIMCard::where('type', 'globe')
                     ->where('mobile_number', "63" . $subNum)
                     ->firstOrFail();
                 if ($glab) { # Delete token

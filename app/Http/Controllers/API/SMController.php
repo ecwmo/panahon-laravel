@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-use App\Models\SMSGateway;
+use App\Models\SIMCard;
 use App\Models\ObservationsStation;
 
 use App\Helpers\Lufft;

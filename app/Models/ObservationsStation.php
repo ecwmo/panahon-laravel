@@ -74,9 +74,9 @@ class ObservationsStation extends Model
             ->hasMany(ObservationsStationHealth::class, 'station_id', 'id');
     }
 
-    public function sms_gateway_subscription()
+    public function SIMCard()
     {
         return $this
-            ->hasOne(SMSGateway::class, 'mobile_number', 'mobile_number');
+            ->hasOne(SIMCard::class, 'mobile_number', 'mobile_number');
     }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SMSGateway extends Model
+class SIMCard extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class SMSGateway extends Model
      *
      * @var string
      */
-    protected $table = 'sms_gateway';
+    protected $table = 'sim_card';
 
     protected $fillable = [
         'type',
@@ -34,12 +34,12 @@ class SMSGateway extends Model
     public function topups()
     {
         return $this
-            ->hasMany(GLabsLoad::class, 'gateway_id');
+            ->hasMany(GLabsLoad::class, 'sim_id');
     }
 
     public function latestTopup()
     {
         return $this
-            ->hasOne(GLabsLoad::class, 'gateway_id')->where('status', 'SUCCESS')->latest();
+            ->hasOne(GLabsLoad::class, 'sim_id')->where('status', 'SUCCESS')->latest();
     }
 }

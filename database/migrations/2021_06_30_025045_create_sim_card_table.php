@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSMSGatewayTable extends Migration
+class CreateSIMCardTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSMSGatewayTable extends Migration
      */
     public function up()
     {
-        Schema::create('sms_gateway', function (Blueprint $table) {
+        Schema::create('sim_card', function (Blueprint $table) {
             $table->id();
             $table->string('type', 50)->nullable();
             $table->string('access_token')->unique()->nullable();
@@ -29,6 +29,6 @@ class CreateSMSGatewayTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sms_gateway');
+        Schema::dropIfExists('sim_card');
     }
 }

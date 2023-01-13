@@ -6,7 +6,7 @@ use Illuminate\Foundation\Application;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SMSGatewayController;
+use App\Http\Controllers\SIMCardController;
 use App\Http\Controllers\ObservationsStationController;
 
 /*
@@ -38,6 +38,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::resource('stations', ObservationsStationController::class)->only(['index', 'show']);
 Route::get('/stations/{station}/logs', [ObservationsStationController::class, 'logs'])->name('station.logs');
 
-Route::get('/smsgateway', [SMSGatewayController::class, 'index'])->name('smsgateway.index');
+Route::get('/simcard', [SIMCardController::class, 'index'])->name('simcard.index');
 
 require __DIR__.'/auth.php';

@@ -1,5 +1,5 @@
 <template layout>
-  <Default title="SMS Gateway" basePath="smsgateway" :showCreateBtn="false" :data="data" :hasEditPage="false" />
+  <Default title="SIM Card" basePath="simcard" :showCreateBtn="false" :data="data" :hasEditPage="false" />
 </template>
 
 <script setup lang="ts">

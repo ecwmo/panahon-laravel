@@ -22,8 +22,8 @@ class GLabsLoad extends Model
         'transaction_id'
     ];
 
-    public function subscription()
+    public function SIMCard()
     {
-        return $this->belongsTo(SMSGateway::class, 'gateway_id');
+        return $this->belongsTo(SIMCard::class, 'sim_id');
     }
 }

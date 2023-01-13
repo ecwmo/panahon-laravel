@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\SMSGateway;
+use App\Models\SIMCard;
 
 use Illuminate\Http\Request;
 
-class SMSGatewayController extends Controller
+class SIMCardController extends Controller
 {
     public function index(Request $request)
     {
-        $subscribers = SMSGateway::whereNotNull('mobile_number')
+        $subscribers = SIMCard::whereNotNull('mobile_number')
             ->orderBy('id')
             ->paginate(15);
 
@@ -28,6 +28,6 @@ class SMSGatewayController extends Controller
             }
         }
 
-        return Inertia::render('SMSGateway', compact('subscribers'));
+        return Inertia::render('SIMCard', compact('subscribers'));
     }
 }
