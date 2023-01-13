@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="message"
     class="flex items-center p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
     role="alert"
   >

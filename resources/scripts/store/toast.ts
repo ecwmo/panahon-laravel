@@ -6,7 +6,7 @@ interface Toast {
 }
 
 export const useToastStore = defineStore('toast', () => {
-  const items = ref([{}] as Toast[])
+  const items = ref([] as Toast[])
 
   const add = (toast: Toast) => items.value.unshift({ ...toast, key: Symbol() })
 
