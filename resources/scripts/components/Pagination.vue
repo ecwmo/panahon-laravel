@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap -mb-1">
-    <!-- Previous Page Link -->
-    <Link
+    <!-- Previous Page InertiaLink -->
+    <InertiaLink
       class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
       :class="
         data.prev_page_url !== null
@@ -11,14 +11,14 @@
       :href="data.prev_page_url"
     >
       « Previous
-    </Link>
+    </InertiaLink>
 
     <!-- Pagination Elements -->
     <template v-for="link in data.links" :key="link.label">
       <div v-if="link.label === '...'" class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded text-gray-400">
         {{ link.label }}
       </div>
-      <Link
+      <InertiaLink
         v-else-if="!isNaN(+link.label)"
         class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
         :class="
@@ -27,11 +27,11 @@
         :href="link.url"
       >
         {{ link.label }}
-      </Link>
+      </InertiaLink>
     </template>
 
-    <!-- Next Page Link -->
-    <Link
+    <!-- Next Page InertiaLink -->
+    <InertiaLink
       class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded"
       :class="
         data.next_page_url !== null
@@ -41,11 +41,10 @@
       :href="data.next_page_url"
     >
       Next »
-    </Link>
+    </InertiaLink>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { Link } from '@inertiajs/inertia-vue3'
   defineProps({ data: { type: Object, required: true } })
 </script>

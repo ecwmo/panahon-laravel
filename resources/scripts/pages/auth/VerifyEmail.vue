@@ -1,5 +1,5 @@
 <template layout="Auth">
-  <Head title="Email Verification" />
+  <InertiaHead title="Email Verification" />
 
   <h1 class="text-center font-bold text-3xl">Email Verification</h1>
   <div class="mx-auto my-6 w-24 border-b-2"></div>
@@ -19,20 +19,18 @@
         Resend Verification Email
       </BreezeButton>
 
-      <Link
+      <InertiaLink
         :href="route('logout')"
         method="post"
         as="button"
         class="underline text-sm text-gray-600 hover:text-gray-900"
-        >Log Out</Link
+        >Log Out</InertiaLink
       >
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
-  import { Head, Link } from '@inertiajs/inertia-vue3'
-
   const props = defineProps<{
     status: string
   }>()

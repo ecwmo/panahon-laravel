@@ -1,5 +1,5 @@
 <template layout="Auth">
-  <Head title="Log in" />
+  <InertiaHead title="Log in" />
 
   <h1 class="text-center font-bold text-3xl">Login</h1>
   <div class="mx-auto my-6 w-24 border-b-2"></div>
@@ -44,13 +44,13 @@
     </div>
 
     <div class="flex items-center justify-end mt-4">
-      <Link
+      <InertiaLink
         v-if="canResetPassword"
         :href="route('password.request')"
         class="underline text-sm text-gray-600 hover:text-gray-900"
       >
         Forgot your password?
-      </Link>
+      </InertiaLink>
 
       <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
         Log in
@@ -60,8 +60,6 @@
 </template>
 
 <script setup lang="ts">
-  import { Head, Link } from '@inertiajs/inertia-vue3'
-
   defineProps<{
     canResetPassword: boolean
     status?: string

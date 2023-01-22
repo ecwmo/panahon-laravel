@@ -29,7 +29,13 @@ export default defineConfig({
       vueTemplate: true,
     }),
     Components({
-      resolvers: [IconsResolver()],
+      resolvers: [
+        IconsResolver(),
+        (componentName) => {
+          if (componentName.startsWith('Inertia'))
+            return { name: componentName.slice(7), from: '@inertiajs/inertia-vue3' }
+        },
+      ],
       dirs: ['resources/scripts/components'],
       dts: 'resources/scripts/components.d.ts',
       directoryAsNamespace: true,

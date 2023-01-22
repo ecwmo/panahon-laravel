@@ -1,5 +1,5 @@
 <template layout="Auth">
-  <Head title="Reset Password" />
+  <InertiaHead title="Reset Password" />
 
   <h1 class="text-center font-bold text-3xl">Reset Password</h1>
   <div class="mx-auto my-6 w-24 border-b-2"></div>
@@ -54,8 +54,6 @@
 </template>
 
 <script setup lang="ts">
-  import { Head } from '@inertiajs/inertia-vue3'
-
   const props = defineProps<{
     email: string
     token: string

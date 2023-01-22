@@ -12,28 +12,28 @@
           {{ td.id }}
         </td>
         <td v-for="f in data.features" :key="f.name" class="p-2 text-justify border-t">
-          <Link
+          <InertiaLink
             v-if="f.href"
             tabindex="-1"
             class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
             :href="td[f.href]"
           >
             {{ getValue(f.name, td) }}
-          </Link>
-          <Link
+          </InertiaLink>
+          <InertiaLink
             v-else-if="hasEditPage"
             tabindex="-1"
             class="px-4 flex items-center"
             :href="route(`${basePath}.update`, td.id)"
           >
             {{ getValue(f.name, td) }}
-          </Link>
+          </InertiaLink>
           <span v-else>{{ getValue(f.name, td) }}</span>
         </td>
         <td v-if="hasEditPage" class="p-2 text-justify border-t w-px">
-          <Link :href="route(`${basePath}.update`, td.id)" tabindex="-1" class="flex items-center">
+          <InertiaLink :href="route(`${basePath}.update`, td.id)" tabindex="-1" class="flex items-center">
             <i-mdi-chevron-right class="text-gray-400" />
-          </Link>
+          </InertiaLink>
         </td>
       </tr>
     </table>
@@ -44,7 +44,6 @@
 </template>
 
 <script setup lang="ts">
-  import { Link } from '@inertiajs/inertia-vue3'
   import { format, isValid } from 'date-fns'
 
   const props = defineProps({

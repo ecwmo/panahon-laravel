@@ -1,5 +1,5 @@
 <template layout="Auth">
-  <Head title="Register" />
+  <InertiaHead title="Register" />
 
   <h1 class="text-center font-bold text-3xl">Register</h1>
   <div class="mx-auto mt-6 w-24 border-b-2"></div>
@@ -59,9 +59,9 @@
     </div>
 
     <div class="flex items-center justify-end mt-4">
-      <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
+      <InertiaLink :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
         Already registered?
-      </Link>
+      </InertiaLink>
 
       <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
         Register
@@ -71,8 +71,6 @@
 </template>
 
 <script setup lang="ts">
-  import { Head, Link } from '@inertiajs/inertia-vue3'
-
   const form = useForm({
     name: '',
     email: '',

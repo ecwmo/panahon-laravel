@@ -22,36 +22,34 @@
     </div>
     <div class="bg-white border-b w-full p-4 md:py-0 md:px-12 text-sm md:text-md flex justify-end items-center">
       <div v-if="isLoggedIn">
-        <Link
+        <InertiaLink
           class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300"
           :href="route('logout')"
           method="post"
           as="button"
         >
           Logout
-        </Link>
+        </InertiaLink>
       </div>
       <div v-else>
-        <Link
+        <InertiaLink
           class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300"
           :href="route('login')"
         >
           Login
-        </Link>
-        <Link
+        </InertiaLink>
+        <InertiaLink
           class="p-2 font-semibold text-gray-500 hover:text-blue-500 transition duration-300"
           :href="route('register')"
         >
           Register
-        </Link>
+        </InertiaLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { Link } from '@inertiajs/inertia-vue3'
-
   defineProps({
     title: { type: String, default: '' },
   })

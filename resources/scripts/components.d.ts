@@ -30,6 +30,8 @@ declare module '@vue/runtime-core' {
     IMdiChevronRight: typeof import('~icons/mdi/chevron-right')['default']
     IMdiChevronUp: typeof import('~icons/mdi/chevron-up')['default']
     IMdiPlus: typeof import('~icons/mdi/plus')['default']
+    InertiaHead: typeof import('@inertiajs/inertia-vue3')['Head']
+    InertiaLink: typeof import('@inertiajs/inertia-vue3')['Link']
     MultiSelectInput: typeof import('./components/MultiSelectInput.vue')['default']
     Pagination: typeof import('./components/Pagination.vue')['default']
     SelectInput: typeof import('./components/SelectInput.vue')['default']

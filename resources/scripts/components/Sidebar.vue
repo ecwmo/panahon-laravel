@@ -1,7 +1,7 @@
 <template>
   <div :class="isPopup ? 'text-sm' : 'hidden md:block bg-blue-700 flex-shrink-0 w-56 p-12 overflow-y-auto'">
     <div v-for="m in menu" :key="m.label" :class="isPopup ? 'mb-2' : 'mb-4'">
-      <Link
+      <InertiaLink
         v-if="m.display"
         :href="m.href"
         class="flex items-center group"
@@ -18,14 +18,12 @@
           <i-material-symbols-lock-person v-else-if="m.icon === 'lock-person'" />
         </div>
         <span>{{ m.label }}</span>
-      </Link>
+      </InertiaLink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { Link } from '@inertiajs/inertia-vue3'
-
   defineProps({
     isPopup: { type: Boolean, default: false },
   })

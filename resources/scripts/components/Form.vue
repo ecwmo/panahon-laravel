@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1 class="mb-8 font-bold text-3xl">
-      <Link :href="route(`${basePath}.index`)" class="text-blue-400 hover:text-blue-600">{{ title }}</Link>
+      <InertiaLink :href="route(`${basePath}.index`)" class="text-blue-400 hover:text-blue-600">{{
+        title
+      }}</InertiaLink>
       <span class="text-blue-400 font-medium"> / </span>
       {{ isUpdate ? `${itemName}` : 'Create' }}
     </h1>
@@ -31,8 +33,6 @@
 </template>
 
 <script setup lang="ts">
-  import { Link } from '@inertiajs/inertia-vue3'
-
   const props = defineProps({
     title: { type: String, default: '' },
     basePath: { type: String, default: '' },
