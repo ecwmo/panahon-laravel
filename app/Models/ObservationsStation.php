@@ -35,6 +35,27 @@ class ObservationsStation extends Model
     ];
 
     /**
+      * The model's default values for attributes.
+      *
+      * @var array
+      */
+    protected $attributes = [
+        'name' => null,
+        'lat' => null,
+        'lon' => null,
+        'elevation' => null,
+        'date_installed' => null,
+        'mobile_number' => null,
+        'station_type' => 'MO',
+        'station_type2' => 'Default',
+        'station_url' => null,
+        'status' => 'INACTIVE',
+        'address' => null,
+        'province' => null,
+        'region' => null,
+    ];
+
+    /**
      * The table associated with the model.
      *
      * @var string

@@ -33,29 +33,48 @@
 </template>
 
 <script setup lang="ts">
-  const props = defineProps({
-    title: { type: String, default: '' },
-    basePath: { type: String, default: '' },
-    itemName: { type: String, default: '' },
-    formData: { type: Object, required: true },
-    showDelete: { type: Boolean, default: false },
-    showSubmitBtn: { type: Boolean, default: false },
-    isUpdate: { type: Boolean, default: false },
-  })
+  import { RoleForm, StationForm, UserForm } from '@/types/form'
 
-  const { formData, basePath } = toRefs(props)
+  const props = withDefaults(
+    defineProps<{
+      title: string
+      basePath: string
+      itemName: string
+      propName: string
+      formData: ReturnType<typeof useForm<StationForm | UserForm | RoleForm>>
+      showDelete: boolean
+      showSubmitBtn: boolean
+      isUpdate: boolean
+    }>(),
+    {
+      title: '',
+      basePath: '',
+      itemName: '',
+      propName: '',
+      showDelete: false,
+      showSubmitBtn: false,
+      isUpdate: false,
+    }
+  )
+
+  const { formData, basePath, propName } = toRefs(props)
 
   const handleFormSubmit = (actionType: string) => {
     if (actionType === 'update') {
-      formData.value.patch(formData.value.id)
+      formData.value.patch(`${formData.value.id}`)
     } else {
-      formData.value.post(route(`${basePath.value}.store`))
+      formData.value.post(route(`${basePath.value}.store`), {
+        onSuccess: (p) => {
+          const { props: pProps } = p as { props: { [key: string]: StationForm | UserForm | RoleForm } }
+          formData.value.id = pProps[propName.value].id
+        },
+      })
     }
   }
 
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this station?')) {
-      formData.value.delete(formData.value.id)
+    if (confirm(`Are you sure you want to delete this ${propName}?`)) {
+      formData.value.delete(`${formData.value.id}`)
     }
   }
 </script>

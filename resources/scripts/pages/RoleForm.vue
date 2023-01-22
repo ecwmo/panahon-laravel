@@ -2,7 +2,8 @@
   <Form
     title="Roles"
     basePath="roles"
-    :itemName="form?.name"
+    propName="role"
+    :itemName="form?.name ?? ''"
     :formData="form"
     :showDelete="form?.id !== undefined && isSuperAdmin"
     :showSubmitBtn="isSuperAdmin"
@@ -34,7 +35,7 @@
     description: '',
   }
 
-  const props = defineProps<{ role?: RoleForm }>()
+  const props = defineProps<{ role: RoleForm }>()
 
   const form = useForm({
     ...defaultData,

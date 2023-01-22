@@ -2,7 +2,8 @@
   <Form
     title="Stations"
     basePath="stations"
-    :itemName="form?.name"
+    propName="station"
+    :itemName="form?.name ?? ''"
     :formData="form"
     :showDelete="form?.id !== undefined && isAdmin"
     :showSubmitBtn="isAdmin"
@@ -139,27 +140,9 @@
     { name: 'Others', opts: ['WIFI', 'Test'] },
   ]
 
-  const defaultData: StationForm = {
-    name: '',
-    lat: '',
-    lon: '',
-    elevation: '',
-    mobile_number: '',
-    station_type: stnTypes[0].name,
-    station_type2: stnTypes[0]?.opts?.[0],
-    station_url: '',
-    status: 'INACTIVE',
-    address: '',
-    province: '',
-    region: '',
-  }
+  const props = defineProps<{ station: StationForm }>()
 
-  const props = defineProps<{ station?: StationForm }>()
-
-  const form = useForm({
-    ...defaultData,
-    ...props.station,
-  })
+  const form = useForm(props.station)
 
   const mobileNumberRequired = computed(() => form.station_type !== 'MO' || form.station_type2 !== 'Default')
 

@@ -2,7 +2,8 @@
   <Form
     title="Users"
     basePath="users"
-    :itemName="form?.name"
+    propName="user"
+    :itemName="form?.name ?? ''"
     :formData="form"
     :showDelete="form?.id !== undefined && isSuperAdmin"
     :showSubmitBtn="isSuperAdmin"
@@ -50,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-  import { UserForm, RoleForm, SelectOption } from '@/types/form'
+  import { RoleForm, SelectOption, UserForm } from '@/types/form'
 
   const { isSuperAdmin } = useUser()
 

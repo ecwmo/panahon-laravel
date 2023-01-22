@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Role;
-// use Illuminate\Http\Request;
 use App\Http\Requests\RoleRequest;
 
 class RoleController extends Controller
@@ -27,24 +26,19 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return Inertia::render('RoleForm', []);
+        $role = new Role();
+        return $this->show($role);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\RoleRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(RoleRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:200|unique:roles,name',
-            'description' => 'max:255|nullable',
-        ]);
-
-        $role = Role::create($request->all());
-
+        $role = $this->storeOrUpdate($request);
         return redirect()->route('roles.show', $role)->with('message', __('Role created successfully.'));
     }
 
@@ -63,19 +57,13 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\RoleRequest  $request
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $request->validate([
-            'name' => 'required|max:200|unique:roles,name,' . $role->id,
-            'description' => 'max:255|nullable',
-        ]);
-
-        $role->update($request->all());
-
+        $role = $this->storeOrUpdate($request, $role);
         return redirect()->route('roles.show', $role)->with('message', __('Role updated successfully.'));
     }
 
@@ -90,5 +78,33 @@ class RoleController extends Controller
         $role->delete();
 
         return redirect()->route('roles.index')->with('message', __('Role deleted successfully.'));
+    }
+
+    /**
+   * Store or Update the specified resource in storage.
+   *
+   * @param  \App\Http\Requests\RoleRequest  $request
+   * @param  \App\Models\Role  $role
+   * @return \App\Models\Role  $role
+   */
+    private function storeOrUpdate(RoleRequest $request, Role $role = null)
+    {
+        $nameValidator = 'required|max:200|unique:roles,name';
+        if ($role) {
+            $nameValidator = $nameValidator . ',' . $role->id;
+        }
+
+        $validated = $request->validate([
+            'name' => $nameValidator,
+            'description' => 'max:255|nullable',
+        ]);
+
+        if (!$role) {
+            $role = Role::create($validated);
+        } else {
+            $role->update($validated);
+        }
+
+        return $role;
     }
 }

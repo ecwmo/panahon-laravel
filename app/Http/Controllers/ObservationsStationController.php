@@ -42,7 +42,8 @@ class ObservationsStationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('StationForm', []);
+        $station = new ObservationsStation();
+        return $this->show($station);
     }
 
     /**

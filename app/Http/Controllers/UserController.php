@@ -34,7 +34,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('UserForm', ['user'=>[], 'roles'=> Role::all()]);
+        $user = new User();
+        return $this->show($user);
     }
 
     /**
@@ -45,20 +46,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|max:255|unique:users',
-            'password' => 'required|string|min:8'
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
-
-        $user->roles()->attach($request->roleIds);
-
+        $user = $this->storeOrUpdate($request);
         return redirect()->route('users.show', $user)->with('message', __('User created successfully.'));
     }
 
@@ -70,11 +58,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        // $user->roleList = $user->roles->pluck('name')->implode(', ');
-        $user->roleIds = $user->roles->pluck('id');
+        if (isset($user['id'])) {
+            $user->roleIds = $user->roles->pluck('id');
+        }
         return Inertia::render('UserForm', [
             'user' => $user,
-            // 'userRoleIds' => $user->roles->pluck('id'),
             'roles' => Role::all()
           ]);
     }
@@ -88,24 +76,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8'
-        ]);
-
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email
-        ]);
-
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-        }
-
-        $user->roles()->sync($request->roleIds);
-
+        $user = $this->storeOrUpdate($request, $user);
         return redirect()->route('users.show', $user)->with('message', __('User updated successfully.'));
     }
 
@@ -120,5 +91,45 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('message', __('User deleted successfully.'));
+    }
+
+    /**
+   * Store or Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  \App\Models\User  $user
+   * @return \App\Models\User  $user
+   */
+    private function storeOrUpdate(Request $request, User $user = null)
+    {
+        $emailValidator = 'required|string|max:255|unique:users,email';
+        if ($user) {
+            $emailValidator = $emailValidator . ',' . $user->id;
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => $emailValidator,
+            'password' => 'nullable|string|min:8'
+        ]);
+
+        if (!$user) {
+            $user = User::create($validated);
+            $user->roles()->attach($request->roleIds);
+        } else {
+            $user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email']
+            ]);
+
+            if (isset($validated['password'])) {
+                $user->password = Hash::make($validated['password']);
+                $user->save();
+            }
+
+            $user->roles()->sync($request->roleIds);
+        }
+
+        return $user;
     }
 }
