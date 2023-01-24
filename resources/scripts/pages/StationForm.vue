@@ -90,7 +90,9 @@
         <div class="w-2/5">
           <BreezeLabel for="status" value="Status" />
           <SelectInput id="status" class="mt-1 block w-full" v-model="form.status">
-            <option>ACTIVE</option>
+            <option>ONLINE</option>
+            <option disabled>OFFLINE</option>
+            <option disabled>ERROR</option>
             <option>INACTIVE</option>
           </SelectInput>
         </div>
