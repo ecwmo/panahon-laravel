@@ -125,7 +125,7 @@ class ObservationsStationController extends Controller
     public function logs(Request $request, ObservationsStation $station)
     {
         $logs = QueryBuilder::for($station->health())
-            ->defaultSort('timestamp')
+            ->defaultSort('-timestamp')
             ->allowedSorts(['timestamp'])
             ->allowedFilters(['message'])
             ->paginate(20)
