@@ -12,24 +12,38 @@
     <div class="p-8 flex flex-wrap">
       <div class="w-full">
         <BreezeLabel for="name" value="Station Name*" />
-        <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+        <BreezeInput
+          id="name"
+          type="text"
+          class="mt-1 block w-full"
+          v-model="form.name"
+          :disabled="!isAdmin"
+          required
+          autofocus
+        />
         <BreezeInputError class="mt-2" :message="form.errors.name" />
       </div>
 
       <div class="flex mt-4 space-x-2 w-full">
         <div class="w-1/3">
           <BreezeLabel for="lat" value="Latitude" />
-          <BreezeInput id="lat" type="text" class="mt-1 block w-full" v-model="form.lat" />
+          <BreezeInput id="lat" type="text" class="mt-1 block w-full" v-model="form.lat" :disabled="!isAdmin" />
           <BreezeInputError class="mt-2" :message="form.errors.lat" />
         </div>
         <div class="w-1/3">
           <BreezeLabel for="lon" value="Longitude" />
-          <BreezeInput id="lon" type="text" class="mt-1 block w-full" v-model="form.lon" />
+          <BreezeInput id="lon" type="text" class="mt-1 block w-full" v-model="form.lon" :disabled="!isAdmin" />
           <BreezeInputError class="mt-2" :message="form.errors.lon" />
         </div>
         <div class="w-1/3">
           <BreezeLabel for="elevation" value="Elevation" />
-          <BreezeInput id="elevation" type="text" class="mt-1 block w-full" v-model="form.elevation" />
+          <BreezeInput
+            id="elevation"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.elevation"
+            :disabled="!isAdmin"
+          />
           <BreezeInputError class="mt-2" :message="form.errors.elevation" />
         </div>
       </div>
@@ -42,6 +56,7 @@
             class="mt-1 block w-full"
             v-model="form.station_type"
             @update:modelValue="handleStnTypeSelectChange"
+            :disabled="!isAdmin"
           >
             <option v-for="opt in stnTypes" :key="opt.name">{{ opt.name }}</option>
           </SelectInput>
@@ -52,7 +67,7 @@
             id="station_type2"
             class="mt-1 block w-full"
             v-model="form.station_type2"
-            :disabled="!stnType2SelectEnabled"
+            :disabled="!isAdmin || !stnType2SelectEnabled"
           >
             <option v-for="opt in stnTypes2" :key="opt">{{ opt }}</option>
           </SelectInput>
@@ -64,7 +79,7 @@
             type="text"
             class="mt-1 block w-full"
             v-model="form.mobile_number"
-            :disabled="!mobileNumberRequired"
+            :disabled="!isAdmin || !mobileNumberRequired"
             :required="mobileNumberRequired"
             placeholder="63XXXXXXXXXX"
             pattern="63[0-9]{10}"
@@ -82,6 +97,7 @@
           v-model="form.station_url"
           placeholder="https://example.com"
           pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
+          :disabled="!isAdmin"
         />
         <BreezeInputError class="mt-2" :message="form.errors.station_url" />
       </div>
@@ -89,7 +105,7 @@
       <div class="flex mt-4 space-x-2 w-full">
         <div class="w-2/5">
           <BreezeLabel for="status" value="Status" />
-          <SelectInput id="status" class="mt-1 block w-full" v-model="form.status">
+          <SelectInput id="status" class="mt-1 block w-full" v-model="form.status" :disabled="!isAdmin">
             <option>ONLINE</option>
             <option disabled>OFFLINE</option>
             <option disabled>ERROR</option>
@@ -98,14 +114,20 @@
         </div>
         <div class="w-3/5">
           <BreezeLabel for="date_installed" value="Date Installed" />
-          <BreezeInput id="date_installed" type="date" class="mt-1 block w-full" v-model="form.date_installed" />
+          <BreezeInput
+            id="date_installed"
+            type="date"
+            class="mt-1 block w-full"
+            v-model="form.date_installed"
+            :disabled="!isAdmin"
+          />
           <BreezeInputError class="mt-2" :message="form.errors.date_installed" />
         </div>
       </div>
 
       <div class="mt-4 w-full">
         <BreezeLabel for="address" value="Address" />
-        <BreezeInput id="address" type="text" class="mt-1 block w-full" v-model="form.address" />
+        <BreezeInput id="address" type="text" class="mt-1 block w-full" v-model="form.address" :disabled="!isAdmin" />
         <BreezeInputError class="mt-2" :message="form.errors.address" />
       </div>
 
@@ -118,12 +140,20 @@
             class="mt-1 block w-full"
             v-model="form.province"
             placeholder="Province"
+            :disabled="!isAdmin"
           />
           <BreezeInputError class="mt-2" :message="form.errors.province" />
         </div>
         <div class="w-1/2">
           <BreezeLabel for="region" value="Region" />
-          <BreezeInput id="region" type="text" class="mt-1 block w-full" v-model="form.region" placeholder="Region" />
+          <BreezeInput
+            id="region"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.region"
+            placeholder="Region"
+            :disabled="!isAdmin"
+          />
           <BreezeInputError class="mt-2" :message="form.errors.region" />
         </div>
       </div>
