@@ -1,6 +1,7 @@
 {
   "private": true,
   "dependencies": {
+    "@protonemedia/inertiajs-tables-laravel-query-builder": "^2.1.0",
     "date-fns": "^2.29.2",
     "pinia": "^2.0.28"
   },

@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 use App\Models\ObservationsStation;
 use App\Models\SIMCard;
@@ -15,24 +20,40 @@ class ObservationsStationController extends Controller
 {
     public function index(Request $request)
     {
-        $stations = ObservationsStation::where([
-          ['name', '!=', null],
-          [function ($query) use ($request) {
-              if ($q = $request->q) {
-                  $query->orWhere('name', 'LIKE', '%' . $q . '%')
-                ->orWhere('address', 'LIKE', '%' . $q . '%')
-                ->orWhere('mobile_number', 'LIKE', '%' . $q . '%')
-                ->get();
-              }
-          }]
-        ])
-          ->orderBy('id', 'asc')
-          ->paginate(15);
+        $stations = QueryBuilder::for(ObservationsStation::class)
+            ->defaultSort('id')
+            ->allowedSorts(['id', 'name', 'station_type', 'status', 'date_installed'])
+            ->allowedFilters([AllowedFilter::exact('id'), 'name', 'station_type', 'status'])
+            ->paginate(10)
+            ->withQueryString();
 
-        foreach ($stations as $station) {
-            $station->status_url = route('stations.index').'/'.$station->id.'/logs';
-        }
-        return Inertia::render('Stations', compact('stations'));
+        return Inertia::render('Stations', compact('stations'))->table(function (InertiaTable $table) {
+            $table
+                ->column('id', '#', searchable: true, sortable: true)
+                ->column('name', 'Station Name', searchable: true, sortable: true, canBeHidden: false)
+                ->column('station_type', 'Type', searchable: true, sortable: true)
+                ->selectFilter(key: 'station_type', label: 'Type', options: [
+                    'SMS' => 'SMS',
+                    'MO' => 'MO',
+                    'Others' => 'Others',
+                ])
+                ->column('status', 'Status', searchable: true, sortable: true)
+                ->selectFilter(key: 'status', label: 'Status', options: [
+                    'ONLINE' => 'ONLINE',
+                    'OFFLINE' => 'OFFLINE',
+                    'ERROR' => 'ERROR',
+                    'INACTIVE' => 'INACTIVE',
+                ])
+                ->column('date_installed', 'Install Date', searchable: false, sortable: true);
+            $is_admin  = false;
+            $user = Auth::user();
+            if ($user) {
+                $is_admin = $user->hasRole('ADMIN') || $user->hasRole('SUPERADMIN');
+            }
+            if ($is_admin) {
+                $table->column(label: 'Actions');
+            }
+        });
     }
 
     /**
@@ -103,8 +124,18 @@ class ObservationsStationController extends Controller
 
     public function logs(Request $request, ObservationsStation $station)
     {
-        $logs = $station->health()->orderBy('timestamp', 'DESC')->paginate(20, array('timestamp', 'message'));
-        return Inertia::render('StationLogs', compact('logs'));
+        $logs = QueryBuilder::for($station->health())
+            ->defaultSort('timestamp')
+            ->allowedSorts(['timestamp'])
+            ->allowedFilters(['message'])
+            ->paginate(20)
+            ->withQueryString();
+
+        return Inertia::render('StationLogs', compact('logs'))->table(function (InertiaTable $table) {
+            $table
+                ->column('timestamp', 'Timestamp', searchable: false, sortable: true, canBeHidden: false)
+                ->column('message', 'String', searchable: true, sortable: false, canBeHidden: false);
+        });
     }
 
     /**

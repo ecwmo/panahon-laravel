@@ -1,19 +1,7 @@
 <template layout>
-  <Default
-    title="Station Logs"
-    basePath="stations"
-    :showCreateBtn="false"
-    :showIdColumn="false"
-    :data="data"
-    :hasEditPage="false"
-  />
+  <DataTable title="Station Logs" basePath="stations/logs" :data="logs" />
 </template>
 
 <script setup lang="ts">
-  const props = defineProps<{ logs: object }>()
-  const features = [
-    { name: 'timestamp', title: 'Timestamp' },
-    { name: 'message', title: 'Message' },
-  ]
-  const data = { ...props.logs, features }
+  defineProps<{ logs: object }>()
 </script>

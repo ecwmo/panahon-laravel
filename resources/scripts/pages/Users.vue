@@ -1,15 +1,9 @@
 <template layout>
-  <Default title="Users" basePath="users" :showCreateBtn="isSuperAdmin" :data="data" />
+  <DataTable title="Users" basePath="users" :data="users" />
 </template>
 
 <script setup lang="ts">
-  const props = defineProps<{
+  defineProps<{
     users: object
   }>()
-  const features = [
-    { name: 'name', title: 'Name' },
-    { name: 'roleList', title: 'Roles' },
-  ]
-  const data = { ...props.users, features }
-  const { isSuperAdmin } = useUser()
 </script>

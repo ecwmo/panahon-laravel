@@ -1,13 +1,7 @@
 <template layout>
-  <Default title="Roles" basePath="roles" :showCreateBtn="isSuperAdmin" :data="data" />
+  <DataTable title="Roles" basePath="roles" :data="roles" />
 </template>
 
 <script setup lang="ts">
-  const props = defineProps<{ roles: object }>()
-  const features = [
-    { name: 'name', title: 'Name' },
-    { name: 'description', title: 'Description' },
-  ]
-  const data = { ...props.roles, features }
-  const { isSuperAdmin } = useUser()
+  defineProps<{ roles: object }>()
 </script>

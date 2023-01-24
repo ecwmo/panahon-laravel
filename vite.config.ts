@@ -34,6 +34,8 @@ export default defineConfig({
         (componentName) => {
           if (componentName.startsWith('Inertia'))
             return { name: componentName.slice(7), from: '@inertiajs/inertia-vue3' }
+          else if (componentName.startsWith('Proton'))
+            return { name: componentName.slice(6), from: '@protonemedia/inertiajs-tables-laravel-query-builder' }
         },
       ],
       dirs: ['resources/scripts/components'],

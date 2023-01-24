@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Role;
+
+use Illuminate\Support\Facades\Auth;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
+
 use App\Http\Requests\RoleRequest;
+
+use App\Models\Role;
 
 class RoleController extends Controller
 {
@@ -15,8 +22,26 @@ class RoleController extends Controller
      */
     public function index(RoleRequest $request)
     {
-        $roles = Role::paginate(10);
-        return Inertia::render('Roles', compact('roles'));
+        $roles = QueryBuilder::for(Role::class)
+        ->defaultSort('id')
+        ->allowedSorts(['id', 'name'])
+        ->allowedFilters([AllowedFilter::exact('id'), 'name', 'description'])
+        ->paginate(10)
+        ->withQueryString();
+        return Inertia::render('Roles', compact('roles'))->table(function (InertiaTable $table) {
+            $table
+                ->column('id', '#', searchable: true, sortable: true)
+                ->column('name', 'Name', searchable: true, sortable: true, canBeHidden: false)
+                ->column('description', 'Description', searchable: true, sortable: false);
+            $is_admin  = false;
+            $user = Auth::user();
+            if ($user) {
+                $is_admin = $user->hasRole('SUPERADMIN');
+            }
+            if ($is_admin) {
+                $table->column(label: 'Actions');
+            }
+        });
     }
 
     /**

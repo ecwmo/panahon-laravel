@@ -1,74 +1,95 @@
 <template>
-  <div class="bg-white rounded-md shadow overflow-x-auto">
-    <table class="w-full whitespace-nowrap">
-      <tr class="text-left font-bold">
-        <th v-if="showIdColumn" class="p-3" scope="col">#</th>
-        <th v-for="f in data.features" :key="f.name" class="p-2" scope="col">
-          {{ f.title }}
-        </th>
-      </tr>
-      <tr v-for="td in data.data" :key="td.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
-        <td v-if="showIdColumn" class="p-3 text-justify border-t">
-          {{ td.id }}
-        </td>
-        <td v-for="f in data.features" :key="f.name" class="p-2 text-justify border-t">
+  <div>
+    <div class="mb-6 flex justify-between items-center">
+      <h1 class="font-bold text-3xl">{{ title }}</h1>
+      <InertiaLink
+        v-if="showActionBtn"
+        :href="route(`${basePath}.create`)"
+        class="rounded px-3 py-2 m-1 shadow bg-blue-600 border-blue-700 hover:bg-amber-400"
+        as="button"
+      >
+        <i-mdi-plus class="text-white text-lg" />
+      </InertiaLink>
+    </div>
+
+    <ProtonTable :resource="data">
+      <template #cell(status)="{ item: dat }" v-if="basePath === 'stations'">
+        <InertiaLink
+          :href="`${route(`${basePath}.index`)}/${dat.id}/logs`"
+          class="underline text-blue-600 hover:text-blue-800"
+        >
+          {{ dat.status }}
+        </InertiaLink>
+      </template>
+
+      <template #cell(roles)="{ item: dat }" v-if="basePath === 'users'">
+        {{ rolesString(dat.roles) }}
+      </template>
+
+      <template #cell(station_name)="{ item: dat }" v-if="basePath === 'simcard'">
+        <InertiaLink
+          :href="`${route('stations.index')}/${dat.station_id}`"
+          class="underline text-blue-600 hover:text-blue-800"
+        >
+          {{ dat.station_name }}
+        </InertiaLink>
+      </template>
+
+      <template #cell(actions)="{ item: dat }">
+        <div class="space-x-2">
           <InertiaLink
-            v-if="f.href"
-            tabindex="-1"
-            class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
-            :href="td[f.href]"
+            v-if="showActionBtn"
+            :href="`${route(`${basePath}.index`)}/${dat.id}`"
+            class="inline-flex items-center justify-center flex-shrink-0 w-6 h-6 hover:text-blue-500 hover:bg-blue-100 rounded-lg shadow-sm"
           >
-            {{ getValue(f.name, td) }}
+            <IMdiPencil class="text-xs" />
           </InertiaLink>
           <InertiaLink
-            v-else-if="hasEditPage"
-            tabindex="-1"
-            class="px-4 flex items-center"
-            :href="route(`${basePath}.update`, td.id)"
+            v-if="showActionBtn"
+            href="#"
+            class="inline-flex items-center justify-center flex-shrink-0 w-6 h-6 hover:text-red-500 hover:bg-red-100 rounded-lg shadow-sm"
+            @click.prevent="handleDeleteBtnCLick(dat.id)"
           >
-            {{ getValue(f.name, td) }}
+            <IMdiTrashCan class="text-xs" />
           </InertiaLink>
-          <span v-else>{{ getValue(f.name, td) }}</span>
-        </td>
-        <td v-if="hasEditPage" class="p-2 text-justify border-t w-px">
-          <InertiaLink :href="route(`${basePath}.update`, td.id)" tabindex="-1" class="flex items-center">
-            <i-mdi-chevron-right class="text-gray-400" />
-          </InertiaLink>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div class="mt-6">
-    <Pagination v-if="showPagination" :data="data" />
+        </div>
+      </template>
+    </ProtonTable>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { format, isValid } from 'date-fns'
+  import { Inertia, Method } from '@inertiajs/inertia'
 
-  const props = defineProps({
-    basePath: { type: String, default: '' },
-    data: { type: Object, required: true },
-    showIdColumn: { type: Boolean, default: true },
-    hasEditPage: { type: Boolean, default: true },
+  const props = withDefaults(
+    defineProps<{
+      title: string
+      basePath: string
+      data: object
+    }>(),
+    {
+      title: '',
+      basePath: '',
+    }
+  )
+
+  const { isAdmin, isSuperAdmin } = useUser()
+
+  const showActionBtn = computed(() => {
+    if (props.basePath === 'stations') {
+      return isSuperAdmin.value || isAdmin.value
+    } else if (['users', 'roles'].includes(props.basePath)) {
+      return isSuperAdmin.value
+    }
+    return false
   })
 
-  const { data } = toRefs(props)
+  const rolesString = (roles: { name: string }[]) => roles.map((r) => r.name).join(', ')
 
-  const getValue = (s: string, obj: { [id: string]: any }) => {
-    const dateAttrs = ['created_at', 'date_installed', 'topup_date']
-
-    if (dateAttrs.includes(s)) {
-      const dt = new Date(obj[s])
-      if (isValid(dt)) {
-        return format(dt, 'yyyy-MM-dd')
-      }
-      return
+  const handleDeleteBtnCLick = (id: string) => {
+    if (confirm('Are you sure you want to delete this item?')) {
+      const url = `${route(`${props.basePath}.index`)}/${id}`
+      Inertia.visit(url, { method: Method.DELETE })
     }
-    return obj[s]
   }
-
-  const showPagination = computed(
-    () => Object.prototype.hasOwnProperty.call(data.value, 'links') && data.value.links.length > 3
-  )
 </script>
