@@ -40,7 +40,7 @@ class UserController extends Controller
             $is_admin  = false;
             $user = Auth::user();
             if ($user) {
-                $is_admin = $user->hasRole('SUPERADMIN');
+                $is_admin = $user->isSuperAdmin();
             }
             if ($is_admin) {
                 $table->column(label: 'Actions');

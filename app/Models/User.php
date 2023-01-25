@@ -80,4 +80,14 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('ADMIN') || $this->hasRole('SUPERADMIN');
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->hasRole('SUPERADMIN');
+    }
 }

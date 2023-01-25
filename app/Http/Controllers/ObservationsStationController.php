@@ -48,7 +48,7 @@ class ObservationsStationController extends Controller
             $is_admin  = false;
             $user = Auth::user();
             if ($user) {
-                $is_admin = $user->hasRole('ADMIN') || $user->hasRole('SUPERADMIN');
+                $is_admin = $user->isAdmin();
             }
             if ($is_admin) {
                 $table->column(label: 'Actions');

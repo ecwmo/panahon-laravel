@@ -38,8 +38,8 @@ class HandleInertiaRequests extends Middleware
         $is_super_admin = false;
         $user = $request->user();
         if ($user) {
-            $is_admin = $user->hasRole('ADMIN');
-            $is_super_admin = $user->hasRole('SUPERADMIN');
+            $is_admin = $user->isAdmin();
+            $is_super_admin = $user->isSuperAdmin();
         }
         return array_merge(parent::share($request), [
             'auth' => [
