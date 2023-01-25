@@ -16,7 +16,11 @@ declare module '@vue/runtime-core' {
     BreezeLabel: typeof import('./components/breeze/Label.vue')['default']
     BreezeNavLink: typeof import('./components/breeze/NavLink.vue')['default']
     BreezeResponsiveNavLink: typeof import('./components/breeze/ResponsiveNavLink.vue')['default']
+    ConfirmDialogue: typeof import('./components/ConfirmDialogue.vue')['default']
     DataTable: typeof import('./components/DataTable.vue')['default']
+    Dialog: typeof import('@headlessui/vue')['Dialog']
+    DialogPanel: typeof import('@headlessui/vue')['DialogPanel']
+    DialogTitle: typeof import('@headlessui/vue')['DialogTitle']
     Form: typeof import('./components/Form.vue')['default']
     Header: typeof import('./components/Header.vue')['default']
     IFa6SolidBars: typeof import('~icons/fa6-solid/bars')['default']
@@ -39,5 +43,7 @@ declare module '@vue/runtime-core' {
     Sidebar: typeof import('./components/Sidebar.vue')['default']
     ToastList: typeof import('./components/ToastList.vue')['default']
     ToastListItem: typeof import('./components/ToastListItem.vue')['default']
+    TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
+    TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
   }
 }

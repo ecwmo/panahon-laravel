@@ -3,7 +3,7 @@
     title="Roles"
     propName="role"
     :itemName="form?.name ?? ''"
-    :formData="form"
+    :form="form"
     :showDelete="form?.id !== undefined && isSuperAdmin"
     :showSubmitBtn="isSuperAdmin"
     :isUpdate="form?.id !== undefined"

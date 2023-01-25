@@ -65,7 +65,7 @@
             v-if="showActionBtn"
             href="#"
             class="inline-flex items-center justify-center flex-shrink-0 w-6 h-6 hover:text-red-500 hover:bg-red-100 rounded-lg shadow-sm"
-            @click.prevent="handleDeleteBtnCLick(dat.id)"
+            @click.prevent="handleDeleteBtnClick(dat.id)"
           >
             <IMdiTrashCan class="text-xs" />
           </InertiaLink>
@@ -110,7 +110,7 @@
     return route().has(routeName) && route(routeName)
   })
 
-  const handleDeleteBtnCLick = (id: string) => {
+  const handleDeleteBtnClick = (id: string) => {
     if (confirm('Are you sure you want to delete this item?')) {
       const url = `${route(indexRoute.value)}/${id}`
       const form = useForm({})

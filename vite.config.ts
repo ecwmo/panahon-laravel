@@ -8,6 +8,7 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
+import { HeadlessUiResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 
 export default defineConfig({
@@ -30,6 +31,7 @@ export default defineConfig({
     }),
     Components({
       resolvers: [
+        HeadlessUiResolver(),
         IconsResolver(),
         (componentName) => {
           if (componentName.startsWith('Inertia'))

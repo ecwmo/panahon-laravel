@@ -29,6 +29,7 @@
         </div>
       </form>
     </div>
+    <ConfirmDialogue ref="confirmDialogue" />
   </div>
 </template>
 
@@ -41,7 +42,7 @@
       title: string
       itemName: string
       propName: string
-      formData: InertiaForm<FormFields>
+      form: InertiaForm<FormFields>
       showDelete: boolean
       showSubmitBtn: boolean
       isUpdate: boolean
@@ -56,26 +57,32 @@
     }
   )
 
-  const { formData, propName } = toRefs(props)
+  const confirmDialogue = ref()
+
+  const { form, propName } = toRefs(props)
 
   const basePath = computed(() => route().current()?.split('.')[0])
 
   const handleFormSubmit = (actionType: string) => {
-    if (actionType === 'update') {
-      formData.value.patch(`${formData.value.id}`)
-    } else {
-      formData.value.post(route(`${basePath.value}.store`), {
-        onSuccess: (p) => {
-          const { props: pProps } = p as { props: Record<string, FormFields> }
-          formData.value.id = pProps[propName.value].id
-        },
-      })
-    }
+    const submitMethod = actionType === 'update' ? 'patch' : 'post'
+    const submitUrl = actionType === 'update' ? `${form.value.id}` : route(`${basePath.value}.store`)
+    form.value.submit(submitMethod, submitUrl, {
+      onSuccess: (p) => {
+        const { props: pProps } = p as { props: Record<string, FormFields> }
+        form.value.id = pProps[propName.value].id
+      },
+    })
   }
 
   const handleDelete = async () => {
-    if (confirm(`Are you sure you want to delete this ${propName}?`)) {
-      formData.value.delete(`${formData.value.id}`)
+    const res = await confirmDialogue.value.show({
+      title: `Delete ${propName.value}`,
+      message: `Are you sure you want to delete this ${propName.value}?`,
+      okButton: 'Delete',
+    })
+
+    if (res) {
+      form.value.delete(`${form.value.id}`)
     }
   }
 </script>

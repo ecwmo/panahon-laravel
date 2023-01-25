@@ -3,7 +3,7 @@
     title="Stations"
     propName="station"
     :itemName="form?.name ?? ''"
-    :formData="form"
+    :form="form"
     :showDelete="form?.id !== undefined && isAdmin"
     :showSubmitBtn="isAdmin"
     :isUpdate="form?.id !== undefined"
