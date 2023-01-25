@@ -1,7 +1,6 @@
 <template layout>
   <Form
     title="Roles"
-    basePath="roles"
     propName="role"
     :itemName="form?.name ?? ''"
     :formData="form"

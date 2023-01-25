@@ -38,7 +38,6 @@
   const props = withDefaults(
     defineProps<{
       title: string
-      basePath: string
       itemName: string
       propName: string
       formData: ReturnType<typeof useForm<StationForm | UserForm | RoleForm>>
@@ -48,7 +47,6 @@
     }>(),
     {
       title: '',
-      basePath: '',
       itemName: '',
       propName: '',
       showDelete: false,
@@ -57,7 +55,9 @@
     }
   )
 
-  const { formData, basePath, propName } = toRefs(props)
+  const { formData, propName } = toRefs(props)
+
+  const basePath = computed(() => route().current()?.split('.')[0])
 
   const handleFormSubmit = (actionType: string) => {
     if (actionType === 'update') {

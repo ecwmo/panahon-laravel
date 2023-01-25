@@ -1,7 +1,6 @@
 <template layout>
   <Form
     title="Stations"
-    basePath="stations"
     propName="station"
     :itemName="form?.name ?? ''"
     :formData="form"
