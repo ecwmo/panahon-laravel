@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('stations', ObservationsStationController::class)->except(['index', 'show']);
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
+    Route::post('/simcard', [SIMCardController::class, 'post'])->name('simcard.post');
 });
 
 Route::resource('stations', ObservationsStationController::class)->only(['index', 'show']);

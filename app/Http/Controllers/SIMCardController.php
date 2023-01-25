@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 
-use Illuminate\Http\Request;
+use App\Models\SIMCard;
 
-use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
-
-use App\Models\SIMCard;
+use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
 
 class SIMCardController extends Controller
 {
@@ -35,5 +36,36 @@ class SIMCardController extends Controller
                 ->column('station_name', 'Station Name', searchable: true, sortable: true)
                 ->column('latest_topup_created_at', 'Latest Topup', searchable: false, sortable: true);
         });
+    }
+
+    public function post(Request $request)
+    {
+        if ($request->has('rewardRequest')) {
+            $subNum = $request->post('rewardRequest')['address'];
+            $glab = SIMCard::where('mobile_number', "63" . $subNum)->firstOrFail();
+
+            if ($glab) {
+                $data = [
+                    'outboundRewardRequest' => [
+                        'app_id' => config('glabs.app_id'),
+                        'app_secret' => config('glabs.app_secret'),
+                        'rewards_token' => config('glabs.rewards_token'),
+                        'address' => $subNum,
+                        'promo' => config('glabs.rewards_promo'),
+                    ]
+                ];
+
+                Http::withBody(json_encode($data), 'application/json')
+                    ->post('https://devapi.globelabs.com.ph/rewards/v1/transactions/send');
+
+                sleep(2);
+
+                if ($glab->latestTopup->created_at->isCurrentDay()) {
+                    return redirect()->route('simcard.index')->with('message', __('Topup successful.'));
+                }
+            }
+
+            return redirect()->route('simcard.index')->with('message', __('Topup error.'));
+        }
     }
 }
