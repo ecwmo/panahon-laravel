@@ -1,5 +1,5 @@
 <template layout>
-  <DataTable title="SIM Card" basePath="simcard" :data="subscribers" />
+  <DataTable title="SIM Card" :data="subscribers" />
 </template>
 
 <script setup lang="ts">

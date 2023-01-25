@@ -25,6 +25,7 @@ declare module '@vue/runtime-core' {
     IMaterialSymbolsLockPerson: typeof import('~icons/material-symbols/lock-person')['default']
     IMaterialSymbolsPerson: typeof import('~icons/material-symbols/person')['default']
     IMaterialSymbolsSignalCellularAlt: typeof import('~icons/material-symbols/signal-cellular-alt')['default']
+    IMdiCashPlus: typeof import('~icons/mdi/cash-plus')['default']
     IMdiChevronDown: typeof import('~icons/mdi/chevron-down')['default']
     IMdiChevronUp: typeof import('~icons/mdi/chevron-up')['default']
     IMdiPencil: typeof import('~icons/mdi/pencil')['default']

@@ -1,5 +1,5 @@
 <template layout>
-  <DataTable title="Stations" basePath="stations" :data="stations" />
+  <DataTable title="Stations" :data="stations" />
 </template>
 
 <script setup lang="ts">
