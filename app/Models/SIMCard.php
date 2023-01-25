@@ -34,7 +34,10 @@ class SIMCard extends Model
     public function latestTopup()
     {
         return $this
-            ->hasOne(GLabsLoad::class, 'sim_id')->where('status', 'SUCCESS')->latest();
+            ->hasOne(GLabsLoad::class, 'sim_id')
+            ->ofMany(['created_at' => 'max'], function ($query) {
+                $query->where('status', 'SUCCESS');
+            });
     }
 
     public function accessTokens()
