@@ -11,7 +11,7 @@
     <div class="p-8 flex flex-wrap">
       <div class="w-full">
         <BreezeLabel for="name" value="Role Name" />
-        <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+        <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autofocus />
         <BreezeInputError class="mt-2" :message="form.errors.name" />
       </div>
 
@@ -25,19 +25,25 @@
 </template>
 
 <script setup lang="ts">
-  import { RoleForm } from '@/types/form'
+  import { RoleFields } from '@/types/form'
+  import { isRequired } from 'intus/rules'
 
   const { isSuperAdmin } = useUser()
 
-  const defaultData: RoleForm = {
+  const defaultData: RoleFields = {
     name: '',
     description: '',
   }
 
-  const props = defineProps<{ role: RoleForm }>()
+  const props = defineProps<{ role: RoleFields }>()
 
-  const form = useForm({
-    ...defaultData,
-    ...props.role,
-  })
+  const form = useValidatedForm(
+    {
+      ...defaultData,
+      ...props.role,
+    },
+    {
+      name: [isRequired()],
+    }
+  )
 </script>

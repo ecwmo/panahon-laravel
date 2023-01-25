@@ -52,6 +52,7 @@ declare global {
   const useSlots: typeof import('vue')['useSlots']
   const useToastStore: typeof import('./store/toast')['useToastStore']
   const useUser: typeof import('./composables/useUser')['default']
+  const useValidatedForm: typeof import('./composables/useValidatedForm')['default']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -112,6 +113,7 @@ declare module '@vue/runtime-core' {
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useToastStore: UnwrapRef<typeof import('./store/toast')['useToastStore']>
     readonly useUser: UnwrapRef<typeof import('./composables/useUser')['default']>
+    readonly useValidatedForm: UnwrapRef<typeof import('./composables/useValidatedForm')['default']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

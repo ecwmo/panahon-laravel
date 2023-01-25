@@ -1,8 +1,7 @@
-export interface FormError {
-  [index: string]: string[]
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FormFields = Record<string | symbol, any>
 
-export interface UserForm {
+export type UserFields = FormFields & {
   id?: number
   name: string
   email: string
@@ -11,13 +10,13 @@ export interface UserForm {
   roleIds?: number[]
 }
 
-export interface RoleForm {
+export type RoleFields = FormFields & {
   id?: number
   name: string
   description?: string
 }
 
-export interface StationForm {
+export type StationFields = FormFields & {
   id?: number
   name: string
   lat?: number | string

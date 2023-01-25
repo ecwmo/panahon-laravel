@@ -11,21 +11,13 @@
     <div class="p-8 flex flex-wrap">
       <div class="w-full">
         <BreezeLabel for="name" value="Name" />
-        <BreezeInput
-          id="name"
-          type="text"
-          class="mt-1 block w-full"
-          v-model="form.name"
-          required
-          autofocus
-          autocomplete="name"
-        />
+        <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autofocus />
         <BreezeInputError class="mt-2" :message="form.errors.name" />
       </div>
 
       <div class="mt-4 w-full">
         <BreezeLabel for="email" value="Email" />
-        <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
+        <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" />
         <BreezeInputError class="mt-2" :message="form.errors.email" />
       </div>
 
@@ -50,25 +42,32 @@
 </template>
 
 <script setup lang="ts">
-  import { RoleForm, SelectOption, UserForm } from '@/types/form'
+  import { RoleFields, SelectOption, UserFields } from '@/types/form'
+  import { isEmail, isRequired } from 'intus/rules'
 
   const { isSuperAdmin } = useUser()
 
-  const defaultData: UserForm = {
+  const defaultData: UserFields = {
     name: '',
     email: '',
     password: '',
     roleIds: [1],
   }
 
-  const props = defineProps<{ user?: UserForm; roles: RoleForm[] }>()
+  const props = defineProps<{ user: UserFields; roles: RoleFields[] }>()
 
-  const form = useForm({
-    ...defaultData,
-    ...props.user,
-  })
+  const form = useValidatedForm(
+    {
+      ...defaultData,
+      ...props.user,
+    },
+    {
+      name: [isRequired()],
+      email: [isRequired(), isEmail()],
+    }
+  )
 
   const mSelecData = computed(() =>
-    props.roles.map((role: RoleForm): SelectOption => ({ name: role.name, value: role.id }))
+    props.roles.map((role: RoleFields): SelectOption => ({ name: role.name, value: role.id }))
   )
 </script>

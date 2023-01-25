@@ -3,6 +3,7 @@
   "dependencies": {
     "@protonemedia/inertiajs-tables-laravel-query-builder": "^2.1.0",
     "date-fns": "^2.29.2",
+    "intus": "^0.0.4",
     "pinia": "^2.0.28"
   },
   "scripts": {

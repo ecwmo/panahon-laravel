@@ -1343,6 +1343,11 @@ inherits@2:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
+intus@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/intus/-/intus-0.0.4.tgz#cf609b71a9bab974650d49eedf8e290d97f3779f"
+  integrity sha512-5KgO1yeNrHWgk071opWIuKNfO+qwS4HOg3m2bApwnvnLImLvQKxdeLAvKYJGUecQ2RFUI7/GntD/CewJEVtvQw==
+
 is-binary-path@~2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-binary-path/-/is-binary-path-2.1.0.tgz#ea1f7f3b80f064236e83470f86c09c254fb45b09"

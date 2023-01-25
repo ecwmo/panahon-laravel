@@ -33,14 +33,15 @@
 </template>
 
 <script setup lang="ts">
-  import { RoleForm, StationForm, UserForm } from '@/types/form'
+  import { FormFields } from '@/types/form'
+  import { InertiaForm } from '@inertiajs/inertia-vue3'
 
   const props = withDefaults(
     defineProps<{
       title: string
       itemName: string
       propName: string
-      formData: ReturnType<typeof useForm<StationForm | UserForm | RoleForm>>
+      formData: InertiaForm<FormFields>
       showDelete: boolean
       showSubmitBtn: boolean
       isUpdate: boolean
@@ -65,7 +66,7 @@
     } else {
       formData.value.post(route(`${basePath.value}.store`), {
         onSuccess: (p) => {
-          const { props: pProps } = p as { props: { [key: string]: StationForm | UserForm | RoleForm } }
+          const { props: pProps } = p as { props: Record<string, FormFields> }
           formData.value.id = pProps[propName.value].id
         },
       })

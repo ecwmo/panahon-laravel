@@ -17,7 +17,6 @@
           class="mt-1 block w-full"
           v-model="form.name"
           :disabled="!isAdmin"
-          required
           autofocus
         />
         <BreezeInputError class="mt-2" :message="form.errors.name" />
@@ -79,9 +78,7 @@
             class="mt-1 block w-full"
             v-model="form.mobile_number"
             :disabled="!isAdmin || !mobileNumberRequired"
-            :required="mobileNumberRequired"
             placeholder="63XXXXXXXXXX"
-            pattern="63[0-9]{10}"
           />
           <BreezeInputError class="mt-2" :message="form.errors.mobile_number" />
         </div>
@@ -95,7 +92,6 @@
           class="mt-1 block w-full"
           v-model="form.station_url"
           placeholder="https://example.com"
-          pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
           :disabled="!isAdmin"
         />
         <BreezeInputError class="mt-2" :message="form.errors.station_url" />
@@ -161,7 +157,8 @@
 </template>
 
 <script setup lang="ts">
-  import { StationForm } from '@/types/form'
+  import { StationFields } from '@/types/form'
+  import { isRegex, isRequired, isUrl } from 'intus/rules'
 
   const { isAdmin } = useUser()
 
@@ -171,9 +168,13 @@
     { name: 'Others', opts: ['WIFI', 'Test'] },
   ]
 
-  const props = defineProps<{ station: StationForm }>()
+  const props = defineProps<{ station: StationFields }>()
 
-  const form = useForm(props.station)
+  const form = useValidatedForm(props.station, {
+    name: [isRequired()],
+    mobile_number: [isRegex(/63[0-9]{10}/)],
+    station_url: [isUrl()],
+  })
 
   const mobileNumberRequired = computed(() => form.station_type !== 'MO' || form.station_type2 !== 'Default')
 
@@ -182,6 +183,6 @@
   const stnType2SelectEnabled = computed(() => stnTypes2.value !== undefined)
 
   const handleStnTypeSelectChange = () => {
-    form.station_type2 = stnTypes2.value?.[0]
+    form.station_type2 = stnTypes2.value?.[0] ?? ''
   }
 </script>
