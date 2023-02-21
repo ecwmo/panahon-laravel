@@ -24,6 +24,7 @@ Route::name('api.')->group(function () {
     Route::post('/globelabs/load', [GLabsLoadController::class, 'post'])->name('glabs.load');
 
     Route::get('/m360', [M360Controller::class, 'index'])->name('m360.index');
+    Route::get('/m360/dlr', [M360Controller::class, 'dlr'])->name('m360dlr.index');
 
     Route::get('/sm', [SMController::class, 'index'])->name('sm.index');
     Route::post('/sm', [SMController::class, 'post'])->name('sm.post');

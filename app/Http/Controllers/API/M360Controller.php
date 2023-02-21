@@ -62,4 +62,35 @@ class M360Controller extends Controller
 
         return response()->json(['message' => "Nothing to do"]);
     }
+
+    public function dlr(Request $request)
+    {
+        if ($request->has('status_code')) {
+            $subNum = '63' . $request->string('msisdn')->trim()->substr(1); #63XXXXXXXXXX
+            $statusCode =  (int)$request->status_code;
+
+            $statusMsg = 'unknown';
+            switch ($statusCode) {
+                case 1:
+                    $statusMsg = 'delivered';
+                    break;
+                case 8:
+                    $statusMsg = 'acknowledge/successful';
+                    break;
+                case 16:
+                    $statusMsg = 'rejected';
+                    break;
+                case 34:
+                    $statusMsg = 'expired';
+                    break;
+                default:
+                    $statusMsg = 'unknown';
+            }
+
+            Log::debug('[m360] DLR. sender:' . $subNum . ' message:' . $statusMsg);
+            return response()->json(['message' => $statusMsg]);
+        }
+
+        return response()->json(['message' => "Nothing to do"]);
+    }
 }
