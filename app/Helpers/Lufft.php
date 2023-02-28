@@ -33,7 +33,7 @@ class Lufft
     public function __construct(string $msg)
     {
         $dtNow = Carbon::now('Asia/Manila');
-        $varArray = explode("+", Str::of($msg)->trim()->replaceMatches('/(%20)|\s/', '+'));
+        $varArray = explode("+", Str::of($msg)->replaceMatches('/>/', '')->trim()->replaceMatches('/(%20)|\s/', '+'));
         $varCount = count($varArray);
 
         $logType = 2;
