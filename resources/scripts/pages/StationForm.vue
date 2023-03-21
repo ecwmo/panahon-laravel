@@ -77,7 +77,7 @@
             type="text"
             class="mt-1 block w-full"
             v-model="form.mobile_number"
-            :disabled="!isAdmin || !mobileNumberRequired"
+            :disabled="!isAdmin"
             placeholder="63XXXXXXXXXX"
           />
           <BreezeInputError class="mt-2" :message="form.errors.mobile_number" />
