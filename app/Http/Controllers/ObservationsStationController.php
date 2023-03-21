@@ -149,7 +149,8 @@ class ObservationsStationController extends Controller
     {
         $stnNameValidator = 'required|max:200|unique:observations_station,name';
         $cpNumUniqueValidator = 'unique:observations_station,mobile_number';
-        $stnUrlValidator = 'exclude_unless:station_type,MO|nullable|URL|unique:observations_station,station_url';
+        $urlRegex = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/';
+        $stnUrlValidator = 'exclude_unless:station_type,MO|nullable|regex:' . $urlRegex . '|unique:observations_station,station_url';
         if ($station) {
             $stnNameValidator = $stnNameValidator . ',' . $station->id;
             $cpNumUniqueValidator = $cpNumUniqueValidator . ',' . $station->id;
