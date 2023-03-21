@@ -158,7 +158,7 @@
 
 <script setup lang="ts">
   import { StationFields } from '@/types/form'
-  import { isRegex, isRequired, isUrl } from 'intus/rules'
+  import { isRegex, isRequired } from 'intus/rules'
 
   const { isAdmin } = useUser()
 
@@ -173,7 +173,11 @@
   const form = useValidatedForm(props.station, {
     name: [isRequired()],
     mobile_number: [isRegex(/63[0-9]{10}/)],
-    station_url: [isUrl()],
+    station_url: [
+      isRegex(
+        /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/
+      ),
+    ],
   })
 
   const mobileNumberRequired = computed(() => form.station_type !== 'MO' || form.station_type2 !== 'Default')
