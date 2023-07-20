@@ -3,7 +3,8 @@ export type FormFields = Record<string | symbol, any>
 
 export type UserFields = FormFields & {
   id?: number
-  name: string
+  username: string
+  full_name: string
   email: string
   password?: string
   password_confirm?: string

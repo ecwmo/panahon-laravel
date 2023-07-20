@@ -2,7 +2,7 @@
   <Form
     title="Users"
     propName="user"
-    :itemName="form?.name ?? ''"
+    :itemName="form?.username ?? ''"
     :form="form"
     :showDelete="form?.id !== undefined && isSuperAdmin"
     :showSubmitBtn="isSuperAdmin"
@@ -10,9 +10,15 @@
   >
     <div class="p-8 flex flex-wrap">
       <div class="w-full">
-        <BreezeLabel for="name" value="Name" />
-        <BreezeInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" autofocus />
-        <BreezeInputError class="mt-2" :message="form.errors.name" />
+        <BreezeLabel for="username" value="Username" />
+        <BreezeInput id="username" type="text" class="mt-1 block w-full" v-model="form.username" autofocus />
+        <BreezeInputError class="mt-2" :message="form.errors.username" />
+      </div>
+
+      <div class="w-full">
+        <BreezeLabel for="full_name" value="Full Name" />
+        <BreezeInput id="full_name" type="text" class="mt-1 block w-full" v-model="form.full_name" autofocus />
+        <BreezeInputError class="mt-2" :message="form.errors.full_name" />
       </div>
 
       <div class="mt-4 w-full">
@@ -48,7 +54,8 @@
   const { isSuperAdmin } = useUser()
 
   const defaultData: UserFields = {
-    name: '',
+    username: '',
+    full_name: '',
     email: '',
     password: '',
     roleIds: [1],
@@ -62,7 +69,7 @@
       ...props.user,
     },
     {
-      name: [isRequired()],
+      username: [isRequired()],
       email: [isRequired(), isEmail()],
     }
   )

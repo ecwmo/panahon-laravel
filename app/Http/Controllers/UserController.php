@@ -27,15 +27,15 @@ class UserController extends Controller
         $users = QueryBuilder::for(User::class)
         ->with('roles')
         ->defaultSort('id')
-        ->allowedSorts(['id', 'name'])
-        ->allowedFilters([AllowedFilter::exact('id'), 'name'])
+        ->allowedSorts(['id', 'username'])
+        ->allowedFilters([AllowedFilter::exact('id'), 'username'])
         ->paginate(10)
         ->withQueryString();
 
         return Inertia::render('Users', compact('users'))->table(function (InertiaTable $table) {
             $table
                 ->column('id', '#', searchable: true, sortable: true)
-                ->column('name', 'Name', searchable: true, sortable: true, canBeHidden: false)
+                ->column('username', 'Username', searchable: true, sortable: true, canBeHidden: false)
                 ->column('roles', 'Roles', searchable: false, sortable: false);
             $is_admin  = false;
             $user = Auth::user();
@@ -129,7 +129,8 @@ class UserController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
             'email' => $emailValidator,
             'password' => 'nullable|string|min:8'
         ]);
@@ -139,7 +140,8 @@ class UserController extends Controller
             $user->roles()->attach($request->roleIds);
         } else {
             $user->update([
-                'name' => $validated['name'],
+                'username' => $validated['username'],
+                'full_name' => $validated['full_name'],
                 'email' => $validated['email']
             ]);
 

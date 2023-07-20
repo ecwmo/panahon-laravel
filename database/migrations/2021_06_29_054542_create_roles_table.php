@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateRolesTable extends Migration
 {
@@ -14,10 +15,14 @@ class CreateRolesTable extends Migration
     public function up()
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->unique();
+            $table->id();
+            $table->string('name');
             $table->string('description')->nullable();
-            $table->timestamps();
+            $table->timestampsTz();
+        });
+
+        Schema::table('roles', function (Blueprint $table) {
+            DB::statement('ALTER TABLE "roles" ADD CONSTRAINT "roles_name_unique" UNIQUE ("name")');
         });
     }
 
