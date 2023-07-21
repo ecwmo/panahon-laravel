@@ -15,7 +15,7 @@ class CreateSIMCardsTable extends Migration
     {
         Schema::create('sim_cards', function (Blueprint $table) {
             $table->string('mobile_number', 50)->primary();
-            $table->string('type', 50);
+            $table->string('type', 50)->nullable();
             $table->timestampsTz();
         });
     }
