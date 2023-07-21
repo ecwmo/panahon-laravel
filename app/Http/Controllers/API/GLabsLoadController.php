@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-
-use App\Models\SIMCard;
-use App\Models\AccessTokens;
+use App\Models\GLabsLoad;
 
 use App\Http\Controllers\Controller;
 
@@ -21,17 +19,21 @@ class GLabsLoadController extends Controller
         # Parse and store to the database
         if (Arr::has($request->post(), 'outboundRewardRequest')) {
             $subNum = $request->post('outboundRewardRequest')['address'];
-            $glab = SIMCard::where('mobile_number', "63" . $subNum)->firstOrFail();
+            $promo = $request->post('outboundRewardRequest')['promo'];
+            $status = $request->post('outboundRewardRequest')['status'];
+            $transactionID = (int)($request->post('outboundRewardRequest')['transaction_id']);
 
-            if ($glab) {
-                $glab->topups()->create([
-                    'status' => $request->post('outboundRewardRequest')['status'],
-                    'promo' => $request->post('outboundRewardRequest')['promo'],
-                    'transaction_id' => (int)($request->post('outboundRewardRequest')['transaction_id'])
-                ]);
-                Log::debug('[GlobeLabs:Load] Topup detected for ' . $subNum . ' promo: ' . $request->post('outboundRewardRequest')['promo'] . ' status: ' . $request->post('outboundRewardRequest')['status']);
-                return response()->json($request->post('outboundRewardRequest'));
-            }
+            Log::debug('[GlobeLabs:Load] Topup detected for ' . $subNum . ' promo: ' . $promo . ' status: ' . $status);
+
+            GLabsLoad::create([
+                'mobile_number' => $subNum,
+                'status' => $status,
+                'promo' => $promo,
+                'transaction_id' => $transactionID,
+            ]);
+            return response()->json($request->post('outboundRewardRequest'));
+
+
         } elseif (Arr::has($request->post(), 'error')) {
             Log::debug('[GlobeLabs:Load] Error:' . $request->post('error'));
             return response()->json(['error' => $request->post('error')]);
