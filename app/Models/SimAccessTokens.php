@@ -15,6 +15,13 @@ class SimAccessTokens extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
+    protected $dateFormat = 'Y-m-d H:i:s P';
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'access_token',
         'type',

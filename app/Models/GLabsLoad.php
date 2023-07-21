@@ -11,6 +11,13 @@ class GLabsLoad extends Model
 
     protected $table = 'glabs_load';
 
+    protected $dateFormat = 'Y-m-d H:i:s P';
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'mobile_number',
         'status',

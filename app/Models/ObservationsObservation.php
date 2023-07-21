@@ -9,12 +9,15 @@ class ObservationsObservation extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'observations_observation';
+
+    protected $dateFormat = 'Y-m-d H:i:s P';
+
+    protected $casts = [
+        'timestamp' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     protected $fillable = [
         'station_id',

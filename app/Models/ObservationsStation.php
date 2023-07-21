@@ -14,6 +14,15 @@ class ObservationsStation extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = 'observations_station';
+
+    protected $dateFormat = 'Y-m-d H:i:s P';
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'name',
         'lat',
@@ -54,13 +63,6 @@ class ObservationsStation extends Model
         'province' => null,
         'region' => null,
     ];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'observations_station';
 
     public function observation()
     {
