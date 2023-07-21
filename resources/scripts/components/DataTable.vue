@@ -19,6 +19,10 @@
         </InertiaLink>
       </template>
 
+      <template #cell(timestamp)="{ item: dat }" v-if="basePath === 'station.logs'">
+        {{ formatDate(dat.timestamp) }}
+      </template>
+
       <template #cell(roles)="{ item: dat }" v-if="basePath === 'users'">
         {{ rolesString(dat.roles) }}
       </template>
@@ -76,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-  import { differenceInDays } from 'date-fns'
+  import { differenceInDays, formatISO9075, parseISO } from 'date-fns'
 
   withDefaults(
     defineProps<{
@@ -100,6 +104,8 @@
   })
 
   const rolesString = (roles: { name: string }[]) => roles.map((r) => r.name).join(', ')
+
+  const formatDate = (dStr: string) => formatISO9075(parseISO(dStr))
 
   const basePath = computed(() => indexRoute.value.replace('.index', ''))
 
