@@ -9,15 +9,16 @@ class SIMCard extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'sim_card';
+
+    protected $table = 'sim_cards';
+
+    protected $primaryKey = 'mobile_number';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'mobile_number',
+        'type',
     ];
 
     public function station()
@@ -28,13 +29,13 @@ class SIMCard extends Model
     public function topups()
     {
         return $this
-            ->hasMany(GLabsLoad::class, 'sim_id');
+            ->hasMany(GLabsLoad::class, 'mobile_number');
     }
 
     public function latestTopup()
     {
         return $this
-            ->hasOne(GLabsLoad::class, 'sim_id')
+            ->hasOne(GLabsLoad::class, 'mobile_number')
             ->ofMany(['created_at' => 'max'], function ($query) {
                 $query->where('status', 'SUCCESS');
             });
@@ -43,6 +44,6 @@ class SIMCard extends Model
     public function accessTokens()
     {
         return $this
-            ->hasMany(AccessTokens::class, 'sim_id');
+            ->hasMany(SimAccessTokens::class, 'mobile_number');
     }
 }

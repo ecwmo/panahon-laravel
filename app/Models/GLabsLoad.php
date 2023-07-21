@@ -9,21 +9,17 @@ class GLabsLoad extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'glabs_load';
 
     protected $fillable = [
+        'mobile_number',
         'status',
         'promo',
-        'transaction_id'
+        'transaction_id',
     ];
 
     public function SIMCard()
     {
-        return $this->belongsTo(SIMCard::class, 'sim_id');
+        return $this->belongsTo(SIMCard::class, 'mobile_number');
     }
 }

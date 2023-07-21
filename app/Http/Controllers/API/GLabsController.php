@@ -12,7 +12,7 @@ use Carbon\Carbon;
 
 use App\Models\SIMCard;
 use App\Models\ObservationsStation;
-use App\Models\AccessTokens;
+use App\Models\SimAccessTokens;
 
 use App\Helpers\Lufft;
 
@@ -24,6 +24,9 @@ class GLabsController extends Controller
 
     public function index(Request $request)
     {
+        $GLABS_ACCESS_TOKEN_TYPE = "GLABS";
+        $GLABS_MOBILE_NUMER_TYPE = "GLOBE";
+
         $msg = "Nothing to do";
 
         $accessToken = $request->query('access_token');
@@ -52,7 +55,7 @@ class GLabsController extends Controller
             $msg = "Number already registered";
 
             # Test if token is already used
-            if (AccessTokens::where('type', 'globe')->where('access_token', $accessToken)->first()) {
+            if (SimAccessTokens::where('type', $GLABS_ACCESS_TOKEN_TYPE)->where('access_token', $accessToken)->first()) {
                 $msg = "Error: Token already used";
                 Log::debug('[GlobeLabs] Subscribe:' . $subNum . ' message:' . $msg);
                 return response()->json(['message' => $msg]);
@@ -64,13 +67,14 @@ class GLabsController extends Controller
             if (!$glab) { # Create new subscription
                 $glab = SIMCard::create([
                     'mobile_number' => '63' . $subNum,
+                    'type' => $GLABS_MOBILE_NUMER_TYPE
                 ]);
             }
 
-            $oldAccessToken = $glab->accessTokens()->where('type', 'globe')->first();
+            $oldAccessToken = $glab->accessTokens()->where('type', $GLABS_ACCESS_TOKEN_TYPE)->first();
 
             if (!$oldAccessToken) { # Add Token
-                $glab->accessTokens()->create(['type' => 'globe', 'access_token' => $accessToken]);
+                $glab->accessTokens()->create(['type' => $GLABS_ACCESS_TOKEN_TYPE, 'access_token' => $accessToken]);
                 $msg = "Mobile number registered successfuly";
             } else { # Update token
                 $oldAccessToken->access_token = $accessToken;
@@ -95,7 +99,7 @@ class GLabsController extends Controller
             return response()->json(['message' => $msg]);
         }
 
-        $glabs = SIMCard::with(['station:id,mobile_number,name', 'latestTopup:sim_id,created_at'])
+        $glabs = SIMCard::with(['station:id,mobile_number,name', 'latestTopup:mobile_number,created_at'])
             ->where('type', 'globe')
             ->orderBy('id')
             ->paginate(15);

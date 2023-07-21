@@ -18,11 +18,8 @@ class CreateGlabsLoadTable extends Migration
             $table->string('status')->nullable();
             $table->string('promo')->nullable();
             $table->integer('transaction_id')->nullable();
-            $table->foreignId('sim_id')
-                ->constrained('sim_card')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->timestamps();
+            $table->string('mobile_number');
+            $table->timestampsTz();
         });
     }
 

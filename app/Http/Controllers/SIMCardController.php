@@ -22,16 +22,16 @@ class SIMCardController extends Controller
             ->withAggregate('station', 'id')
             ->withAggregate('station', 'name')
             ->withAggregate('latestTopup', 'created_at')
-            ->defaultSort('id')
-            ->allowedSorts(['id', 'mobile_number', 'created_at', 'station_name', 'latest_topup_created_at'])
-            ->allowedFilters([AllowedFilter::exact('id'), 'mobile_number', 'station_name'])
+            ->defaultSort('mobile_number')
+            ->allowedSorts(['mobile_number', 'type', 'created_at', 'station_name', 'latest_topup_created_at'])
+            ->allowedFilters(['mobile_number', 'station_name'])
             ->paginate(10)
             ->withQueryString();
 
         return Inertia::render('SIMCard', compact('subscribers'))->table(function (InertiaTable $table) {
             $table
-                ->column('id', '#', searchable: true, sortable: true)
                 ->column('mobile_number', 'Mobile Number', searchable: true, sortable: true, canBeHidden: false)
+                ->column('type', 'Type', searchable: true, sortable: true, canBeHidden: false)
                 ->column('created_at', 'Subscription Date', searchable: false, sortable: true)
                 ->column('station_name', 'Station Name', searchable: true, sortable: true)
                 ->column('latest_topup_created_at', 'Latest Topup', searchable: false, sortable: true);
